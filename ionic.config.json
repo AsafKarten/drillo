@@ -1,0 +1,7 @@
+{
+  "name": "drillo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
