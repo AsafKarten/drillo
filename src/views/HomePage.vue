@@ -2,28 +2,31 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>Home</ion-title>
       </ion-toolbar>
     </ion-header>
     
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+    <ion-content :fullscreen="true" >
+  
+     
+    <div v-if="currentUser">
+      <p>{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+       <p>{{currentUser?.profile.email}} </p>
+      <ion-button @click="userLogout">Logout</ion-button>
+    </div>
+      
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar,IonItem,IonButton } from '@ionic/vue';
+import { defineComponent, onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import {useAppState} from '../realm-state';
+
+
+
 
 export default defineComponent({
   name: 'HomePage',
@@ -32,20 +35,49 @@ export default defineComponent({
     IonHeader,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonButton 
+    
+  },
+  setup(){
+    const router = useRouter();
+    const currentUser = ref<any>()
+    const {user , logout} = useAppState();
+    
+    
+    //currentUser.value = user
+  onMounted(async()=>{
+    //add code or delete
+  });
+
+    
+    const userLogout = async ()=>{
+      await logout();
+      currentUser.value = null;
+      router.replace("/login");
+      
+      
+    }
+     return {
+        userLogout,
+        currentUser : user,
+        
   }
+  },
+ 
 });
 </script>
 
 <style scoped>
 #container {
   text-align: center;
-  
-  position: absolute;
+  background: black;
+  height: 100%;
+  /* position: absolute;
   left: 0;
   right: 0;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); */
 }
 
 #container strong {

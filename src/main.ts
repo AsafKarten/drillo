@@ -23,6 +23,11 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+//realm
+import * as Realm from "realm-web";
+
+new Realm.App({ id: "application-0-sliwo" });
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
