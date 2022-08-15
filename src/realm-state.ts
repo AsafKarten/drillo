@@ -39,7 +39,7 @@ export const useAppState = () => {
           // save profile info
           const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
           const collection = mongodb?.db("drillo").collection("users");
-          const resp = await collection?.insertOne(
+          await collection?.insertOne(
             {userID: app?.currentUser?.id, first, last}
           );
 

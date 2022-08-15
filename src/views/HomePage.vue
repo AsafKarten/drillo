@@ -2,28 +2,31 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Home</ion-title>
+        <div v-if="currentUser" class="header">
+      <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+       <p class="headerText">{{currentUser?.profile.email}} </p>
+      <ion-button class="headerButton" @click="userLogout">Logout</ion-button>
+    </div>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true" >
   
      
-    <div v-if="currentUser">
-      <p>{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
-       <p>{{currentUser?.profile.email}} </p>
-      <ion-button @click="userLogout">Logout</ion-button>
-    </div>
+   
+    <MapBox/>
       
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar,IonItem,IonButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
 import { defineComponent, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
+import MapBox from './MapBox.vue';
+
 
 
 
@@ -34,18 +37,16 @@ export default defineComponent({
     IonContent,
     IonHeader,
     IonPage,
-    IonTitle,
     IonToolbar,
-    IonButton 
-    
-  },
+    IonButton,
+    MapBox,
+},
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
     const {user , logout} = useAppState();
     
     
-    //currentUser.value = user
   onMounted(async()=>{
     //add code or delete
   });
@@ -69,6 +70,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.header{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-content: space-between;
+  font-size: 20px;
+ 
+}
+.headerText {
+  padding-left: 2%;
+}
+.headerButton{
+  padding-left: 2%;
+}
 #container {
   text-align: center;
   background: black;

@@ -85,7 +85,7 @@ export default defineComponent({
 
     const loginEmailPassword = async () => {
       try {
-      const user = await login(email.value, password.value)
+      await login(email.value, password.value)
         router.replace("/home");
       } catch (err) {
         console.error("Failed to login", err);

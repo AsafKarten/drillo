@@ -48,7 +48,7 @@
   import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar,IonInput, IonLabel ,IonItem,IonButton } from '@ionic/vue';
   import { defineComponent, ref } from 'vue';
   
-  import { useRoute, useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router';
 
   import { useAppState } from '@/realm-state';
   export default defineComponent({
