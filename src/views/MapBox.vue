@@ -3,7 +3,7 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
+
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { defineComponent, onMounted, watch, reactive, ref } from "vue";
@@ -38,11 +38,12 @@ export default defineComponent({
 
 </script>
 
-<style>
+<style scoped>
 #map {
     position: relative;
     width: 100%;
     height: 100%;
+
 }
 
 .mapboxgl-ctrl-logo {

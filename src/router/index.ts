@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue'
 import LoginPage from '../views/Login.vue'
 import CreateAccount from '../views/CreateAccount.vue'
+import DrillerView from '../views/DrillerView.vue'
 import { useAppState } from '../realm-state';
 
 const routes: Array<RouteRecordRaw> = [
@@ -25,6 +26,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'CreateAccount',
     component: CreateAccount
   }
+  ,
+  {
+    path: '/driller-view',
+    name: 'DrillerView',
+    component: DrillerView
+  }
 ]
 
 const router = createRouter({
@@ -44,6 +51,11 @@ router.beforeEach((to , from , next) => {
       next('./home');
     }
   }
+  // if(to.fullPath === '/driller-view'){
+  //   if(isLoggedIn.value){
+  //     next('./driller-view');
+  //   }
+  // }
   next();
 })
 

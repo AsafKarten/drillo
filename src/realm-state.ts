@@ -47,8 +47,19 @@ export const useAppState = () => {
         await app?.currentUser?.refreshCustomData();
         user.value = app?.currentUser
           return true;
-    }
+    };
 
+    const getProject =async () => {
+      
+        // 1. Get a data source client
+        const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+        // 2. Get a database & collection
+        const collection = mongodb?.db("drillo").collection("projects");
+        // 3. Read and write data with MongoDB queries
+        
+        return await collection?.findOne({})
+      
+    }
 
     return{
         isLoggedIn,
@@ -57,5 +68,6 @@ export const useAppState = () => {
         login,
         logout,
         createAccount,
+        getProject,
     };
 };
