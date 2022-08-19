@@ -14,7 +14,7 @@
   
      
    
-    <MapBox/>
+    
       
     </ion-content>
   </ion-page>
@@ -22,10 +22,10 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
-import MapBox from './MapBox.vue';
+
 
 
 
@@ -39,7 +39,7 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
-    MapBox,
+   
 },
   setup(){
     const router = useRouter();
@@ -48,6 +48,7 @@ export default defineComponent({
     
     
   onMounted(async()=>{
+    //fix page render after login
     //add code or delete
   });
 
