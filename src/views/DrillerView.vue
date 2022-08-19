@@ -88,7 +88,7 @@ export default defineComponent({
     const currentDate = ref(new Date())
     const router = useRouter();
     const currentUser = ref<any>();
-    const { user, logout, getProject,updateProject } = useAppState();
+    const { user, logout, getProject,updateProjectPits } = useAppState();
     const project = ref<any>({});
     const pits = ref<any>([]);
     const centerPoint = ref<any>();
@@ -149,7 +149,7 @@ export default defineComponent({
           project.value.pits[index] = currentPit.value;
           console.log(project.value);
           
-          await updateProject(project.value)
+          await updateProjectPits(project.value)
       }
       
     //end modal block

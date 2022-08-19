@@ -61,7 +61,7 @@ export const useAppState = () => {
       
     }
 
-    const updateProject =async (project : any) => {
+    const updateProjectPits =async (project : any) => {
         try {
                   // 1. Get a data source client
         const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -97,6 +97,6 @@ export const useAppState = () => {
         logout,
         createAccount,
         getProject,
-        updateProject,
+        updateProjectPits,
     };
 };
