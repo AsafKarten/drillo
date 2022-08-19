@@ -44,8 +44,8 @@
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
         <p>{{currentPit.status? "בוצע": "ממתין" }}</p>
         <p>{{currentPit.garbage? "!זבל בקידוח" :  " " }}</p>
-        <ion-button color="success" @click="setConfirm" >{{currentPit.status?"ביטול ביצוע" : "אישור ביצוע"   }}</ion-button>
-        <ion-button @click="setGarbage" color="warning">{{currentPit.garbage?"ביטול זבל" : "!זבל בקידוח"    }}</ion-button>
+        <ion-button color="success" @click="setConfirm" >אישור ביצוע</ion-button>
+        <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
       </ion-content>
     </ion-modal>
 
@@ -63,6 +63,7 @@ import {
   IonButton,
   IonModal,
   IonTitle,
+  
   
 } from "@ionic/vue";
 import { defineComponent, onMounted, ref } from "vue";
@@ -87,7 +88,7 @@ export default defineComponent({
     const currentDate = ref(new Date())
     const router = useRouter();
     const currentUser = ref<any>();
-    const { user, logout, getProject } = useAppState();
+    const { user, logout, getProject,updateProject } = useAppState();
     const project = ref<any>({});
     const pits = ref<any>([]);
     const centerPoint = ref<any>();
@@ -108,8 +109,8 @@ export default defineComponent({
     };
 
 //check error
-    const pitClick = (clickData) => {
-        const pitClicked = pits.value.find(pit => pit.p.toString() === clickData._id);
+    const pitClick = (clickData: { _id: any; }) => {
+        const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
         console.log("pitClicked:")
         console.log(pitClicked)
         currentPit.value = pitClicked
@@ -127,18 +128,28 @@ export default defineComponent({
       }
 
       const setConfirm = ()=>{
-        if(!currentPit.value.status)
+        if(!currentPit.value.status){
              currentPit.value.status = true;
+             savePitChanges();
+             
+             }
         else 
-           currentPit.value.status = false;   
+           return  
       }
 
       const setGarbage = ()=>{
         if(!currentPit.value.garbage)
           currentPit.value.garbage = true;
           else
-             currentPit.value.garbage = false;
+             return
         
+      }
+      const savePitChanges= async()=>{
+        let index = currentPit.value.p  * 1  - 1
+          project.value.pits[index] = currentPit.value;
+          console.log(project.value);
+          
+          await updateProject(project.value)
       }
       
     //end modal block
@@ -149,6 +160,7 @@ export default defineComponent({
       modalManager,
       setConfirm,
       setGarbage,
+      savePitChanges,
       //properties
       currentUser: user,
       project: project,

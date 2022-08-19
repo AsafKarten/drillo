@@ -61,6 +61,34 @@ export const useAppState = () => {
       
     }
 
+    const updateProject =async (project : any) => {
+        try {
+                  // 1. Get a data source client
+        const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+        // 2. Get a database & collection
+        const collection = mongodb?.db("drillo").collection("projects");
+        // 3. Read and write data with MongoDB queries
+        const query = { "_id": project._id };
+        const update = {
+          "$set": {
+           "pits": project.pits,
+              }
+          };
+          const options = { "upsert": false };
+          collection?.updateOne(query, update, options)
+          .then(result => {
+           const { matchedCount, modifiedCount } = result;
+           if(matchedCount && modifiedCount) {
+           console.log(`Successfully updated the item.`)
+    }
+  })
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+    }
+
     return{
         isLoggedIn,
         user,
@@ -69,5 +97,6 @@ export const useAppState = () => {
         logout,
         createAccount,
         getProject,
+        updateProject,
     };
 };
