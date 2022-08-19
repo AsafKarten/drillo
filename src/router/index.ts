@@ -3,7 +3,11 @@ import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue'
 import LoginPage from '../views/Login.vue'
 import CreateAccount from '../views/CreateAccount.vue'
+import CreateProject from '../views/CreateProject.vue'
 import DrillerView from '../views/DrillerView.vue'
+import ProjectsView from '../views/ProjectsView.vue'
+import EmployeesView from '../views/EmployeesView.vue'
+import MachinesView from '../views/MachinesView.vue'
 import { useAppState } from '../realm-state';
 
 const routes: Array<RouteRecordRaw> = [
@@ -31,6 +35,27 @@ const routes: Array<RouteRecordRaw> = [
     path: '/driller-view',
     name: 'DrillerView',
     component: DrillerView
+  }  ,
+  {
+    path: '/create-project',
+    name: 'createProject',
+    component: CreateProject
+  }
+  ,
+  {
+    path: '/projects',
+    name: 'ProjectsView',
+    component: ProjectsView
+  } ,
+  {
+    path: '/employees',
+    name: 'EmployeesView',
+    component: EmployeesView
+  },
+  {
+    path: '/machines',
+    name: 'MachinesView',
+    component: MachinesView
   }
 ]
 

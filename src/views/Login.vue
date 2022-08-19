@@ -85,7 +85,10 @@ export default defineComponent({
 
     const loginEmailPassword = async () => {
       try {
-      await login(email.value, password.value)
+      let resp = await login(email.value, password.value)
+      if(resp === "driller")
+          router.replace("/driller-view");
+      else
         router.replace("/home");
       } catch (err) {
         console.error("Failed to login", err);

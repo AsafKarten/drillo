@@ -12,30 +12,9 @@
     
     <ion-content :fullscreen="true" >
   
-     <div class="homeContainer">
-
-   <div class="homeBox">
-    <h5>add new project</h5>
-    <ion-button  router-link="/create-project" >add new project</ion-button>
-   </div>
-
-   <div class="homeBox">
-    <h5>My projects</h5>
-    <ion-button router-link="/projects" >My projects</ion-button>
-   </div>
-
-   <div class="homeBox">
-    <h5>My employees</h5>
-    <ion-button router-link="/employees">My employees</ion-button>
-   </div>
-
-    <div class="homeBox">
-    <h5>My drilling Machines</h5>
-    <ion-button router-link="/machines">My drilling Machines</ion-button>
-   </div>
-
-    </div>
-      
+   
+      <h1>Employees View</h1>
+      <p>This page is under constructions</p>
     </ion-content>
   </ion-page>
 </template>
@@ -52,7 +31,7 @@ import {useAppState} from '../realm-state';
 
 
 export default defineComponent({
-  name: 'HomePage',
+  name: 'EmployeesView',
   components: {
     IonContent,
     IonHeader,
@@ -68,7 +47,6 @@ export default defineComponent({
     
     
   onMounted(async()=>{
-    //fix page render after login
     //add code or delete
   });
 
@@ -91,22 +69,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.homeContainer{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  padding: 1%;
-}
-.homeBox{
-  box-sizing: content-box;
-  text-align: center;
-  width: 30%;
-  padding: 2%;
-  margin: 1%;
-  border: 2px solid lightgray;
-  border-radius: 5px;
 
-}
 .header{
   display: flex;
   flex-direction: row;
@@ -121,32 +84,5 @@ export default defineComponent({
 .headerButton{
   padding-left: 2%;
 }
-#container {
-  text-align: center;
-  background: black;
-  height: 100%;
-  /* position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%); */
-}
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
 </style>

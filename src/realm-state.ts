@@ -17,6 +17,8 @@ export const useAppState = () => {
         //Refresh a user's custom data to make sure we have the latest version
         await app?.currentUser?.refreshCustomData();
         user.value = app?.currentUser
+        if(user.value.customData.userType === "driller")
+          return "driller";
         return true;
     };
 
