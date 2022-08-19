@@ -37,15 +37,17 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
+        <div class="hebrewText">
         <h5>{{"P-" + currentPit.p+" "}}</h5>
         <h6>קואורדינטות</h6>
         <p>{{"Lon: "+currentPit.coordinates.lon+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
         <p>{{currentPit.status? "בוצע": "ממתין" }}</p>
-        <p>{{currentPit.garbage? "!זבל בקידוח" :  " " }}</p>
+        <p>{{currentPit.garbage? "זבל בקידוח" :  " " }}</p>
         <ion-button color="success" @click="setConfirm" >אישור ביצוע</ion-button>
         <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
+        </div>
       </ion-content>
     </ion-modal>
 
@@ -175,6 +177,9 @@ export default defineComponent({
 </script >
 
 <style scoped>
+.hebrewText{
+  direction: rtl;
+}
 #map {
   height: 100%;
   width: 100%;
