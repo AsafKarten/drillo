@@ -15,6 +15,7 @@
    
       <h1>Create Project</h1>
       <p>This page is under constructions</p>
+      <ExcelComponent/>
     </ion-content>
   </ion-page>
 </template>
@@ -24,6 +25,8 @@ import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
+
+import ExcelComponent from '../Components/ExcelComponent.vue'
 
 
 
@@ -38,7 +41,7 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
-   
+    ExcelComponent,
 },
   setup(){
     const router = useRouter();

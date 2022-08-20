@@ -21,7 +21,8 @@
     "mapbox-gl": "^2.9.2",
     "realm-web": "^1.7.1",
     "vue": "^3.2.21",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@capacitor/cli": "4.0.1",
