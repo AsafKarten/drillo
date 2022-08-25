@@ -6,6 +6,7 @@ import CreateAccount from '../views/CreateAccount.vue'
 import CreateProject from '../views/CreateProject.vue'
 import DrillerView from '../views/DrillerView.vue'
 import ProjectsView from '../views/ProjectsView.vue'
+import ProjectView from '../views/ProjectView.vue'
 import EmployeesView from '../views/EmployeesView.vue'
 import MachinesView from '../views/MachinesView.vue'
 import { useAppState } from '../realm-state';
@@ -46,6 +47,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/projects',
     name: 'ProjectsView',
     component: ProjectsView
+  } ,
+  {
+    path: '/project',
+    name: 'ProjectView',
+    component: ProjectView,
   } ,
   {
     path: '/employees',

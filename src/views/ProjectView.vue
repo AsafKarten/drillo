@@ -13,13 +13,11 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Projects View</h1>
+      <h1>Project View</h1>
       <p>This page is under constructions</p>
       <div>
-        <ion-item :key="project._id" v-for="project in projects">
-        <p @click="goToProject(project)">{{project.name}}</p>
-        <p>{{project.address}}</p>
-        </ion-item>
+        <p>{{project?.name}}</p>
+        <p>{{project?.address}}</p>
         
       </div>
     </ion-content>
@@ -27,11 +25,10 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonItem } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
-
 
 
 
@@ -46,18 +43,18 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
-    IonItem,
    
 },
-  setup(){
+  setup(props){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout, getAllProjects} = useAppState();
-    const projects = ref<any>([]);
-    
+    const {user , logout,getProjectByID} = useAppState();
+    const project_id = ref<any>();
+    const project = ref<any>();
     
   onMounted(async()=>{
-    projects.value = await getAllProjects();
+   console.log(props);
+   
   });
 
     
@@ -68,14 +65,11 @@ export default defineComponent({
       
       
     }
-    const goToProject =(project:any)=>{
-        router.push('/project')
-    }
      return {
         userLogout,
-        goToProject,
         currentUser : user,
-        projects:projects
+        project:project,
+        project_id:project_id
         
   }
   },

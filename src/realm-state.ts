@@ -63,6 +63,20 @@ export const useAppState = () => {
       
     }
 
+
+    const getProjectByID =async (id:string) => {
+      
+      // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("projects");
+      // 3. Read and write data with MongoDB queries
+      const query = { "_id":id };
+      return await collection?.findOne({"_id":id})
+    
+  }
+
+
      //create new project
      const createNewProject =async (name: string, address:string, pits:[]) => {
    
@@ -129,8 +143,10 @@ console.log(error);
         logout,
         createAccount,
         getProject,
+        getProjectByID,
         createNewProject,
         updateProjectPits,
         getAllProjects,
+        
     };
 };
