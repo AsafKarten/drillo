@@ -118,7 +118,7 @@ console.log(error);
             const collection = mongodb?.db("drillo").collection("projects");
             // 3. Read and write data with MongoDB queries
             
-            return await collection?.find()
+            return await collection?.find({})
     }
 
     return{
