@@ -38,9 +38,9 @@
       </ion-header>
       <ion-content class="ion-padding">
         <div class="hebrewText">
-        <h5>{{"P-" + currentPit.p+" "}}</h5>
+        <h5>{{ currentPit.p}}</h5>
         <h6>קואורדינטות</h6>
-        <p>{{"Lon: "+currentPit.coordinates.lon+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
+        <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
         <p>{{currentPit.status? "בוצע": "ממתין" }}</p>

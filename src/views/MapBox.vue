@@ -63,7 +63,7 @@ export default defineComponent({
           },
           geometry: {
             type: "Point",
-            coordinates: [pit.coordinates.lon,pit.coordinates.lat]
+            coordinates: [pit.coordinates.long,pit.coordinates.lat]
           }
         }
       });
