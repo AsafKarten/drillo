@@ -63,6 +63,25 @@ export const useAppState = () => {
       
     }
 
+     //create new project
+     const createNewProject =async (name: string, address:string, pits:[]) => {
+   
+      try {
+        // 1. Get a data source client
+const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+// 2. Get a database & collection
+const collection = mongodb?.db("drillo").collection("projects");
+// 3. Read and write data with MongoDB queries
+collection?.insertOne({name, address, pits});
+return true;
+
+
+} catch (error) {
+console.log(error);
+
+}
+};
+
     const updateProjectPits =async (project : any) => {
         try {
                   // 1. Get a data source client
@@ -91,6 +110,17 @@ export const useAppState = () => {
         }
     }
 
+
+    const getAllProjects = async()=>{
+            // 1. Get a data source client
+            const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+            // 2. Get a database & collection
+            const collection = mongodb?.db("drillo").collection("projects");
+            // 3. Read and write data with MongoDB queries
+            
+            return await collection?.find()
+    }
+
     return{
         isLoggedIn,
         user,
@@ -99,6 +129,8 @@ export const useAppState = () => {
         logout,
         createAccount,
         getProject,
+        createNewProject,
         updateProjectPits,
+        getAllProjects,
     };
 };

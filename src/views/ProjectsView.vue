@@ -15,12 +15,19 @@
    
       <h1>Projects View</h1>
       <p>This page is under constructions</p>
+      <div>
+        <ion-item :key="project._id" v-for="project in projects">
+        <p>{{project.name}}</p>
+        <p>{{project.address}}</p>
+        </ion-item>
+        
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonItem } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -38,16 +45,18 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
+    IonItem,
    
 },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout} = useAppState();
+    const {user , logout, getAllProjects} = useAppState();
+    const projects = ref<any>([]);
     
     
   onMounted(async()=>{
-    //add code or delete
+    projects.value = await getAllProjects();
   });
 
     
@@ -61,6 +70,7 @@ export default defineComponent({
      return {
         userLogout,
         currentUser : user,
+        projects:projects
         
   }
   },

@@ -11,7 +11,7 @@ import { defineComponent, onMounted, watch, reactive, ref } from "vue";
 export default defineComponent({
   name:"MapBox",
   components: { },
-  props: {pitsToShow:Array, centerPoint:Object},
+  props: {pitsToShow:Array},
   emits: [ 'pitClick'],
   setup(props, ctx) {
       

@@ -23,7 +23,6 @@
 
       <MapBox id="map" 
       :pitsToShow="pits" 
-      :centerPoint="centerPoint"
       @pitClick="pitClick"
        />
 
@@ -93,15 +92,12 @@ export default defineComponent({
     const { user, logout, getProject,updateProjectPits } = useAppState();
     const project = ref<any>({});
     const pits = ref<any>([]);
-    const centerPoint = ref<any>();
     const currentPit = ref();
     const isOpen = ref(false);
 
     onMounted(async () => {
       project.value = await getProject();
-      pits.value = project?.value.pits;
-      centerPoint.value = {lon:project?.value.pits[0].coordinates.lon, lat:project?.value.pits[0].coordinates.lat};
-      
+      pits.value = project?.value.pits;      
     });
 
     const userLogout = async () => {
@@ -168,7 +164,6 @@ export default defineComponent({
       project: project,
       pits: pits,
       currentPit:currentPit,
-      centerPoint: centerPoint,
       currentDate: currentDate,
       isOpen: isOpen,
     };

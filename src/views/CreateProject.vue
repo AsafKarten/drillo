@@ -13,9 +13,9 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Create Project</h1>
-      <p>This page is under constructions</p>
+      <h1>יצירת פרוייקט חדש</h1>
       <ExcelComponent/>
+      
     </ion-content>
   </ion-page>
 </template>
@@ -86,6 +86,10 @@ export default defineComponent({
 }
 .headerButton{
   padding-left: 2%;
+}
+h1{
+  color:  black;
+
 }
 
 </style>
