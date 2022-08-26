@@ -88,6 +88,10 @@ export default defineComponent({
       let resp = await login(email.value, password.value)
       if(resp === "driller")
           router.replace("/driller-view");
+
+      if (resp === "site manager")
+          router.replace("/daily-report");
+          
       else
         router.replace("/home");
       } catch (err) {

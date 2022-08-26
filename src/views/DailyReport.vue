@@ -13,15 +13,10 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Machines View</h1>
+      <h1>Daily Report</h1>
       <p>This page is under constructions</p>
 
-         <div>
-        <ion-item :key="machine._id" v-for="machine in drillingMachines">
-        <p>{{machine?.name}}</p>
-        <p>{{machine?.type}}</p>
-        </ion-item>       
-      </div>
+  
     </ion-content>
   </ion-page>
 </template>
@@ -38,26 +33,24 @@ import {useAppState} from '../realm-state';
 
 
 export default defineComponent({
-  name: 'MachinesView',
+  name: 'DailyReport',
   components: {
     IonContent,
     IonHeader,
     IonPage,
     IonToolbar,
     IonButton,
-    IonItem,
+
    
 },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout, getAllDrillingMachines} = useAppState();
-    const drillingMachines = ref<any>()
-    
+    const {user , logout} = useAppState();
+ 
   onMounted(async()=>{
     //add code or delete
-    drillingMachines.value = await getAllDrillingMachines();
-    console.log(drillingMachines.value);
+
     
   });
 
@@ -72,7 +65,7 @@ export default defineComponent({
      return {
         userLogout,
         currentUser : user,
-        drillingMachines:drillingMachines,
+       
         
   }
   },

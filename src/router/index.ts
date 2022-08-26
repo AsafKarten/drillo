@@ -9,6 +9,7 @@ import ProjectsView from '../views/ProjectsView.vue'
 import ProjectView from '../views/ProjectView.vue'
 import EmployeesView from '../views/EmployeesView.vue'
 import MachinesView from '../views/MachinesView.vue'
+import DailyReport from '../views/DailyReport.vue'
 import { useAppState } from '../realm-state';
 
 const routes: Array<RouteRecordRaw> = [
@@ -63,6 +64,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'MachinesView',
     component: MachinesView
   }
+  ,
+  {
+    path: '/daily-report',
+    name: 'DailyReport',
+    component: DailyReport
+  }
 ]
 
 const router = createRouter({
@@ -82,11 +89,7 @@ router.beforeEach((to , from , next) => {
       next('./home');
     }
   }
-  // if(to.fullPath === '/driller-view'){
-  //   if(isLoggedIn.value){
-  //     next('./driller-view');
-  //   }
-  // }
+ 
   next();
 })
 

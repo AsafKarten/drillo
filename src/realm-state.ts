@@ -19,6 +19,9 @@ export const useAppState = () => {
         user.value = app?.currentUser
         if(user.value.customData.userType === "driller")
           return "driller";
+        if(user.value.customData.userType === "site manager")
+           return "site manager";
+           
         return true;
     };
 
@@ -124,7 +127,7 @@ console.log(error);
         }
     }
 
-
+    
     const getAllProjects = async()=>{
             // 1. Get a data source client
             const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -134,6 +137,27 @@ console.log(error);
             
             return await collection?.find({})
     }
+
+   
+    const getAllDrillingMachines = async()=>{
+            // 1. Get a data source client
+            const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+            // 2. Get a database & collection
+            const collection = mongodb?.db("drillo").collection("drilling_machines");
+            // 3. Read and write data with MongoDB queries
+            
+            return await collection?.find({})
+    }
+
+    const getAllEmployees= async()=>{
+      // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("organization");
+      // 3. Read and write data with MongoDB queries
+      
+      return await collection?.find({})
+}
 
     return{
         isLoggedIn,
@@ -147,6 +171,8 @@ console.log(error);
         createNewProject,
         updateProjectPits,
         getAllProjects,
+        getAllDrillingMachines,
+        getAllEmployees,
         
     };
 };

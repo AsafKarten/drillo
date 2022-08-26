@@ -15,12 +15,19 @@
    
       <h1>Employees View</h1>
       <p>This page is under constructions</p>
+
+         <div>
+        <ion-item :key="employee._id" v-for="employee in employees">
+        <p>{{employee}}</p>
+      
+        </ion-item>       
+      </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton, IonItem } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -38,16 +45,22 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
+    IonItem,
    
 },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout} = useAppState();
-    
+    const {user , logout,getAllEmployees} = useAppState();
+    const employees = ref<any>()
+    const organization = ref<any>()
     
   onMounted(async()=>{
     //add code or delete
+    organization.value = await getAllEmployees();
+    employees.value = organization.value[0].employees
+    console.log(employees.value);
+    
   });
 
     
@@ -61,6 +74,8 @@ export default defineComponent({
      return {
         userLogout,
         currentUser : user,
+        employees:employees,
+        organization:organization,
         
   }
   },
