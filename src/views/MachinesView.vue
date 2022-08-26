@@ -18,8 +18,8 @@
 
          <div>
         <ion-item :key="machine._id" v-for="machine in drillingMachines">
-        <p>{{machine?.name}}</p>
-        <p>{{machine?.type}}</p>
+        <p>{{machine?.name + ": "}} </p>
+        <p> {{ machine?.type}}</p>
         </ion-item>       
       </div>
     </ion-content>

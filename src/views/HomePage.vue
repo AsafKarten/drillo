@@ -14,26 +14,49 @@
   
      <div class="homeContainer">
 
-   <div class="homeBox">
-    <h5>add new project</h5>
-    <ion-button  router-link="/create-project" >add new project</ion-button>
-   </div>
+       <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>יצירת פרויקט חדש</ion-card-subtitle>
+      <ion-card-title>פרויקט חדש</ion-card-title>
+    </ion-card-header>
 
-   <div class="homeBox">
-    <h5>My projects</h5>
-    <ion-button router-link="/projects" >My projects</ion-button>
-   </div>
+    <ion-card-content>
+      <ion-button  router-link="/create-project" >פרויקט חדש</ion-button>
+    </ion-card-content>
+  </ion-card>
 
-   <div class="homeBox">
-    <h5>My employees</h5>
-    <ion-button router-link="/employees">My employees</ion-button>
-   </div>
+    <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>הפרוייקטים שלי</ion-card-subtitle>
+      <ion-card-title>הפרוייקטים שלי</ion-card-title>
+    </ion-card-header>
 
-    <div class="homeBox">
-    <h5>My drilling Machines</h5>
-    <ion-button router-link="/machines">My drilling Machines</ion-button>
-   </div>
+    <ion-card-content>
+      <ion-button router-link="/projects">הפרוייקטים שלי</ion-button>
+    </ion-card-content>
+  </ion-card>
 
+    <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>העובדים שלי</ion-card-subtitle>
+      <ion-card-title>העובדים שלי</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button router-link="/employees">העובדים שלי</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+    <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>מכונות קידוח</ion-card-subtitle>
+      <ion-card-title>מכונות קידוח</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button router-link="/machines">מכונות קידוח</ion-button>
+    </ion-card-content>
+  </ion-card>
     </div>
       
     </ion-content>
@@ -41,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -59,6 +82,11 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
+    IonCard,
+    IonCardContent, 
+    IonCardHeader, 
+    IonCardSubtitle, 
+    IonCardTitle,
    
 },
   setup(){
@@ -97,16 +125,7 @@ export default defineComponent({
   justify-content: space-evenly;
   padding: 1%;
 }
-.homeBox{
-  box-sizing: content-box;
-  text-align: center;
-  width: 30%;
-  padding: 2%;
-  margin: 1%;
-  border: 2px solid lightgray;
-  border-radius: 5px;
 
-}
 .header{
   display: flex;
   flex-direction: row;

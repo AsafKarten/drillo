@@ -26,8 +26,7 @@ export default defineComponent({
         zoom: 18,
         attributionControl: false
       });
-        //try code block Keep in bounds!!!
-
+     
         const mapboxPitsSourceDefinition = {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] }
@@ -53,13 +52,13 @@ export default defineComponent({
 
 
 
-      //internal function for converting server zeps array to mapbox syntax (FeatureCollection)
+      //internal function for converting server pits array to mapbox syntax (FeatureCollection)
       const formatServerPitsToMapbox = pits => pits.map( pit => {
         console.log(pit);
         return {
           type:"Feature",
           properties: {
-            _id: pit.p
+            _id: pit.p    
           },
           geometry: {
             type: "Point",
@@ -68,12 +67,12 @@ export default defineComponent({
         }
       });
 
-         //update zeps on map when a zep changes or added
+         //update pits on map when a zep changes or added
       watch( [()=>props.pitsToShow, ()=>props.pitsToShow.length], ([pits,length]) => {
         updateMapPits( formatServerPitsToMapbox(pits) );
       });
 
-      //internal function to update map data with the new zeps collection
+      //internal function to update map data with the new pits collection
       const updateMapPits = pits => {
         map.getSource('pitsSource').setData( { type: 'FeatureCollection', features: pits } );
         //map.flyTo({ center: zeps[zeps.length-1].geometry.coordinates });
@@ -88,7 +87,7 @@ export default defineComponent({
 //to here
       map.on("load", mapLoad);
       map.on('click','pitsMarkers', pitClicked);
-        //end of try code block!!!
+        
 
     });
 
