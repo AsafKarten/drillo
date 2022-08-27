@@ -49,15 +49,22 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getProjectByID} = useAppState();
+    const {user , logout,getAllOrganizations} = useAppState();
     const employee_id = ref<any>(route.params);
     const employee = ref<any>();
     const {id} = route.params
-    
+    const organization = ref<any>()
+    const employees = ref<any>()
+
   onMounted(async()=>{
-   console.log(employee_id.value);
-   console.log(route.params);
-   console.log(id);
+    organization.value= await getAllOrganizations();
+    employees.value= organization.value[0].employees
+    employee.value = employees.value.find((emp: { _id: { toString: () => any; }; }) =>emp._id.toString() === employee_id.value.id)
+
+   console.log(employee_id.value.id);
+   
+   console.log(employees.value);
+   console.log(employee.value);
    
   });
 
@@ -76,7 +83,9 @@ export default defineComponent({
         currentUser : user,
         employee:employee,
         employee_id:employee_id,
-        id:id
+        id:id,
+        organization:organization,
+        employees:employees,
         
   }
   },

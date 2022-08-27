@@ -149,7 +149,7 @@ console.log(error);
             return await collection?.find({})
     }
 
-    const getAllEmployees= async()=>{
+    const getAllOrganizations= async()=>{
       // 1. Get a data source client
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
       // 2. Get a database & collection
@@ -172,7 +172,7 @@ console.log(error);
         updateProjectPits,
         getAllProjects,
         getAllDrillingMachines,
-        getAllEmployees,
+        getAllOrganizations,
         
     };
 };
