@@ -37,8 +37,33 @@ export default defineComponent({
         'type': 'circle',
         'source': 'pitsSource',
         'paint': {
-          'circle-radius': 5,
-          'circle-color':'#ff0000'
+          /*'circle-radius': 10,
+          /'circle-color':'#ff0000'*/
+
+          // Make circles larger as the user zooms from z12 to z22.
+          'circle-radius': {
+            'base': 10,
+            'stops': [
+              [12, 1.5],
+              [14, 2],
+              [18, 6],
+              [22, 50]
+            ]
+          },
+          // Color circles by status, using a `match` expression.
+          'circle-color': [
+            'match',
+            ['get', 'status'],
+            'Pending',
+            '#ffff00',
+            'Done',
+            '#00ff00',
+            /* other */ '#ff0000'
+          ],
+          //Add outline for each circle so its easier to click on it
+          "circle-stroke-width": 8,
+          "circle-stroke-color": "#000000",
+          "circle-stroke-opacity": 0.03
         }
       }
 //
@@ -50,14 +75,15 @@ export default defineComponent({
 
 
 
-
+ 
 
       //internal function for converting server pits array to mapbox syntax (FeatureCollection)
       const formatServerPitsToMapbox = pits => pits.map( pit => {
         return {
           type:"Feature",
           properties: {
-            _id: pit.p    
+            _id: pit.p,
+            status: pit.status
           },
           geometry: {
             type: "Point",
@@ -65,10 +91,23 @@ export default defineComponent({
           }
         }
       });
-
-         //update pits on map when a zep changes or added
+console.log(props.pitsToShow)
+      //update pits on map when a data changes or added
       watch( [()=>props.pitsToShow, ()=>props.pitsToShow.length], ([pits,length]) => {
         updateMapPits( formatServerPitsToMapbox(pits) );
+
+        //find the bounds of all pits (minimum and maximum of lat and long = southwestern and northeastern corner)
+        let longMin = 1000, longMax = -1000, latMin = 1000, latMax = -1000;
+        for(let i=0; i<props.pitsToShow.length; i++)
+        {
+          let pitCoords = props.pitsToShow[i].coordinates;
+          if(pitCoords.long < longMin) longMin = pitCoords.long;
+          if(pitCoords.long > longMax) longMax = pitCoords.long;
+          if(pitCoords.lat  < latMin ) latMin  = pitCoords.lat;
+          if(pitCoords.lat  > latMax ) latMax  = pitCoords.lat;
+        }
+        //fit map zoom level and center to show all the points
+        map.fitBounds([[longMin,latMin],[longMax,latMax]], {padding: 50});
       });
 
       //internal function to update map data with the new pits collection
