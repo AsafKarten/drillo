@@ -54,7 +54,6 @@ export default defineComponent({
 
       //internal function for converting server pits array to mapbox syntax (FeatureCollection)
       const formatServerPitsToMapbox = pits => pits.map( pit => {
-        console.log(pit);
         return {
           type:"Feature",
           properties: {

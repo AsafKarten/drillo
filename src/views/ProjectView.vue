@@ -22,6 +22,7 @@
       </div>
 
         <MapBox id="map" 
+        :v-show="showMap"
       :pitsToShow="pitsToShow" 
       @pitClick="pitClick"
        />
@@ -42,6 +43,8 @@
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
+           <p>{{currentPit.status? "בוצע": "ממתין" }}</p>
+        <p>{{currentPit.garbage? "זבל בקידוח" :  " " }}</p>
         </div>
       </ion-content>
     </ion-modal>
@@ -78,7 +81,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getProjectByID} = useAppState();
+    const {user , logout, getProjectByID, getAllProjects} = useAppState();
     const project_id = ref<any>(route.params);
     const project = ref<any>();
     const {id} = route.params
@@ -89,17 +92,12 @@ export default defineComponent({
     const currentPit = ref<any>();
     
   onMounted(async()=>{
-    console.log(project_id.value.id);
-    
-    const project = await getProjectByID(project_id.value.id)
-    console.log(project);
-    
-    pitsToShow.value= project.pits
-    console.log(pitsToShow.value);
-    
-    console.log(project_id.value);
-   console.log(route.params);
-   console.log(id);
+//need to fix find project by id and remove the find function here
+  
+    const projects = await getAllProjects()
+    project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
+    pitsToShow.value = project.value.pits 
+    showMap.value = true;
    
   });
 
@@ -114,8 +112,6 @@ export default defineComponent({
 
        const pitClick = (clickData: { _id: any; }) => {
         const pitClicked = pitsToShow.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
-        console.log("pitClicked:")
-        console.log(pitClicked)
         currentPit.value = pitClicked
         modalManager();
         if (pitClicked == undefined) return;
