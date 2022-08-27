@@ -165,6 +165,7 @@ export default defineComponent({
 
     const saveProject =async ()=>{
       await createNewProject(projectName.value, projectAddress.value, pitsToShow.value)
+      router.replace('/projects')
     }
 
        //modal block

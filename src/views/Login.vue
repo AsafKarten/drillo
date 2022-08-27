@@ -89,7 +89,7 @@ export default defineComponent({
       if(resp === "driller")
           router.replace("/driller-view");
 
-      if (resp === "site manager")
+      else if (resp === "site manager")
           router.replace("/daily-report");
           
       else
