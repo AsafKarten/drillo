@@ -36,8 +36,9 @@
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
-        <p>{{currentPit.status? "בוצע": "ממתין" }}</p>
+        <p>{{currentPit.status +'סטטוס:'}}</p>
         <p>{{currentPit.garbage? "זבל בקידוח" :  " " }}</p>
+        <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
         <ion-button color="success" @click="setConfirm" >אישור ביצוע</ion-button>
         <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
         </div>
@@ -87,6 +88,7 @@ export default defineComponent({
     const project = ref<any>({});
     const pits = ref<any>([]);
     const currentPit = ref();
+    const prevPit = ref();
     const isOpen = ref(false);
 
     onMounted(async () => {
@@ -105,9 +107,12 @@ export default defineComponent({
         const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
         console.log("pitClicked:")
         console.log(pitClicked)
+        prevPit.value = currentPit.value
         currentPit.value = pitClicked
+        
         modalManager();
         if (pitClicked == undefined) return;
+        
         
     }
 
@@ -119,14 +124,16 @@ export default defineComponent({
           isOpen.value = true;
       }
 
-      const setConfirm = ()=>{
-        if(!currentPit.value.status){
-             currentPit.value.status = true;
+      const setConfirm = ()=>{     
+             currentPit.value.status = 'Done';
+             savePitChanges();           
+      }
+
+      const setPending = ()=>{  
+        if(currentPit.value.status === 'waiting'){
+             currentPit.value.status = 'Pending';
              savePitChanges();
-             
-             }
-        else 
-           return  
+          }      
       }
 
       const setGarbage = ()=>{
@@ -142,6 +149,7 @@ export default defineComponent({
           console.log(project.value);
           
           await updateProjectPits(project.value)
+          modalManager()
       }
       
     //end modal block
@@ -153,11 +161,13 @@ export default defineComponent({
       setConfirm,
       setGarbage,
       savePitChanges,
+      setPending,
       //properties
       currentUser: user,
       project: project,
       pits: pits,
       currentPit:currentPit,
+      prevPit:prevPit,
       currentDate: currentDate,
       isOpen: isOpen,
     };

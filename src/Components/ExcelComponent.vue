@@ -58,6 +58,7 @@
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
+        <p>{{currentPit.status}}</p>
         </div>
       </ion-content>
     </ion-modal>
@@ -137,7 +138,7 @@ export default defineComponent({
             let p = arraylist.value[i].p;
             let itm = {x : arraylist.value[i].x , y : arraylist.value[i].y }
             const [long, lat] = proj4('+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs', '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees', [itm.x, itm.y]);
-            pits[i]= {p:p , itm:itm , coordinates: {long:long,lat:lat}}
+            pits[i]= {p:p , itm:itm , coordinates: {long:long,lat:lat}, status:'waiting'}
         }
         pitsToShow.value = pits;
         showMap.value = true;

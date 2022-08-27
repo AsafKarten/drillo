@@ -44,7 +44,7 @@
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
         <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
-           <p>{{currentPit.status? "בוצע": "ממתין" }}</p>
+           <p>{{currentPit.status}}</p>
         <p>{{currentPit.garbage? "זבל בקידוח" :  " " }}</p>
         </div>
       </ion-content>
