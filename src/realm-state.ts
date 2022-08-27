@@ -75,7 +75,7 @@ export const useAppState = () => {
       const collection = mongodb?.db("drillo").collection("projects");
       // 3. Read and write data with MongoDB queries
       const query = { "_id":id };
-      return await collection?.findOne({"_id":id})
+      return await collection?.findOne(query)
     
   }
 

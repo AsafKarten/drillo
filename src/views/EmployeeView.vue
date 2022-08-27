@@ -13,23 +13,21 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Machines View</h1>
+      <h1>Employee View</h1>
       <p>This page is under constructions</p>
-
-         <div>
-        <ion-item @click="goToMachine(machine)" :key="machine._id" v-for="machine in drillingMachines">
-        <p>{{machine?.name + ": "}} </p>
-        <p> {{ machine?.type}}</p>
-        </ion-item>       
+      <div>
+        <p>{{employee?.name}}</p>
+        <p>{{employee_id}}</p>
+        
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton, IonItem } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 
 
@@ -38,27 +36,29 @@ import {useAppState} from '../realm-state';
 
 
 export default defineComponent({
-  name: 'MachinesView',
+  name: 'EmployeeView',
   components: {
     IonContent,
     IonHeader,
     IonPage,
     IonToolbar,
     IonButton,
-    IonItem,
    
 },
   setup(){
     const router = useRouter();
+    const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout, getAllDrillingMachines} = useAppState();
-    const drillingMachines = ref<any>()
+    const {user , logout,getProjectByID} = useAppState();
+    const employee_id = ref<any>(route.params);
+    const employee = ref<any>();
+    const {id} = route.params
     
   onMounted(async()=>{
-    //add code or delete
-    drillingMachines.value = await getAllDrillingMachines();
-    console.log(drillingMachines.value);
-    
+   console.log(employee_id.value);
+   console.log(route.params);
+   console.log(id);
+   
   });
 
     
@@ -70,14 +70,13 @@ export default defineComponent({
       
     }
 
-    const goToMachine =(machine:any)=>{
-        router.push('/machine/'+ machine._id)
-    }
+   
      return {
         userLogout,
-        goToMachine,
         currentUser : user,
-        drillingMachines:drillingMachines,
+        employee:employee,
+        employee_id:employee_id,
+        id:id
         
   }
   },

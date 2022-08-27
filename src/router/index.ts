@@ -9,6 +9,8 @@ import ProjectsView from '../views/ProjectsView.vue'
 import ProjectView from '../views/ProjectView.vue'
 import EmployeesView from '../views/EmployeesView.vue'
 import MachinesView from '../views/MachinesView.vue'
+import EmployeeView from '../views/EmployeeView.vue'
+import MachineView from '../views/MachineView.vue'
 import DailyReport from '../views/DailyReport.vue'
 import { useAppState } from '../realm-state';
 
@@ -50,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
     component: ProjectsView
   } ,
   {
-    path: '/project',
+    path: '/project/:id',
     name: 'ProjectView',
     component: ProjectView,
   } ,
@@ -69,6 +71,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/daily-report',
     name: 'DailyReport',
     component: DailyReport
+  }
+  ,
+  {
+    path: '/employee/:id',
+    name: 'EmployeeView',
+    component: EmployeeView
+  }
+  ,
+  {
+    path: '/machine/:id',
+    name: 'MachineView',
+    component: MachineView
   }
 ]
 

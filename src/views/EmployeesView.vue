@@ -17,9 +17,9 @@
       <p>This page is under constructions</p>
 
          <div>
-        <ion-item :key="employee._id" v-for="employee in employees">
-        <p>{{employee}}</p>
-      
+        <ion-item @click="goToEmployee(employee)" :key="employee._id" v-for="employee in employees">
+        <p>{{employee._id}}</p>
+        <p>{{employee.name}}</p>
         </ion-item>       
       </div>
       
@@ -73,8 +73,12 @@ export default defineComponent({
       
       
     }
+      const goToEmployee =(employee:any)=>{
+        router.push('/employee/'+ employee._id)
+    }
      return {
         userLogout,
+        goToEmployee,
         currentUser : user,
         employees:employees,
         organization:organization,
