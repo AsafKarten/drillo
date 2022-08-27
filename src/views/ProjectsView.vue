@@ -5,13 +5,13 @@
         <div v-if="currentUser" class="header">
       <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
        <p class="headerText">{{currentUser?.profile.email}} </p>
-      <ion-button class="headerButton" @click="userLogout">Logout</ion-button>
+      <ion-button class="headerButton" @click="userLogout">יציאה</ion-button>
     </div>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true" >
-  
+  <div class="mainContainer">
    
       <h1>Projects View</h1>
       <p>This page is under constructions</p>
@@ -21,6 +21,8 @@
         <p>{{project.address}}</p>
         </ion-item>
         
+      </div>
+      
       </div>
     </ion-content>
   </ion-page>
@@ -84,7 +86,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+.mainContainer{
+  display: block;
+  direction: rtl;
+  
+}
 .header{
   display: flex;
   flex-direction: row;

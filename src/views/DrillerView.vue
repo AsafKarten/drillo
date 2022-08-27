@@ -8,14 +8,8 @@
               {{ currentUser.customData.first }}
               {{ currentUser.customData.last }}
             </p>
-            <p class="headerText">{{ currentDate.getDate() +"/"
-                + (currentDate.getMonth()+1)  + "/" 
-                + currentDate.getFullYear() + "  "  
-                + currentDate.getHours() + ":"  
-                + currentDate.getMinutes() + ":" 
-                + currentDate.getSeconds() }}</p>
             <ion-button class="headerButton" @click="userLogout"
-              >Logout</ion-button
+              >יציאה</ion-button
             >
           </div>
         </ion-toolbar>
