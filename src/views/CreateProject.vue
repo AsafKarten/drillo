@@ -11,10 +11,9 @@
     </ion-header>
     
     <ion-content :fullscreen="true" >
-  
-   <div class="mainContainer">
+    <!---merge components???-->
       <ExcelComponent/>
-      </div>
+    
     </ion-content>
   </ion-page>
 </template>
@@ -71,11 +70,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.mainContainer{
-  display: block;
-  direction: rtl;
-  
-}
+
 .header{
   display: flex;
   flex-direction: row;
