@@ -11,15 +11,16 @@
     </ion-header>
     
     <ion-content :fullscreen="true" >
-  
-   
-      <h1>Machine View</h1>
-      <p>This page is under constructions</p>
+ 
+      <h1> Machine View </h1>
+      <p> This page is under constructions </p>
       <div>
-        <p>{{machine?.name}}</p>
-        <p>{{machine_id}}</p>
+        <p> {{"name: " + machine?.name }} </p>
+        <p> {{"type: " + machine?.type }} </p>
+        <p> {{"id: " + machine_id.id }} </p>
         
-      </div>
+    </div>
+    
     </ion-content>
   </ion-page>
 </template>
@@ -49,12 +50,14 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getProjectByID} = useAppState();
+    const {user , logout,getAllDrillingMachines} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
     
   onMounted(async()=>{
+    const drillingMachines = await getAllDrillingMachines()
+    machine.value = drillingMachines?.find(proj =>proj._id.toString() === machine_id.value.id)
     console.log(machine_id.value);
    console.log(route.params);
    console.log(id);

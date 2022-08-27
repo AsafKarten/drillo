@@ -53,13 +53,13 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout,getAllEmployees} = useAppState();
+    const {user , logout,getAllOrganizations} = useAppState();
     const employees = ref<any>()
     const organization = ref<any>()
     
   onMounted(async()=>{
     //add code or delete
-    organization.value = await getAllEmployees();
+    organization.value = await getAllOrganizations();
     employees.value = organization.value[0].employees
     console.log(employees.value);
     
