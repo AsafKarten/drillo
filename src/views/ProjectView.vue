@@ -15,9 +15,10 @@
    
       <h1>Project View</h1>
       <p>This page is under constructions</p>
-      <div>
-        <p>{{project?.name}}</p>
-        <p>{{project_id}}</p>
+      <div class="mainContainer">
+        <p>{{"שם הפרוייקט:" + project?.name}}</p>
+        <p>{{ "כתובת:" + project?.address}}</p>
+        <p>{{"מספר מזהה:" + project_id.id}}</p>
         
       </div>
 
@@ -144,7 +145,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+.mainContainer{
+  display: block;
+  direction: rtl;
+  
+}
 .header{
   display: flex;
   flex-direction: row;
