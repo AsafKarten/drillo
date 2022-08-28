@@ -15,6 +15,7 @@
    <div class="mainContainer">
       <h1>Employees View</h1>
       <p>This page is under constructions</p>
+      <ion-button router-link="/create-employee">צור עובד חדש</ion-button>
 
          <div>
         <ion-item @click="goToEmployee(employee)" :key="employee._id" v-for="employee in employees">

@@ -12,8 +12,8 @@ import MachinesView from '../views/MachinesView.vue'
 import EmployeeView from '../views/EmployeeView.vue'
 import MachineView from '../views/MachineView.vue'
 import DailyReport from '../views/DailyReport.vue'
+import CreateEmployee from '../views/CreateEmployee.vue'
 import { useAppState } from '../realm-state';
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -83,6 +83,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/machine/:id',
     name: 'MachineView',
     component: MachineView
+  },
+  {
+    path: '/create-employee',
+    name: 'CreateEmployee',
+    component: CreateEmployee
   }
 ]
 

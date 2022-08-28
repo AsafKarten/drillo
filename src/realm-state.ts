@@ -54,6 +54,31 @@ export const useAppState = () => {
           return true;
     };
 
+     //create account email & password function
+     //fix forced logout problem
+     const createEmployeeAccount =async (email:string, password:string,first:string,last:string, usertaype:string, organizationID:string) => {
+      //Create user
+      await app.emailPasswordAuth.registerUser(email, password)
+      // Authenticate the user
+      await app.logIn(
+        Realm.Credentials.emailPassword(email, password)
+      )
+      
+      // save profile info
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      const collection = mongodb?.db("drillo").collection("users");
+      await collection?.insertOne(
+        {userID: app?.currentUser?.id, first, last,usertaype,organizationID}
+      );
+
+    //Refresh a user's custom data to make sure we have the latest version
+    await app?.currentUser?.refreshCustomData();
+    user.value = app?.currentUser
+    console.log(user.value);
+    
+      return true;
+};
+
     const getProject =async () => {
       
         // 1. Get a data source client
@@ -167,6 +192,7 @@ console.log(error);
         login,
         logout,
         createAccount,
+        createEmployeeAccount,
         getProject,
         getProjectByID,
         createNewProject,
