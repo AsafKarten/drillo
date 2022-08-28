@@ -15,6 +15,15 @@
    
       <h1>Daily Report</h1>
       <p>This page is under constructions</p>
+      <p>{{repoDate}}</p>
+        <div>
+        <ion-item :key="pit._id" v-for="pit in pits">
+        <p>{{pit.p}}</p>
+        <p>{{pit._id}}</p>
+        <p>{{pit.status}}</p>
+        </ion-item>
+        
+      </div>
 
   
     </ion-content>
@@ -40,17 +49,38 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
+    IonItem
 
    
 },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout} = useAppState();
- 
-  onMounted(async()=>{
-    //add code or delete
+    const {user , logout, getAllProjects} = useAppState();
+    const project = ref<any>();
+    const reports = ref<any>();
+    const report = ref<any>();
+    const project_id = ref<any>();
+    const user_id = ref<any>();
+    const pits = ref<any>();
+    const repoDate = ref<any>()
 
+  onMounted(async()=>{
+    //the shown report is the last object in the array=> it needs to show all the reports that was not confirmed yet
+    //need to fix the query so it will not find the project out of all projects in here.
+    user_id.value = user.value.customData._id
+    console.log(user_id.value);
+     const projects = await getAllProjects()
+        console.log(projects);
+        
+        project.value = projects?.find(proj =>proj.site_manager === user_id.value)
+        reports.value = project.value.reports;
+        report.value = reports.value[reports.value.length-1];
+        pits.value = report.value.pits;
+        repoDate.value = report.value.date;
+        console.log(report.value);
+    
+   
     
   });
 
@@ -62,10 +92,18 @@ export default defineComponent({
       
       
     }
+
+ 
      return {
         userLogout,
         currentUser : user,
-       
+        project:project,
+        reports:reports,
+        report:report,
+        project_id:project_id,
+        user_id:user_id,
+        pits:pits,
+        repoDate:repoDate,
         
   }
   },
