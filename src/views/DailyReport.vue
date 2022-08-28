@@ -15,14 +15,16 @@
    
       <h1>Daily Report</h1>
       <p>This page is under constructions</p>
-      <p>{{repoDate}}</p>
-        <div>
-        <ion-item :key="pit._id" v-for="pit in pits">
+        <div :key="repo.date" v-for="repo in reports">
+        <p>{{repo.date}}</p>
+        <ion-item :key="pit._id" v-for="pit in repo.pits">
         <p>{{pit.p}}</p>
         <p>{{pit._id}}</p>
         <p>{{pit.status}}</p>
-        </ion-item>
         
+        </ion-item>
+        <ion-button v-if="!repo.approve" @click="confirmReport(repo.date)">אישור ביצוע</ion-button>
+        <span v-else>אושר</span>
       </div>
 
   
@@ -56,7 +58,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout, getAllProjects} = useAppState();
+    const {user , logout, getAllProjects, updateProjectPits} = useAppState();
     const project = ref<any>();
     const reports = ref<any>();
     const report = ref<any>();
@@ -84,6 +86,21 @@ export default defineComponent({
     
   });
 
+  const confirmReport = async(repo_date:Date)=>{
+    console.log(repo_date);
+    let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
+    let index = reports.value.indexOf(repo)
+    repo.approve = true;
+    console.log(repo);
+    reports.value[index]=repo;
+    console.log(reports.value);
+    project.value.reports = reports.value
+    await updateProjectPits(project.value)
+    
+    
+    
+  }
+
     
     const userLogout = async ()=>{
       await logout();
@@ -96,6 +113,7 @@ export default defineComponent({
  
      return {
         userLogout,
+        confirmReport,
         currentUser : user,
         project:project,
         reports:reports,
@@ -129,3 +147,6 @@ export default defineComponent({
 }
 
 </style>
+
+
+
