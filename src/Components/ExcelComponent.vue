@@ -113,6 +113,7 @@ export default defineComponent({
     const currentPit = ref<any>();
     const projectName = ref("");
     const projectAddress = ref("");
+    const reports = ref<any>([])
   onMounted(async()=>{
     //add code or delete
   });
@@ -164,7 +165,7 @@ export default defineComponent({
     }
 
     const saveProject =async ()=>{
-      await createNewProject(projectName.value, projectAddress.value, pitsToShow.value)
+      await createNewProject(projectName.value, projectAddress.value, pitsToShow.value, reports.value)
       router.replace('/projects')
     }
 
@@ -193,7 +194,8 @@ export default defineComponent({
         isOpen:isOpen,
         currentPit:currentPit,
         projectName: projectName,
-        projectAddress: projectAddress
+        projectAddress: projectAddress,
+        reports:reports
 
         
   }

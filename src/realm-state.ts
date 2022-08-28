@@ -81,7 +81,7 @@ export const useAppState = () => {
 
 
      //create new project
-     const createNewProject =async (name: string, address:string, pits:[]) => {
+     const createNewProject =async (name: string, address:string, pits:[], reports:[]) => {
    
       try {
         // 1. Get a data source client
@@ -89,7 +89,7 @@ const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
 // 2. Get a database & collection
 const collection = mongodb?.db("drillo").collection("projects");
 // 3. Read and write data with MongoDB queries
-collection?.insertOne({name, address, pits});
+collection?.insertOne({name, address, pits,reports});
 return true;
 
 
@@ -110,6 +110,7 @@ console.log(error);
         const update = {
           "$set": {
            "pits": project.pits,
+           "reports":project.reports,
               }
           };
           const options = { "upsert": false };

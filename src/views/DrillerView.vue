@@ -147,9 +147,45 @@ export default defineComponent({
         let index = currentPit.value.p  * 1  - 1
           project.value.pits[index] = currentPit.value;
           console.log(project.value);
+          if(currentPit.value.status === 'Done')
+          {
+            addToDailyReport();
+          }
           
           await updateProjectPits(project.value)
           modalManager()
+      }
+
+      const addToDailyReport = ()=>{
+          let reports = project.value.reports
+          let today = new Date();
+          if(reports == undefined){
+            reports = [];
+            reports.push({date:today,pits:[currentPit.value] })
+            project.value.reports = reports
+          }
+          else{
+            
+            let index = reports.length  * 1  - 1
+            let report = reports[index] ;
+            let repoDate = new Date(report.date)
+            if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
+            report.pits.push(currentPit.value)
+            reports[index] = report
+            project.value.reports = reports;
+          }
+          else{
+            reports.push({date:today,pits:[currentPit.value] })
+            project.value.reports[index] = reports;
+          }
+          
+          console.log(project.value);
+          }
+          
+        
+
+          
+          
       }
       
     //end modal block
@@ -162,6 +198,7 @@ export default defineComponent({
       setGarbage,
       savePitChanges,
       setPending,
+      addToDailyReport,
       //properties
       currentUser: user,
       project: project,
