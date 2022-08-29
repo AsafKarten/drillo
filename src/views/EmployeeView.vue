@@ -14,9 +14,11 @@
   
    
       <h1>Employee View</h1>
-      <p>This page is under constructions</p>
       <div>
-        <p>{{employee?.name}}</p>
+
+        <p>{{employee?.first}} {{employee?.last}}</p>
+        <p>{{employee?.userType}}</p>
+        <p>{{employee?.organizationID}}</p>
         <p>{{employee_id}}</p>
         
       </div>
@@ -49,7 +51,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getAllOrganizations} = useAppState();
+    const {user , logout,getAllEmployees} = useAppState();
     const employee_id = ref<any>(route.params);
     const employee = ref<any>();
     const {id} = route.params
@@ -57,14 +59,11 @@ export default defineComponent({
     const employees = ref<any>()
 
   onMounted(async()=>{
-    organization.value= await getAllOrganizations();
-    employees.value= organization.value[0].employees
-    employee.value = employees.value.find((emp: { _id: { toString: () => any; }; }) =>emp._id.toString() === employee_id.value.id)
-
-   console.log(employee_id.value.id);
+     //add code or delete
+    const allEmployees= await getAllEmployees();
+    employee.value = allEmployees?.find((emp: { _id: { toString: () => any; }; }) =>emp._id.toString() === employee_id.value.id)
+    console.log(employee.value);
    
-   console.log(employees.value);
-   console.log(employee.value);
    
   });
 

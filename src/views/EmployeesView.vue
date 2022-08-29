@@ -20,7 +20,7 @@
          <div>
         <ion-item :key="employee._id" v-for="employee in employees">
         <p>{{employee._id}}</p>
-        <p>{{employee.name}}</p>
+        <p>{{employee.first}} {{employee.last}}</p>
         <ion-button @click="goToEmployee(employee)">פרופיל עובד</ion-button>
         </ion-item>       
       </div>
@@ -55,14 +55,14 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout,getAllOrganizations} = useAppState();
+    const {user , logout,getAllEmployees} = useAppState();
     const employees = ref<any>()
     const organization = ref<any>()
     
   onMounted(async()=>{
     //add code or delete
-    organization.value = await getAllOrganizations();
-    employees.value = organization.value[0].employees
+    const allEmployees= await getAllEmployees();
+    employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
     console.log(employees.value);
     
   });

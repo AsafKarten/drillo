@@ -13,9 +13,9 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Project View</h1>
-      <p>This page is under constructions</p>
+      
       <div class="mainContainer">
+        <h1> פרוייקט {{ project?.name}}</h1>
         <p>{{"שם הפרוייקט:" + project?.name}}</p>
         <p>{{ "כתובת:" + project?.address}}</p>
         <p>{{"מספר מזהה:" + project_id.id}}</p>
@@ -23,6 +23,13 @@
           <p>קודחים:</p>
           <ion-item :key="driller._id" v-for="driller in projectDrillers">
         <p >{{driller.first }}{{driller.last }}</p>
+        </ion-item>
+        </div>
+
+          <div>
+          <p>מכונות קידוח:</p>
+          <ion-item :key="machine._id" v-for="machine in projectMachines">
+        <p >{{machine.name }} {{machine.type }} {{machine.model}}</p>
         </ion-item>
         </div>
 
@@ -35,6 +42,7 @@
         
       </div>
       <div>
+        <ion-button class="headerButton" @click="modalManagerMachine">הוספת מכונת קידוח</ion-button>
         <ion-button class="headerButton" @click="modalManagerDriller">הוספת קודח</ion-button>
         <ion-button class="headerButton" @click="modalManagerSiteManager">הוספת מנהל עבודה</ion-button>
       </div>
@@ -109,6 +117,28 @@
         </div>
       </ion-content>
     </ion-modal>
+
+    <!--Add machine to project modal-->
+     <ion-modal :is-open="isOpenMachine">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title></ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="modalManagerMachine">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="hebrewText">
+   <ion-item :key="machine._id" v-for="machine in machines">
+        <p >{{machine.name }}{{machine.type }}</p>
+        
+        <p >{{machine.model}}</p>
+        <ion-button @click="addMachine(machine)">הוסף</ion-button>
+        </ion-item>
+        </div>
+      </ion-content>
+    </ion-modal>
   </ion-page>
 </template>
 
@@ -142,34 +172,38 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout, getProjectByID, getAllProjects,getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
+    const {user , logout, getProjectByID,updateProjectMachines,getAllDrillingMachines, getAllProjects,getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
     const project_id = ref<any>(route.params);
     const project = ref<any>();
     const {id} = route.params
-
+    const machines = ref<any>()
     const pitsToShow = ref<any>([]);
     const showMap = ref(false);
     const isOpen = ref(false);
     const isOpenSiteManager = ref(false);
     const isOpenDriller = ref(false);
+    const isOpenMachine = ref(false);
     const currentPit = ref<any>();
     const employees = ref<any>()
     const employee = ref<any>()
     const siteManagers = ref<any>()
     const drillers = ref<any>()
     const projectDrillers = ref<any>();
+    const projectMachines = ref<any>();
     const projectManagers = ref<any>();
   onMounted(async()=>{
 //need to fix find project by id and remove the find function here
-  
+  machines.value =  await getAllDrillingMachines();
+  machines.value = machines.value.filter((machine: { organizationID: any; }) => machine.organizationID === user.value.customData.organizationID)
     const projects = await getAllProjects()
     employees.value = await getAllEmployees()
     project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
     projectDrillers.value = project?.value.drillers
+    projectMachines.value = project?.value.machines
     projectManagers.value = project?.value.site_managers
     siteManagers.value = employees?.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "site manager" && emp.organizationID === user.value.customData.organizationID)
     drillers.value = employees?.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "driller" && emp.organizationID === user.value.customData.organizationID)
-    
+    projectMachines.value = project?.value.machines
     pitsToShow.value = project.value.pits 
     showMap.value = true;
     console.log(employees.value);
@@ -178,6 +212,9 @@ export default defineComponent({
   });
  //unify add driller and add site manager to one smart modal and one smart fuction
   const addDriller =async (driller:any)=>{
+    if(projectDrillers.value === undefined)
+       projectDrillers.value=[]
+
     let tempDriller = projectDrillers?.value.find((d: { _id: any; }) =>d._id.toString() === driller._id.toString())
     console.log(tempDriller);
     if(tempDriller !== undefined){
@@ -195,6 +232,8 @@ export default defineComponent({
     }    
   }
   const addSiteManager =async (siteManager:any)=>{
+    if(projectManagers.value === undefined)
+        projectManagers.value=[]
 
     let tempManager = projectManagers.value.find((m: { _id: any; }) =>m._id.toString() === siteManager._id.toString())
     console.log(tempManager);
@@ -214,6 +253,27 @@ export default defineComponent({
     }
     
 
+const addMachine =async (machine:any)=>{
+  if(projectMachines.value === undefined)
+      projectMachines.value=[]
+
+    let tempMachine = projectMachines?.value.find((m: { _id: any; }) =>m._id.toString() === machine._id.toString())
+    console.log(tempMachine);
+    if(tempMachine !== undefined){
+      console.log(tempMachine);
+      console.log("המכונה כבר משוייכת לפרוייקט זה")
+      return;
+    }
+    else{
+      console.log(machine);
+      if(project.value.machines === undefined)
+          project.value.machines = [];
+
+      project.value.machines.push(machine)
+      console.log(project.value);
+      await updateProjectMachines(project.value)
+    }    
+  }
 
     
     const userLogout = async ()=>{
@@ -244,6 +304,12 @@ export default defineComponent({
         else
           isOpenDriller.value = true;
       }
+         const modalManagerMachine = ()=>{
+        if(isOpenMachine.value)
+          isOpenMachine.value=false;
+        else
+          isOpenMachine.value = true;
+      }
          const modalManagerSiteManager = ()=>{
         if(isOpenSiteManager.value)
           isOpenSiteManager.value=false;
@@ -256,7 +322,9 @@ export default defineComponent({
         modalManager,
         addDriller,
         addSiteManager,
+        addMachine,
         modalManagerDriller,
+        modalManagerMachine,
         modalManagerSiteManager,
         currentUser : user,
         project:project,
@@ -266,6 +334,7 @@ export default defineComponent({
         showMap:showMap,
         isOpen:isOpen,
         isOpenDriller:isOpenDriller,
+        isOpenMachine:isOpenMachine,
         isOpenSiteManager:isOpenSiteManager,
         currentPit:currentPit,
         employees:employees,
@@ -273,7 +342,9 @@ export default defineComponent({
         siteManagers:siteManagers,
         drillers:drillers,
         projectDrillers:projectDrillers,
-        projectManagers:projectManagers
+        projectManagers:projectManagers,
+        projectMachines:projectMachines,
+        machines:machines,
 
   }
   },
