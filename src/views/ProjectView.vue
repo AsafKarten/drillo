@@ -161,10 +161,13 @@ export default defineComponent({
 
   const addDriller = (driller:any)=>{
       console.log(driller);
+      console.log("to do: save changes to mongodb");
+      
       
   }
   const addSiteManager = (siteManager:any)=>{
     console.log(siteManager);
+    console.log("to do: save changes to mongodb");
   }
 
 
