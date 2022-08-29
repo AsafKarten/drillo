@@ -169,14 +169,12 @@ export default defineComponent({
             let index = reports.length  * 1  - 1
             let report = reports[index] ;
             let repoDate = new Date(report.date)
+
             if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
-            report.pits.push(currentPit.value)
-            reports[index] = report
-            project.value.reports = reports;
+            project.value.reports[index].pits.push(currentPit.value)
           }
           else{
-            reports.push({date:today,pits:[currentPit.value] })
-            project.value.reports[index] = reports;
+            project.value.reports.push({date:today,pits:[currentPit.value] })
           }
           
           console.log(project.value);

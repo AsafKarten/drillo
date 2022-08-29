@@ -11,16 +11,18 @@
     </ion-header>
     
     <ion-content :fullscreen="true" >
-  
+  <div class="mainContainer">
    
       <h1>Machines View</h1>
       <p>This page is under constructions</p>
 
          <div>
-        <ion-item @click="goToMachine(machine)" :key="machine._id" v-for="machine in drillingMachines">
+        <ion-item :key="machine._id" v-for="machine in drillingMachines">
         <p>{{machine?.name + ": "}} </p>
         <p> {{ machine?.type}}</p>
+        <ion-button  @click="goToMachine(machine)">צפייה במכונה</ion-button>
         </ion-item>       
+      </div>
       </div>
     </ion-content>
   </ion-page>
@@ -86,7 +88,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+.mainContainer{
+  display: block;
+  direction: rtl;
+  
+}
 .header{
   display: flex;
   flex-direction: row;

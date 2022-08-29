@@ -18,9 +18,10 @@
       <ion-button router-link="/create-employee">צור עובד חדש</ion-button>
 
          <div>
-        <ion-item @click="goToEmployee(employee)" :key="employee._id" v-for="employee in employees">
+        <ion-item :key="employee._id" v-for="employee in employees">
         <p>{{employee._id}}</p>
         <p>{{employee.name}}</p>
+        <ion-button @click="goToEmployee(employee)">פרופיל עובד</ion-button>
         </ion-item>       
       </div>
       

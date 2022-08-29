@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <div v-if="currentUser" class="header">
-      <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+      <p class="headerText">{{currentUser?.customData.first}} {{currentUser?.customData.last}}</p>
        <p class="headerText">{{currentUser?.profile.email}} </p>
       <ion-button class="headerButton" @click="userLogout">יציאה</ion-button>
     </div>
@@ -13,19 +13,36 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Daily Report</h1>
-      <p>This page is under constructions</p>
-        <div :key="repo.date" v-for="repo in reports">
+      <h1>מנהל עבודה: {{currentUser?.customData.first}} {{currentUser?.customData.last}}</h1>
+      <h5>פרוייקט: {{project?.name}}</h5>
+
+       <ion-card :key="repo.date" v-for="repo in reports">
+    <ion-card-header>
+      <ion-card-subtitle>{{repo.date+":"+"תאריך"}}</ion-card-subtitle>
+      <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+       <ion-item :key="pit._id" v-for="pit in repo.pits">
+        <p class="textMargin">{{pit.p}}</p>
+        
+        <p class="textMargin">{{pit.status}}</p>
+        </ion-item>
+        <ion-button v-if="!repo.approve" @click="confirmReport(repo.date)">אישור ביצוע</ion-button>
+        <span v-else>אושר</span>
+    </ion-card-content>
+  </ion-card>
+
+        <!-- <div :key="repo.date" v-for="repo in reports">
         <p>{{repo.date}}</p>
         <ion-item :key="pit._id" v-for="pit in repo.pits">
         <p>{{pit.p}}</p>
         <p>{{pit._id}}</p>
         <p>{{pit.status}}</p>
-        
         </ion-item>
         <ion-button v-if="!repo.approve" @click="confirmReport(repo.date)">אישור ביצוע</ion-button>
         <span v-else>אושר</span>
-      </div>
+      </div> -->
 
   
     </ion-content>
@@ -33,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton, IonItem } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -51,7 +68,12 @@ export default defineComponent({
     IonPage,
     IonToolbar,
     IonButton,
-    IonItem
+    IonItem,
+    IonCard,
+    IonCardContent, 
+    IonCardHeader, 
+    IonCardSubtitle, 
+    IonCardTitle,
 
    
 },
@@ -130,7 +152,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+.textMargin{
+  margin-left: 1%;
+}
 .header{
   display: flex;
   flex-direction: row;

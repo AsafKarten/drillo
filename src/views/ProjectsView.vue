@@ -17,8 +17,9 @@
       <p>This page is under constructions</p>
       <div>
         <ion-item :key="project._id" v-for="project in projects">
-        <p @click="goToProject(project)">{{project.name}}</p>
+        <p>{{project.name}}</p>
         <p>{{project.address}}</p>
+        <ion-button @click="goToProject(project)">צפייה בפרוייקט</ion-button>
         </ion-item>
         
       </div>
