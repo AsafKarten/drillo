@@ -158,7 +158,7 @@ export default defineComponent({
     console.log(siteManagers.value);
    console.log(drillers.value);
   });
-
+ //unify add driller and add site manager to one smart modal and one smart fuction
   const addDriller = (driller:any)=>{
       console.log(driller);
       console.log("to do: save changes to mongodb");
