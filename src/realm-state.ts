@@ -79,6 +79,16 @@ export const useAppState = () => {
       return true;
 };
 
+const getAllEmployees = async()=>{
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("users");
+  // 3. Read and write data with MongoDB queries
+  
+  return await collection?.find({})
+}
+
     const getProject =async () => {
       
         // 1. Get a data source client
@@ -164,6 +174,8 @@ console.log(error);
             return await collection?.find({})
     }
 
+
+
    
     const getAllDrillingMachines = async()=>{
             // 1. Get a data source client
@@ -193,6 +205,7 @@ console.log(error);
         logout,
         createAccount,
         createEmployeeAccount,
+        getAllEmployees,
         getProject,
         getProjectByID,
         createNewProject,

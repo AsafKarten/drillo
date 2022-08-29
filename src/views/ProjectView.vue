@@ -21,13 +21,16 @@
         <p>{{"מספר מזהה:" + project_id.id}}</p>
         
       </div>
-
+      <div>
+        <ion-button class="headerButton" @click="modalManagerDriller">הוספת קודח</ion-button>
+        <ion-button class="headerButton" @click="modalManagerSiteManager">הוספת מנהל עבודה</ion-button>
+      </div>
         <MapBox id="map" 
         :v-show="showMap"
       :pitsToShow="pitsToShow" 
       @pitClick="pitClick"
        />
-
+<!--Show pit modal-->
         <ion-modal :is-open="isOpen">
       <ion-header>
         <ion-toolbar>
@@ -50,6 +53,49 @@
       </ion-content>
     </ion-modal>
     </ion-content>
+<!--Add driller to project modal-->
+     <ion-modal :is-open="isOpenDriller">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title></ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="modalManagerDriller">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="hebrewText">
+   <ion-item :key="driller._id" v-for="driller in drillers">
+        <p >{{driller.first }}{{driller.last }}</p>
+        
+        <p >{{driller._id}}</p>
+        <ion-button @click="addDriller(driller)">הוסף</ion-button>
+        </ion-item>
+        </div>
+      </ion-content>
+    </ion-modal>
+
+<!--Add site manager to project modal-->
+      <ion-modal :is-open="isOpenSiteManager">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title></ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="modalManagerSiteManager">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="hebrewText">
+           <ion-item :key="siteManager._id" v-for="siteManager in siteManagers">
+        <p >{{siteManager.first }}{{siteManager.last }}</p>
+        
+        <p >{{siteManager._id}}</p>
+        <ion-button @click="addSiteManager(siteManager)">הוסף</ion-button>
+        </ion-item>
+        </div>
+      </ion-content>
+    </ion-modal>
   </ion-page>
 </template>
 
@@ -75,6 +121,7 @@ export default defineComponent({
     IonButtons,
     IonModal,
     IonTitle,
+    IonItem,
     MapBox,
    
 },
@@ -82,7 +129,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout, getProjectByID, getAllProjects} = useAppState();
+    const {user , logout, getProjectByID, getAllProjects,getAllEmployees} = useAppState();
     const project_id = ref<any>(route.params);
     const project = ref<any>();
     const {id} = route.params
@@ -90,17 +137,36 @@ export default defineComponent({
     const pitsToShow = ref<any>([]);
     const showMap = ref(false);
     const isOpen = ref(false);
+    const isOpenSiteManager = ref(false);
+    const isOpenDriller = ref(false);
     const currentPit = ref<any>();
-    
+    const employees = ref<any>()
+    const employee = ref<any>()
+    const siteManagers = ref<any>()
+    const drillers = ref<any>()
   onMounted(async()=>{
 //need to fix find project by id and remove the find function here
   
     const projects = await getAllProjects()
+    employees.value = await getAllEmployees()
+    siteManagers.value = employees.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "site manager" && emp.organizationID === user.value.customData.organizationID)
+    drillers.value = employees.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "driller" && emp.organizationID === user.value.customData.organizationID)
     project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
     pitsToShow.value = project.value.pits 
     showMap.value = true;
-   
+    console.log(employees.value);
+    console.log(siteManagers.value);
+   console.log(drillers.value);
   });
+
+  const addDriller = (driller:any)=>{
+      console.log(driller);
+      
+  }
+  const addSiteManager = (siteManager:any)=>{
+    console.log(siteManager);
+  }
+
 
     
     const userLogout = async ()=>{
@@ -125,10 +191,26 @@ export default defineComponent({
         else
           isOpen.value = true;
       }
+         const modalManagerDriller = ()=>{
+        if(isOpenDriller.value)
+          isOpenDriller.value=false;
+        else
+          isOpenDriller.value = true;
+      }
+         const modalManagerSiteManager = ()=>{
+        if(isOpenSiteManager.value)
+          isOpenSiteManager.value=false;
+        else
+          isOpenSiteManager.value = true;
+      }
      return {
         userLogout,
         pitClick,
         modalManager,
+        addDriller,
+        addSiteManager,
+        modalManagerDriller,
+        modalManagerSiteManager,
         currentUser : user,
         project:project,
         project_id:project_id,
@@ -136,7 +218,13 @@ export default defineComponent({
         pitsToShow:pitsToShow,
         showMap:showMap,
         isOpen:isOpen,
+        isOpenDriller:isOpenDriller,
+        isOpenSiteManager:isOpenSiteManager,
         currentPit:currentPit,
+        employees:employees,
+        employee:employee,
+        siteManagers:siteManagers,
+        drillers:drillers
 
   }
   },
@@ -145,6 +233,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.hebrewText{
+  direction: rtl;
+}
 .mainContainer{
   display: block;
   direction: rtl;

@@ -159,6 +159,7 @@ export default defineComponent({
       const addToDailyReport = ()=>{
           let reports = project.value.reports
           let today = new Date();
+          //if its a new project and this is the first report
           if(reports == undefined){
             reports = [];
             reports.push({date:today,pits:[currentPit.value] })
@@ -169,10 +170,12 @@ export default defineComponent({
             let index = reports.length  * 1  - 1
             let report = reports[index] ;
             let repoDate = new Date(report.date)
-
+            
+            //if the last report is today's report
             if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
             project.value.reports[index].pits.push(currentPit.value)
           }
+          //else- its a new report for today
           else{
             project.value.reports.push({date:today,pits:[currentPit.value] })
           }
