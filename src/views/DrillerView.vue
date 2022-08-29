@@ -16,6 +16,7 @@
       </ion-header>
 
       <MapBox id="map" 
+      :v-show="showMap"
       :pitsToShow="pits" 
       @pitClick="pitClick"
        />
@@ -84,18 +85,46 @@ export default defineComponent({
     const currentDate = ref(new Date())
     const router = useRouter();
     const currentUser = ref<any>();
-    const { user, logout, getProject,updateProjectPits } = useAppState();
+    const { user, logout, getAllProjects,updateProjectPits } = useAppState();
     const project = ref<any>({});
+    const projects = ref<any>();
     const pits = ref<any>([]);
     const currentPit = ref();
     const prevPit = ref();
     const isOpen = ref(false);
+    const showMap = ref(false)
 
     onMounted(async () => {
-      project.value = await getProject();
-      pits.value = project?.value.pits;      
+      projects.value = await getAllProjects();
+      findProject()
+  
+    
+           
     });
 
+    const findProject = ()=>{ 
+
+       projects.value = projects.value?.filter((proj: { organizationID: any; }) => proj.organizationID === user.value.customData.organizationID)
+
+      
+      for (let index = 0; index < projects.value.length; index++) {
+        const element = projects.value[index];
+        console.log(element.drillers);
+        let employee = element.drillers.find((emp: { _id: any; }) => emp._id == user.value.customData._id)
+
+        if(employee !== undefined){
+          project.value = element
+          pits.value = element.pits
+          showMap.value = true
+          return
+        }
+        
+      }
+      
+      
+       
+    
+    }
     const userLogout = async () => {
       await logout();
       currentUser.value = null;
@@ -170,7 +199,7 @@ export default defineComponent({
             let index = reports.length  * 1  - 1
             let report = reports[index] ;
             let repoDate = new Date(report.date)
-            
+
             //if the last report is today's report
             if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
             project.value.reports[index].pits.push(currentPit.value)
@@ -200,14 +229,17 @@ export default defineComponent({
       savePitChanges,
       setPending,
       addToDailyReport,
+      findProject,
       //properties
       currentUser: user,
       project: project,
+      projects:projects,
       pits: pits,
       currentPit:currentPit,
       prevPit:prevPit,
       currentDate: currentDate,
       isOpen: isOpen,
+      showMap:showMap
     };
   },
 });
