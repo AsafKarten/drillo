@@ -14,9 +14,9 @@
   <div class="mainContainer">
    
       <h1>Machines View</h1>
-      <p>This page is under constructions</p>
 
          <div>
+          <ion-button router-link="/create-machine">הוסף מכונה חדשה</ion-button>
         <ion-item :key="machine._id" v-for="machine in drillingMachines">
         <p>{{machine?.name + ": "}} </p>
         <p> {{ machine?.type}}</p>

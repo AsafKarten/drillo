@@ -56,7 +56,7 @@ export const useAppState = () => {
 
      //create account email & password function
      //fix forced logout problem
-     const createEmployeeAccount =async (email:string, password:string,first:string,last:string, usertaype:string, organizationID:string) => {
+     const createEmployeeAccount =async (email:string, password:string,first:string,last:string, userType:string, organizationID:string) => {
       //Create user
       await app.emailPasswordAuth.registerUser(email, password)
       // Authenticate the user
@@ -68,7 +68,7 @@ export const useAppState = () => {
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
       const collection = mongodb?.db("drillo").collection("users");
       await collection?.insertOne(
-        {userID: app?.currentUser?.id, first, last,usertaype,organizationID}
+        {userID: app?.currentUser?.id, first, last,userType,organizationID}
       );
 
     //Refresh a user's custom data to make sure we have the latest version
@@ -229,7 +229,24 @@ console.log(error);
             
             return await collection?.find({})
     }
+     //create new project
+     const createNewDrillingMachine =async (name: string, type:string, model:string, organizationID:string) => {
+   
+      try {
+        // 1. Get a data source client
+const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+// 2. Get a database & collection
+const collection = mongodb?.db("drillo").collection("drilling_machines");
+// 3. Read and write data with MongoDB queries
+collection?.insertOne({name, type, model, organizationID});
+return true;
 
+
+} catch (error) {
+console.log(error);
+
+}
+};
 
 
    
@@ -269,6 +286,7 @@ console.log(error);
         updateProjectDrillers,
         updateProjectSiteManagers,
         getAllProjects,
+        createNewDrillingMachine,
         getAllDrillingMachines,
         getAllOrganizations,
         

@@ -16,7 +16,7 @@
       </ion-header>
 
       <MapBox id="map" 
-      :v-show="showMap"
+      v-show="showMap"
       :pitsToShow="pits" 
       @pitClick="pitClick"
        />
