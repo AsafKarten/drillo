@@ -11,17 +11,17 @@ import { defineComponent, onMounted, watch, reactive, ref } from "vue";
 export default defineComponent({
   name:"MapBox",
   components: { },
-  props: {pitsToShow:Array},
+  props: {pitsToShow:Array },
   emits: [ 'pitClick'],
   setup(props, ctx) {
-      
+      const mapStyle = ref("mapbox://styles/mapbox/light-v10");
     onMounted(() => {
-      
+      console.log(mapStyle.value); 
       mapboxgl.accessToken = "pk.eyJ1Ijoibm95aWwiLCJhIjoiY2t5eGFuNWNsMDlhcjJwcGdoeGNubTdmNiJ9.UloSWuKs68zMLBouKS7zhQ";
 
       const map = new mapboxgl.Map({
         container: "map",
-        style: "mapbox://styles/mapbox/light-v10",
+        style:  mapStyle.value,
         center: [34.749611 , 31.982113],
         zoom: 18,
         attributionControl: false
@@ -133,7 +133,7 @@ console.log(props.pitsToShow)
 
   
   return{
-    
+    mapStyle:mapStyle
   }
   }
 });

@@ -19,6 +19,19 @@
         <p>{{"שם הפרוייקט:" + project?.name}}</p>
         <p>{{ "כתובת:" + project?.address}}</p>
         <p>{{"מספר מזהה:" + project_id.id}}</p>
+        <div>
+          <p>קודחים:</p>
+          <ion-item :key="driller._id" v-for="driller in projectDrillers">
+        <p >{{driller.first }}{{driller.last }}</p>
+        </ion-item>
+        </div>
+
+         <div>
+          <p>מנהלי פרוייקט:</p>
+          <ion-item :key="manager._id" v-for="manager in projectManagers">
+        <p >{{manager.first }}{{manager.last }}</p>
+        </ion-item>
+        </div>
         
       </div>
       <div>
@@ -129,7 +142,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout, getProjectByID, getAllProjects,getAllEmployees} = useAppState();
+    const {user , logout, getProjectByID, getAllProjects,getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
     const project_id = ref<any>(route.params);
     const project = ref<any>();
     const {id} = route.params
@@ -144,14 +157,19 @@ export default defineComponent({
     const employee = ref<any>()
     const siteManagers = ref<any>()
     const drillers = ref<any>()
+    const projectDrillers = ref<any>();
+    const projectManagers = ref<any>();
   onMounted(async()=>{
 //need to fix find project by id and remove the find function here
   
     const projects = await getAllProjects()
     employees.value = await getAllEmployees()
-    siteManagers.value = employees.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "site manager" && emp.organizationID === user.value.customData.organizationID)
-    drillers.value = employees.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "driller" && emp.organizationID === user.value.customData.organizationID)
     project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
+    projectDrillers.value = project?.value.drillers
+    projectManagers.value = project?.value.site_managers
+    siteManagers.value = employees?.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "site manager" && emp.organizationID === user.value.customData.organizationID)
+    drillers.value = employees?.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "driller" && emp.organizationID === user.value.customData.organizationID)
+    
     pitsToShow.value = project.value.pits 
     showMap.value = true;
     console.log(employees.value);
@@ -159,16 +177,42 @@ export default defineComponent({
    console.log(drillers.value);
   });
  //unify add driller and add site manager to one smart modal and one smart fuction
-  const addDriller = (driller:any)=>{
+  const addDriller =async (driller:any)=>{
+    let tempDriller = projectDrillers?.value.find((d: { _id: any; }) =>d._id.toString() === driller._id.toString())
+    console.log(tempDriller);
+    if(tempDriller !== undefined){
+      console.log("הקודח כבר משוייך לפרוייקט זה")
+      return;
+    }
+    else{
       console.log(driller);
-      console.log("to do: save changes to mongodb");
-      
-      
+      if(project.value.drillers === undefined)
+          project.value.drillers = [];
+
+      project.value.drillers.push(driller)
+      console.log(project.value);
+      await updateProjectDrillers(project.value)
+    }    
   }
-  const addSiteManager = (siteManager:any)=>{
-    console.log(siteManager);
-    console.log("to do: save changes to mongodb");
+  const addSiteManager =async (siteManager:any)=>{
+
+    let tempManager = projectManagers.value.find((m: { _id: any; }) =>m._id.toString() === siteManager._id.toString())
+    console.log(tempManager);
+    
+    if(tempManager !== undefined){
+      console.log("המנהל כבר משוייך לפרוייקט זה")
+      return;
+    }
+    else{
+      console.log(siteManager);
+    if(project.value.site_managers === undefined)
+          project.value.site_managers = [];
+     project.value.site_managers.push(siteManager)
+     console.log(project.value);
+     await updateProjectSiteManagers(project.value)
   }
+    }
+    
 
 
     
@@ -227,7 +271,9 @@ export default defineComponent({
         employees:employees,
         employee:employee,
         siteManagers:siteManagers,
-        drillers:drillers
+        drillers:drillers,
+        projectDrillers:projectDrillers,
+        projectManagers:projectManagers
 
   }
   },
