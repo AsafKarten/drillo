@@ -12,12 +12,12 @@
     
     <ion-content :fullscreen="true" >
  
-      <h1> Machine View </h1>
-      <p> This page is under constructions </p>
+      <h1> פרטי מכונת קידוח {{ machine?.name }} </h1>
+     
       <div>
-        <p> {{"name: " + machine?.name }} </p>
-        <p> {{"type: " + machine?.type }} </p>
-        <p> {{"id: " + machine_id.id }} </p>
+        <p>name: {{ machine?.name }} </p>
+        <p>type: {{ machine?.type }} </p>
+        <p>id: {{ machine_id.id }} </p>
         
     </div>
     

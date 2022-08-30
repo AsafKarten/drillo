@@ -13,8 +13,8 @@
     <ion-content :fullscreen="true" >
   <div class="mainContainer">
    
-      <h1>Projects View</h1>
-      <p>This page is under constructions</p>
+      <h1>הפרוייקטים שלי</h1>
+      
       <div>
         <ion-item :key="project._id" v-for="project in projects">
         <p>{{project.name}}</p>

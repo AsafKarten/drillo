@@ -3,7 +3,7 @@
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">add new drilling machine</ion-title>
+          <ion-title size="large">הוספת מכונת קידוח חדשה</ion-title>
         </ion-toolbar>
       </ion-header>
 

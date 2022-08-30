@@ -13,8 +13,8 @@
     <ion-content :fullscreen="true" >
   
    <div class="mainContainer">
-      <h1>Employees View</h1>
-      <p>This page is under constructions</p>
+      <h1>העובדים שלי</h1>
+      
       <ion-button router-link="/create-employee">צור עובד חדש</ion-button>
 
          <div>

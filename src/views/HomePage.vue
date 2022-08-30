@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page v-show="showComponent">
     <ion-header :translucent="true">
       <ion-toolbar>
         <div v-if="currentUser" class="header">
@@ -93,11 +93,16 @@ export default defineComponent({
     const router = useRouter();
     const currentUser = ref<any>()
     const {user , logout} = useAppState();
-    
+    const showComponent = ref(false)
     
   onMounted(async()=>{
-    //fix page render after login
-    //add code or delete
+    if(user.value.customData.userType === 'driller')
+        router.replace('/driller-view')
+    else if(user.value.customData.userType === 'site manager')
+        router.replace('/daily-report')
+    else
+      showComponent.value = true
+    
   });
 
     
@@ -111,6 +116,7 @@ export default defineComponent({
      return {
         userLogout,
         currentUser : user,
+        showComponent:showComponent,
         
   }
   },

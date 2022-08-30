@@ -1,19 +1,15 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Create Employee</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Create Account</ion-title>
+          <ion-title size="large">יצירת עובד חדש</ion-title>
         </ion-toolbar>
       </ion-header>
-
-      <div id="container">
+     
+      <div id="container"> 
+        <h1>יצירת עובד חדש</h1>
+        <h3>לאחר סיום יצירת עובד חדש המערכת תתנתק ויהיה צורך להתחבר מחדש!</h3>
      <ion-item>
           <ion-label position="floating">First Name</ion-label>
        <ion-input v-model="first" type="text" autocomplete="new-first"></ion-input>

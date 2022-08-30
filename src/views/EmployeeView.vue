@@ -13,7 +13,7 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>Employee View</h1>
+      <h1>פרופיל עובד</h1>
       <div>
 
         <p>{{employee?.first}} {{employee?.last}}</p>

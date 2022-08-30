@@ -13,7 +13,7 @@
     <ion-content :fullscreen="true" >
   <div class="mainContainer">
    
-      <h1>Machines View</h1>
+      <h1>מכונות הקידוח שלי</h1>
 
          <div>
           <ion-button router-link="/create-machine">הוסף מכונה חדשה</ion-button>
