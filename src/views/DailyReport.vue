@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <AppHeader/>
+    <AppHeader :showButtons="false"/>
     
     <ion-content :fullscreen="true" >
   

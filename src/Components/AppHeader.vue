@@ -2,8 +2,8 @@
   <ion-header :translucent="true">
     <ion-toolbar>
       <div v-if="currentUser" class="header">
-          <ion-button @click="$router.back()" size="small" color="tertiary">חזרה</ion-button>
-          <ion-button router-link="/" size="small" color="tertiary">מסך ראשי</ion-button>
+          <ion-button v-if="showButtons" @click="$router.back()" size="small" color="tertiary">חזרה</ion-button>
+          <ion-button v-if="showButtons" router-link="/" size="small" color="tertiary">מסך ראשי</ion-button>
           <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
           <p class="headerText">{{currentUser?.profile.email}} </p>
           <ion-button @click="userLogout" color="Secondary">יציאה</ion-button>
@@ -26,13 +26,16 @@ export default defineComponent({
     IonToolbar,
     IonButton
   },
+  props: {showButtons: Boolean },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
     const {user , logout} = useAppState();
+    const userType = ref<any>()
     
-    /*onMounted(async()=>{
-    });*/
+    onMounted(async()=>{
+      userType.value = user.value.customData.userType
+    });
 
     const userLogout = async ()=>{
       await logout();
@@ -43,6 +46,7 @@ export default defineComponent({
     return {
       userLogout,
       currentUser : user,
+      userType:userType,
     }
   }
 });

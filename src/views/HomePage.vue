@@ -1,6 +1,6 @@
 <template>
   <ion-page v-show="showComponent">
-    <AppHeader/>
+    <AppHeader :showButtons="false"/>
     
     <ion-content :fullscreen="true" >
   

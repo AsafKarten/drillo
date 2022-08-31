@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <AppHeader/>
+      <AppHeader :showButtons="false"/>
   
       <div class="splitScreen">
         <div class="screenTop">
