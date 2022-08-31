@@ -1,5 +1,5 @@
 <template>
-  <div id="map"></div>
+  <div id="map" class="mapboxContainer"></div>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default defineComponent({
   props: {pitsToShow:Array },
   emits: [ 'pitClick'],
   setup(props, ctx) {
-      const mapStyle = ref("mapbox://styles/mapbox/light-v10");
+      const mapStyle = ref("mapbox://styles/mapbox/dark-v10");
     onMounted(() => {
       console.log(mapStyle.value); 
       mapboxgl.accessToken = "pk.eyJ1Ijoibm95aWwiLCJhIjoiY2t5eGFuNWNsMDlhcjJwcGdoeGNubTdmNiJ9.UloSWuKs68zMLBouKS7zhQ";
@@ -62,15 +62,40 @@ export default defineComponent({
           ],
           //Add outline for each circle so its easier to click on it
           "circle-stroke-width": 8,
-          "circle-stroke-color": "#000000",
-          "circle-stroke-opacity": 0.03
-        }
+          "circle-stroke-color": "#fff",
+          "circle-stroke-opacity": [
+            'match',
+            ['get', 'selected'],
+            'Selected',
+            0.5,
+            /* other */ 0.03
+          ]//0.03
+        },
+        
       }
 //
       const mapLoad = () => {
         map.resize();
         map.addSource('pitsSource', mapboxPitsSourceDefinition);
         map.addLayer(mapboxPitsLayerDefinition);
+
+        map.addLayer({
+            'id': 'pitsNames',
+            'type': 'symbol',
+            'source': 'pitsSource',
+            'layout': {
+              'text-field': ['get', 'description'],
+              'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+              'text-radial-offset': 0.5,
+              'text-justify': 'auto',
+              'text-font': ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+              'text-size': 10
+            },
+            'paint': {
+              'text-color': "#888888"
+            }
+          }
+        );
       };
 
 
@@ -83,7 +108,9 @@ export default defineComponent({
           type:"Feature",
           properties: {
             _id: pit.p,
-            status: pit.status
+            description: pit.p, 
+            status: pit.status,
+            selected: pit.selected?"Selected":"Not"
           },
           geometry: {
             type: "Point",
@@ -91,9 +118,10 @@ export default defineComponent({
           }
         }
       });
-console.log(props.pitsToShow)
+
       //update pits on map when a data changes or added
-      watch( [()=>props.pitsToShow, ()=>props.pitsToShow.length], ([pits,length]) => {
+      watch( [()=>props.pitsToShow, ()=>props.pitsToShow.length, ()=>props.pitsToShow.map(pit => pit.selected+',').join()], ([pits,length,selected]) => {
+        //map.resize();
         updateMapPits( formatServerPitsToMapbox(pits) );
 
         //find the bounds of all pits (minimum and maximum of lat and long = southwestern and northeastern corner)
@@ -117,7 +145,7 @@ console.log(props.pitsToShow)
       };
 
 //under constructions
-        const pitClicked = e => {
+      const pitClicked = e => {
         ctx.emit('pitClick',  {
           _id: e.features[0].properties._id
         });
@@ -140,15 +168,17 @@ console.log(props.pitsToShow)
 
 </script>
 
-<style scoped>
-#map {
+<style>
+.mapboxContainer {
     position: relative;
     width: 100%;
-    height: 100%;
-
+    height: auto;
+    min-width: 300px;
+    min-height: 200px;
 }
 
 .mapboxgl-ctrl-logo {
     display: none !important;
+    stroke: solid 2px red !important;
 }
 </style>

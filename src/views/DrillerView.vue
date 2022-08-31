@@ -1,50 +1,85 @@
 <template>
   <ion-page>
     <ion-content>
-      <ion-header :translucent="true">
-        <ion-toolbar>
-          <div v-if="currentUser" class="header">
-            <p class="headerText">
-              {{ currentUser.customData.first }}
-              {{ currentUser.customData.last }}
-            </p>
-            <ion-button class="headerButton" @click="userLogout"
-              >יציאה</ion-button
-            >
-          </div>
-        </ion-toolbar>
-      </ion-header>
+      <AppHeader/>
+  
+      <div class="splitScreen">
+        <div class="screenTop">
 
-      <MapBox id="map" 
-      v-show="showMap"
-      :pitsToShow="pits" 
-      @pitClick="pitClick"
-       />
+          <ion-accordion-group :multiple="true" :value="['Waiting', 'Done']">
 
- <ion-modal :is-open="isOpen">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>בור קידוח מספר {{currentPit.p}}</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="modalManager">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div class="hebrewText">
-        <h5>{{ currentPit.p}}</h5>
-        <h6>קואורדינטות</h6>
-        <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
-         <h6>רשת ישראל החדשה</h6>
-        <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
-        <p>{{currentPit.status +'סטטוס:'}}</p>
-        <p>{{currentPit.garbage? "זבל בקידוח" :  " " }}</p>
-        <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
-        <ion-button color="success" @click="setConfirm" >אישור ביצוע</ion-button>
-        <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
+            <ion-accordion value="Waiting">
+
+              <ion-item slot="header">
+                <ion-label>לא הושלמו</ion-label>
+                <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status!='Done').length }} </ion-badge>
+              </ion-item>
+
+              <div slot="content">
+                <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
+                  {{ pit.p }}
+                  <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
+                </ion-item>
+              </div>
+
+            </ion-accordion>
+
+
+            <ion-accordion value="Done">
+
+              <ion-item slot="header">
+                <ion-label>הסתיימו</ion-label>
+                <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status=='Done').length }} </ion-badge>
+              </ion-item>
+
+              <div slot="content">
+                <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
+                  {{ pit.p }}
+                  <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
+                </ion-item>
+              </div>
+              
+            </ion-accordion>
+
+          </ion-accordion-group>
         </div>
-      </ion-content>
-    </ion-modal>
+        <div class="screenBottom">
+
+        <MapBox id="map" 
+        v-show="showMap"
+        :pitsToShow="pits" 
+        @pitClick="pitClick"
+        />
+        </div>
+      </div>
+
+
+      <ion-modal :is-open="isOpen" class="modalHalfScreen">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="modalManager('close')">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div class="hebrewText">
+            <h5>{{currentPit?.p}}</h5>
+            <h6>קואורדינטות</h6>
+            <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
+            <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>
+            <h6>רשת ישראל החדשה</h6>
+            <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
+            <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
+            <p>סטטוס: {{currentPit?.status}}</p>
+            <p>{{currentPit?.garbage? "זבל בקידוח" :  " " }}</p>
+            <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
+            <ion-button color="success" @click="setConfirm" >אישור ביצוע</ion-button>
+            <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
+          </div>
+        </ion-content>
+      </ion-modal>
 
     </ion-content>
   </ion-page>
@@ -60,13 +95,19 @@ import {
   IonButton,
   IonModal,
   IonTitle,
-  
+  IonItem,
+  IonLabel,
+  IonBadge,
+  IonAccordion, 
+  IonAccordionGroup,
   
 } from "@ionic/vue";
 import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAppState } from "../realm-state";
 import MapBox from "./MapBox.vue";
+
+import AppHeader from '../Components/AppHeader.vue'
 
 export default defineComponent({
   name: "DrillerView",
@@ -79,7 +120,13 @@ export default defineComponent({
     IonToolbar,
     IonButton,
     IonTitle,
+    IonItem,
+    IonLabel,
+    IonBadge,
+    IonAccordion, 
+    IonAccordionGroup,
     MapBox,
+    AppHeader
   },
   setup() {
     const currentDate = ref(new Date())
@@ -116,6 +163,7 @@ export default defineComponent({
           project.value = element
           pits.value = element.pits
           showMap.value = true
+          pits.value.forEach((pit:any) => pit.selected = false );
           return
         }
         
@@ -125,11 +173,6 @@ export default defineComponent({
        
     
     }
-    const userLogout = async () => {
-      await logout();
-      currentUser.value = null;
-      router.replace("/login");
-    };
 
 //check error
     const pitClick = (clickData: { _id: any; }) => {
@@ -138,17 +181,29 @@ export default defineComponent({
         console.log(pitClicked)
         prevPit.value = currentPit.value
         currentPit.value = pitClicked
-        
-        modalManager();
-        if (pitClicked == undefined) return;
-        
-        
+
+        if (pitClicked == undefined || pitClicked===prevPit.value) { modalManager("close"); return; }
+
+        modalManager("open");
+        pitClicked.selected = true
     }
 
     //modal block
-      const modalManager = ()=>{
-        if(isOpen.value)
-          isOpen.value=false;
+      const modalManager = (action:any=undefined)=> {
+        if(action=="close") modalManagerInternal(true);
+        else if(action=="open") modalManagerInternal(false);
+        else if(isOpen.value) modalManagerInternal(true);
+        else modalManagerInternal(false);
+      }
+
+      const modalManagerInternal = (close:boolean)=>{
+        pits.value.forEach((pit:any) => pit.selected = false );
+        if(close)
+        {
+          isOpen.value = false;
+          prevPit.value = undefined;
+          currentPit.value = undefined;
+        }
         else
           isOpen.value = true;
       }
@@ -182,7 +237,7 @@ export default defineComponent({
           }
           
           await updateProjectPits(project.value)
-          modalManager()
+          modalManager("close")
       }
 
       const addToDailyReport = ()=>{
@@ -221,7 +276,6 @@ export default defineComponent({
     //end modal block
     return {
       //methoods
-      userLogout,
       pitClick,
       modalManager,
       setConfirm,
@@ -248,24 +302,12 @@ export default defineComponent({
 <style scoped>
 .hebrewText{
   direction: rtl;
+  line-height: 80%;
+  overflow: scroll;
 }
 #map {
   height: 100%;
   width: 100%;
-}
-.header {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-content: space-between;
-  font-size: 20px;
-}
-.headerText {
-  padding-left: 2%;
-}
-.headerButton {
-  
-  padding-left: 12%;
 }
 
 #container strong {
@@ -284,5 +326,36 @@ export default defineComponent({
 
 #container a {
   text-decoration: none;
+}
+
+.splitScreen {
+  width: 100%;
+  height: 100%;
+}
+.screenTop, .screenBottom {
+  width: 100%;
+  height: 50%;
+}
+.screenTop {
+  overflow-y: scroll;
+}
+.screenBottom {
+  display: flex;
+}
+
+.modalHalfScreen {
+  height: 60%;
+  margin-top: 0px;
+  
+}
+
+h5,h6{
+  font-weight: bold;
+}
+
+.coords {
+  font-family: monospace;
+  font-size: 150%;
+  letter-spacing: 1px;
 }
 </style>

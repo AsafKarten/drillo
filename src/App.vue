@@ -16,3 +16,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+body {
+    direction: rtl;
+}
+</style>

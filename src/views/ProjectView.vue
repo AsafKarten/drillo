@@ -1,57 +1,113 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <div v-if="currentUser" class="header">
-      <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
-       <p class="headerText">{{currentUser?.profile.email}} </p>
-      <ion-button class="headerButton" @click="userLogout">יציאה</ion-button>
-    </div>
-      </ion-toolbar>
-    </ion-header>
+    <AppHeader/>
     
     <ion-content :fullscreen="true" >
   
-   
-      
-      <div class="mainContainer">
-        <h1> פרוייקט {{ project?.name}}</h1>
-        <p>{{"שם הפרוייקט:" + project?.name}}</p>
-        <p>{{ "כתובת:" + project?.address}}</p>
-        <p>{{"מספר מזהה:" + project_id.id}}</p>
-        <div>
-          <p>קודחים:</p>
-          <ion-item :key="driller._id" v-for="driller in projectDrillers">
-        <p >{{driller.first }}{{driller.last }}</p>
-        </ion-item>
+    <div class="splitScreen">
+      <div class="screenTop">
+
+        <div class="mainContainer">
+          <h1> פרוייקט <b>{{project?.name}}</b></h1>
+          <p>{{"כתובת:" + project?.address}}</p>
+          <p>{{"מספר מזהה:" + project_id.id}}</p>
+
+
+          <ion-accordion-group>
+
+            <ion-accordion value="drillers">
+
+              <ion-item slot="header">
+                <ion-label>קודחים</ion-label>
+                <ion-badge :key="driller._id" v-for="driller in projectDrillers" style="margin:2px">
+                  {{ driller.first }}
+                </ion-badge>
+              </ion-item>
+
+              <div slot="content">
+                <ion-item :key="driller._id" v-for="driller in projectDrillers">
+                  {{ driller.first }} {{ driller.last }}
+                  <ion-button color="danger" slot="end" @click="removeDriller(driller)">הסרה</ion-button>
+                </ion-item>
+                <ion-item>
+                  <ion-button class="headerButton" @click="modalManagerDriller">
+                    הוספת קודח
+                  </ion-button>
+                </ion-item>
+              </div>
+
+            </ion-accordion>
+
+            <ion-accordion value="machines">
+
+              <ion-item slot="header">
+                <ion-label>מכונות קידוח</ion-label>
+                <ion-badge :key="machine._id" v-for="machine in projectMachines" style="margin:2px">
+                  {{ machine.name }}
+                </ion-badge>
+              </ion-item>
+
+              <div slot="content">
+                <ion-item :key="machine._id" v-for="machine in projectMachines">
+                  {{ machine.name }} | {{ machine.type }} | {{ machine.model }}
+                  <ion-button color="danger" slot="end" @click="removeMachine(machine)">הסרה</ion-button>
+                </ion-item>
+                <ion-item>
+                  <ion-button class="headerButton" @click="modalManagerMachine">
+                    הוספת מכונת קידוח
+                  </ion-button>
+                </ion-item>
+              </div>
+
+            </ion-accordion>
+
+            <ion-accordion value="managers">
+
+              <ion-item slot="header">
+                <ion-label>מנהלי פרוייקט</ion-label>
+                <ion-badge :key="manager._id" v-for="manager in projectManagers" style="margin:2px">
+                  {{ manager.first }}
+                </ion-badge>
+              </ion-item>
+
+              <div slot="content">
+                <ion-item :key="manager._id" v-for="manager in projectManagers">
+                  {{ manager.first }} {{ manager.last }}
+                  <ion-button color="danger" slot="end" @click="removeSiteManager(manager)">הסרה</ion-button>
+                </ion-item>
+                <ion-item>
+                  <ion-button class="headerButton" @click="modalManagerSiteManager">
+                    הוספת מנהל עבודה
+                  </ion-button>
+                </ion-item>
+              </div>
+
+            </ion-accordion>
+
+          </ion-accordion-group>
+
         </div>
 
-          <div>
-          <p>מכונות קידוח:</p>
-          <ion-item :key="machine._id" v-for="machine in projectMachines">
-        <p >{{machine.name }} {{machine.type }} {{machine.model}}</p>
-        </ion-item>
-        </div>
-
-         <div>
-          <p>מנהלי פרוייקט:</p>
-          <ion-item :key="manager._id" v-for="manager in projectManagers">
-        <p >{{manager.first }}{{manager.last }}</p>
-        </ion-item>
-        </div>
+       <!-- <div>
+          <ion-button class="headerButton" @click="modalManagerMachine">הוספת מכונת קידוח</ion-button>
+          <ion-button class="headerButton" @click="modalManagerDriller">הוספת קודח</ion-button>
+          <ion-button class="headerButton" @click="modalManagerSiteManager">הוספת מנהל עבודה</ion-button>
+        </div> -->
         
       </div>
-      <div>
-        <ion-button class="headerButton" @click="modalManagerMachine">הוספת מכונת קידוח</ion-button>
-        <ion-button class="headerButton" @click="modalManagerDriller">הוספת קודח</ion-button>
-        <ion-button class="headerButton" @click="modalManagerSiteManager">הוספת מנהל עבודה</ion-button>
-      </div>
+      <div class="screenBottom">
+
         <MapBox id="map" 
         :v-show="showMap"
-      :pitsToShow="pitsToShow" 
-      @pitClick="pitClick"
-       />
-<!--Show pit modal-->
+        :pitsToShow="pitsToShow" 
+        @pitClick="pitClick"
+        />
+
+      </div>
+    </div>
+
+      
+      <!--Show pit modal-->
         <ion-modal :is-open="isOpen">
       <ion-header>
         <ion-toolbar>
@@ -143,13 +199,16 @@
 </template>
 
 <script lang="ts">
-import {  IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem, } from '@ionic/vue';
+import {  IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonBadge,IonItem,
+    IonAccordion, 
+    IonAccordionGroup,
+} from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 import MapBox from'../views/MapBox.vue';
 
-
+import AppHeader from '../Components/AppHeader.vue'
 
 
 
@@ -166,7 +225,11 @@ export default defineComponent({
     IonTitle,
     IonItem,
     MapBox,
-   
+    IonAccordion, 
+    IonAccordionGroup,
+    IonLabel,
+    IonBadge,
+    AppHeader
 },
   setup(){
     const router = useRouter();
@@ -231,6 +294,19 @@ export default defineComponent({
       await updateProjectDrillers(project.value)
     }    
   }
+  const removeDriller =async (driller:any)=>{
+    let tempDriller = projectDrillers?.value.find((d: { _id: any; }) =>d._id.toString() === driller._id.toString())
+    console.log(tempDriller);
+    if(tempDriller !== undefined){
+      project.value.drillers.splice( project.value.drillers.indexOf(driller) )
+      await updateProjectDrillers(project.value)
+    }
+    else{
+      console.log("הקודח לא משוייך לפרוייקט זה")
+      return;
+    }    
+  }
+
   const addSiteManager =async (siteManager:any)=>{
     if(projectManagers.value === undefined)
         projectManagers.value=[]
@@ -249,6 +325,22 @@ export default defineComponent({
      project.value.site_managers.push(siteManager)
      console.log(project.value);
      await updateProjectSiteManagers(project.value)
+  }
+    }
+
+  const removeSiteManager =async (siteManager:any)=>{
+    let tempManager = projectManagers.value.find((m: { _id: any; }) =>m._id.toString() === siteManager._id.toString())
+    console.log(tempManager);
+    
+    if(tempManager !== undefined){
+      project.value.site_managers.splice( project.value.site_managers.indexOf(siteManager) )
+      console.log(project.value);
+      await updateProjectSiteManagers(project.value)
+    }
+    else{
+      console.log(siteManager);
+      console.log("המנהל לא משוייך לפרוייקט זה")
+      return;
   }
     }
     
@@ -275,14 +367,20 @@ const addMachine =async (machine:any)=>{
     }    
   }
 
-    
-    const userLogout = async ()=>{
-      await logout();
-      currentUser.value = null;
-      router.replace("/login");
-      
-      
+  const removeMachine =async (machine:any)=>{
+    let tempMachine = projectMachines?.value.find((m: { _id: any; }) => m._id.toString() === machine._id.toString())
+    console.log(tempMachine);
+    if(tempMachine !== undefined){
+      project.value.machines.splice( project.value.machines.indexOf(machine) )
+      await updateProjectMachines(project.value)
     }
+    else{
+      console.log(tempMachine);
+      console.log("המכונה לא נמצאה בפרוייקט זה")
+    }    
+  }
+
+    
 
        const pitClick = (clickData: { _id: any; }) => {
         const pitClicked = pitsToShow.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
@@ -317,12 +415,14 @@ const addMachine =async (machine:any)=>{
           isOpenSiteManager.value = true;
       }
      return {
-        userLogout,
         pitClick,
         modalManager,
         addDriller,
+        removeDriller,
         addSiteManager,
+        removeSiteManager,
         addMachine,
+        removeMachine,
         modalManagerDriller,
         modalManagerMachine,
         modalManagerSiteManager,
@@ -359,21 +459,20 @@ const addMachine =async (machine:any)=>{
 .mainContainer{
   display: block;
   direction: rtl;
-  
-}
-.header{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-content: space-between;
-  font-size: 20px;
- 
-}
-.headerText {
-  padding-left: 2%;
-}
-.headerButton{
-  padding-left: 2%;
 }
 
+.splitScreen {
+  width: 100%;
+  height: 100%;
+}
+.screenTop, .screenBottom {
+  width: 100%;
+  height: 50%;
+}
+.screenTop {
+  overflow-y: scroll;
+}
+.screenBottom {
+  display: flex;
+}
 </style>

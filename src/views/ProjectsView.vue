@@ -1,41 +1,30 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <div v-if="currentUser" class="header">
-      <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
-       <p class="headerText">{{currentUser?.profile.email}} </p>
-      <ion-button class="headerButton" @click="userLogout">יציאה</ion-button>
-    </div>
-      </ion-toolbar>
-    </ion-header>
+    <AppHeader/>
     
     <ion-content :fullscreen="true" >
-  <div class="mainContainer">
-   
+    <div class="mainContainer">
       <h1>הפרוייקטים שלי</h1>
-      
-      <div>
-        <ion-item :key="project._id" v-for="project in projects">
-        <p>{{project.name}}</p>
-        <p>{{project.address}}</p>
-        <ion-button @click="goToProject(project)">צפייה בפרוייקט</ion-button>
-        </ion-item>
-        
-      </div>
-      
+        <div>
+          <ion-item :key="project._id" v-for="project in projects">
+          <p>{{project.name}}</p>
+          <p>{{project.address}}</p>
+          <ion-button @click="goToProject(project)">צפייה בפרוייקט</ion-button>
+          </ion-item>
+          
+        </div>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonItem } from '@ionic/vue';
+import { IonContent, IonPage,IonButton,IonItem } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
 
-
+import AppHeader from '../Components/AppHeader.vue'
 
 
 
@@ -45,12 +34,10 @@ export default defineComponent({
   name: 'ProjectsView',
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonToolbar,
     IonButton,
     IonItem,
-   
+    AppHeader
 },
   setup(){
     const router = useRouter();
@@ -64,18 +51,10 @@ export default defineComponent({
   });
 
     
-    const userLogout = async ()=>{
-      await logout();
-      currentUser.value = null;
-      router.replace("/login");
-      
-      
-    }
     const goToProject =(project:any)=>{
         router.push('/project/'+ project._id)
     }
      return {
-        userLogout,
         goToProject,
         currentUser : user,
         projects:projects
@@ -91,20 +70,6 @@ export default defineComponent({
   display: block;
   direction: rtl;
   
-}
-.header{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-content: space-between;
-  font-size: 20px;
- 
-}
-.headerText {
-  padding-left: 2%;
-}
-.headerButton{
-  padding-left: 2%;
 }
 
 </style>

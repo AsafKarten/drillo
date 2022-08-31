@@ -1,16 +1,14 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <div v-if="currentUser" class="header">
-      <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
-       <p class="headerText">{{currentUser?.profile.email}} </p>
-      <ion-button class="headerButton" @click="userLogout">יציאה</ion-button>
-    </div>
-      </ion-toolbar>
-    </ion-header>
+     <AppHeader/>
     
     <ion-content :fullscreen="true" >
+
+  
+    <div class="splitScreen">
+      <div class="screenTop">
+
+
     <h1>יצירת פרוייקט חדש</h1>
      <ion-item>
           <ion-label position="floating">שם הפרוייקט</ion-label>
@@ -35,12 +33,24 @@
         accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       />
     </div>
+
+        
+<ion-button @click="saveProject">שמירת פרוייקט</ion-button>
+
+      </div>
+      <div class="screenBottom">
+
+
      <MapBox v-show="showMap" id="map" 
       :pitsToShow="pitsToShow" 
       @pitClick="pitClick"
        />
 
-       <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
+
+      </div>
+    </div>
+
+
 
        <ion-modal :is-open="isOpen">
       <ion-header>
@@ -52,7 +62,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <div class="hebrewText">
+        <div>
         <h5>{{ currentPit.p}}</h5>
         <h6>קואורדינטות</h6>
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
@@ -77,7 +87,7 @@ import MapBox from'../views/MapBox.vue';
 import * as XLSX from "xlsx";
 import proj4 from 'proj4'
 
-
+import AppHeader from './AppHeader.vue'
 
 
 
@@ -98,6 +108,7 @@ export default defineComponent({
     IonLabel,
     IonItem,
     MapBox,
+    AppHeader
 },
   setup(){
     const router = useRouter();
@@ -146,13 +157,6 @@ export default defineComponent({
         console.log(pitsToShow.value);
       };
     }
-    
-    const userLogout = async ()=>{
-      await logout();
-      currentUser.value = null;
-      router.replace("/login");
-    
-    }
 
      const pitClick = (clickData: { _id: any; }) => {
         const pitClicked = pitsToShow.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
@@ -178,7 +182,6 @@ export default defineComponent({
       }
      return {
         //methoods
-        userLogout,
         addfile,
         pitClick,
         modalManager,
@@ -205,27 +208,24 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.hebrewText{
-  direction: rtl;
-  
-}
-.header{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-content: space-between;
-  font-size: 20px;
- 
-}
-.headerText {
-  padding-left: 2%;
-}
-.headerButton{
-  padding-left: 2%;
-}
 .uploadBox{
    border: 2px solid lightgray;
    border-collapse: collapse;
    margin-top: 1%;
+}
+
+.splitScreen {
+  width: 100%;
+  height: 100%;
+}
+.screenTop, .screenBottom {
+  width: 100%;
+  height: 50%;
+}
+.screenTop {
+  overflow-y: scroll;
+}
+.screenBottom {
+  display: flex;
 }
 </style>

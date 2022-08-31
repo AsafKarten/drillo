@@ -115,7 +115,6 @@
       return{ 
         //methods
         createEmployeeAccountEmailPassword,
-        userLogout,
         //properties
         currentUser:user,
         organizationID,

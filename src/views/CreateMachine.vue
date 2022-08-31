@@ -95,20 +95,11 @@
           error.value = err;
         }
       }
-
-       const userLogout = async ()=>{
-      await logout();
-      currentUser.value = null;
-      router.replace("/login");
-      
-      
-    }
       
       
       return{ 
         //methods
         createMachine,
-        userLogout,
         //properties
         currentUser:user,
         organizationID,
