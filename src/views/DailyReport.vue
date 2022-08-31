@@ -78,25 +78,36 @@ export default defineComponent({
     const user_id = ref<any>();
     const pits = ref<any>();
     const repoDate = ref<any>()
+    const projects =ref<any>()
+    const siteManagers = ref<any>()
+    const siteManager = ref<any>()
 
   onMounted(async()=>{
     //the shown report is the last object in the array=> it needs to show all the reports that was not confirmed yet
     //need to fix the query so it will not find the project out of all projects in here.
     user_id.value = user.value.customData._id
     console.log(user_id.value);
-     const projects = await getAllProjects()
+      projects.value = await getAllProjects()
         console.log(projects);
-        
-        project.value = projects?.find(proj =>proj.site_manager === user_id.value)
-        reports.value = project.value.reports;
-        report.value = reports.value[reports.value.length-1];
-        pits.value = report.value.pits;
-        repoDate.value = report.value.date;
-        console.log(report.value);
-    
-   
+        findProjectAndReports();
+
     
   });
+  const findProjectAndReports = ()=>{
+
+    for (let index = 0; index < projects.value.length; index++) {
+          const tempProject =  projects.value[index]
+          siteManagers.value = tempProject.site_managers
+          let tempManager = tempProject.site_managers.find((sm: { _id: any; }) => sm._id.toString() === user.value.customData._id.toString())
+          if(tempManager !== undefined){
+            siteManager.value = tempManager
+            project.value = tempProject
+            reports.value = project.value.reports;
+            return true;
+          }  
+        }
+    
+  }
 
   const confirmReport = async(repo_date:Date)=>{
     console.log(repo_date);
@@ -116,6 +127,7 @@ export default defineComponent({
  
      return {
         confirmReport,
+        findProjectAndReports,
         currentUser : user,
         project:project,
         reports:reports,
@@ -124,6 +136,9 @@ export default defineComponent({
         user_id:user_id,
         pits:pits,
         repoDate:repoDate,
+        siteManagers:siteManagers,
+        siteManager:siteManager,
+        projects:projects,
         
   }
   },

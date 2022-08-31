@@ -6,20 +6,24 @@
   
    
       <h1>פרופיל עובד</h1>
-      <div>
 
-        <p>{{employee?.first}} {{employee?.last}}</p>
-        <p>{{employee?.userType}}</p>
-        <p>{{employee?.organizationID}}</p>
-        <p>{{employee_id}}</p>
-        
-      </div>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>{{employee?.userType}}</ion-card-subtitle>
+          <ion-card-title>{{employee?.first}} {{employee?.last}}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-button  router-link="/employees" >חזרה</ion-button>
+        </ion-card-content>
+      </ion-card>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from '@ionic/vue';
+import { IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -34,6 +38,12 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
+    IonButton,
+    IonCard, 
+    IonCardContent, 
+    IonCardHeader, 
+    IonCardSubtitle, 
+    IonCardTitle,
     AppHeader
   },
   setup(){

@@ -124,7 +124,7 @@ const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
 // 2. Get a database & collection
 const collection = mongodb?.db("drillo").collection("projects");
 // 3. Read and write data with MongoDB queries
-collection?.insertOne({name, address, pits,reports});
+collection?.insertOne({name, address, pits,reports,creationDate:new Date()});
 return true;
 
 

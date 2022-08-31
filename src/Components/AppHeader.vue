@@ -3,6 +3,7 @@
     <ion-toolbar>
       <div v-if="currentUser" class="header">
           <ion-button @click="$router.back()" size="small" color="tertiary">חזרה</ion-button>
+          <ion-button router-link="/" size="small" color="tertiary">מסך ראשי</ion-button>
           <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
           <p class="headerText">{{currentUser?.profile.email}} </p>
           <ion-button @click="userLogout" color="Secondary">יציאה</ion-button>

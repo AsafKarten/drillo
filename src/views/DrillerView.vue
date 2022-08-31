@@ -210,6 +210,7 @@ export default defineComponent({
 
       const setConfirm = ()=>{     
              currentPit.value.status = 'Done';
+             currentPit.value.finishDate = new Date()
              savePitChanges();           
       }
 
