@@ -34,6 +34,7 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
+    AppHeader
   },
   setup(){
     const router = useRouter();
