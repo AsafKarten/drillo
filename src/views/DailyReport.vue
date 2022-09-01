@@ -83,11 +83,12 @@ export default defineComponent({
     const siteManager = ref<any>()
 
   onMounted(async()=>{
-    //the shown report is the last object in the array=> it needs to show all the reports that was not confirmed yet
-    //need to fix the query so it will not find the project out of all projects in here.
     user_id.value = user.value.customData._id
     console.log(user_id.value);
+    //get all orijects from mongo
       projects.value = await getAllProjects()
+      //filter the projects by organization
+      projects.value = projects.value.filter((proj: { organizationID: any; }) => proj.organizationID === user.value.customData.organizationID)
         console.log(projects);
         findProjectAndReports();
 
@@ -98,6 +99,7 @@ export default defineComponent({
     for (let index = 0; index < projects.value.length; index++) {
           const tempProject =  projects.value[index]
           siteManagers.value = tempProject.site_managers
+          //find the project the user is assigned to
           let tempManager = tempProject.site_managers.find((sm: { _id: any; }) => sm._id.toString() === user.value.customData._id.toString())
           if(tempManager !== undefined){
             siteManager.value = tempManager

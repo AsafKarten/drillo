@@ -2,11 +2,11 @@
   <ion-header :translucent="true">
     <ion-toolbar>
       <div v-if="currentUser" class="header">
-          <ion-button v-if="showButtons" @click="$router.back()" size="small" color="tertiary">חזרה</ion-button>
-          <ion-button v-if="showButtons" router-link="/" size="small" color="tertiary">מסך ראשי</ion-button>
-          <p class="headerText">{{currentUser.customData.first}} {{currentUser.customData.last}}</p>
-          <p class="headerText">{{currentUser?.profile.email}} </p>
-          <ion-button @click="userLogout" color="Secondary">יציאה</ion-button>
+          <ion-button  v-if="showButtons" @click="$router.back()" color="dark">חזרה</ion-button>
+          <ion-button  v-if="showButtons" router-link="/" color="dark">מסך ראשי</ion-button>
+          <p class="headerText">מחובר: {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+          <!-- <p class="headerText">{{currentUser?.profile.email}} </p> -->
+          <ion-button  @click="userLogout" color="dark">{{"יציאה"}}</ion-button>
           
       </div>
     </ion-toolbar>
@@ -57,14 +57,18 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   width: 100%;
-  align-content: space-between;
-  font-size: 20px;
+  justify-content: space-between;
+  font-size: 16px;
+  background-color:#404040;
+  color:  lightgrey;
  
 }
 .headerText {
   padding-left: 2%;
 }
-.headerButton{
-  padding-left: 2%;
+.headerButtons{
+  margin-top: 1%;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 </style>
