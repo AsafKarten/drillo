@@ -120,6 +120,9 @@
       <ion-content class="ion-padding">
         <div class="hebrewText">
         <h5>{{ currentPit.p}}</h5>
+        <h6>נתוני קידוח</h6>
+            <p>עומק: <span>{{currentPit?.diameter}}</span></p>
+            <p>קוטר: <span>{{currentPit?.depth}}</span></p>
         <h6>קואורדינטות</h6>
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>

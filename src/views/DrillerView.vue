@@ -66,6 +66,9 @@
         <ion-content class="ion-padding">
           <div class="hebrewText">
             <h5>{{currentPit?.p}}</h5>
+            <h6>נתוני קידוח</h6>
+            <p>עומק: <span class="coords">{{currentPit?.diameter}}</span></p>
+            <p>קוטר: <span class="coords">{{currentPit?.depth}}</span></p>
             <h6>קואורדינטות</h6>
             <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
             <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>

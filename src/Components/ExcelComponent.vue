@@ -64,6 +64,9 @@
       <ion-content class="ion-padding">
         <div>
         <h5>{{ currentPit.p}}</h5>
+        <h6>נתוני קידוח</h6>
+        <p>{{"קוטר: "+currentPit.diameter}}</p>
+        <p>{{"עומק: "+currentPit.depth}}</p>
         <h6>קואורדינטות</h6>
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
@@ -125,8 +128,10 @@ export default defineComponent({
     const projectName = ref("");
     const projectAddress = ref("");
     const reports = ref<any>([])
+      const organizationID = ref();
   onMounted(async()=>{
-    //add code or delete
+    organizationID.value = user.value.customData.organizationID
+    
   });
  const addfile = (event:any) =>{
       file.value = event.target.files[0];
@@ -148,9 +153,11 @@ export default defineComponent({
         var pits= []
         for(i = 0 ; i < arraylist.value.length ; i++){
             let p = arraylist.value[i].p;
+            let diameter =arraylist.value[i].diameter;
+            let depth = arraylist.value[i].depth;
             let itm = {x : arraylist.value[i].x , y : arraylist.value[i].y }
             const [long, lat] = proj4('+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs', '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees', [itm.x, itm.y]);
-            pits[i]= {p:p , itm:itm , coordinates: {long:long,lat:lat}, status:'waiting'}
+            pits[i]= {p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting'}
         }
         pitsToShow.value = pits;
         showMap.value = true;
@@ -169,7 +176,7 @@ export default defineComponent({
     }
 
     const saveProject =async ()=>{
-      await createNewProject(projectName.value, projectAddress.value, pitsToShow.value, reports.value)
+      await createNewProject(organizationID.value,projectName.value, projectAddress.value, pitsToShow.value, reports.value)
       router.replace('/projects')
     }
 
@@ -198,7 +205,8 @@ export default defineComponent({
         currentPit:currentPit,
         projectName: projectName,
         projectAddress: projectAddress,
-        reports:reports
+        reports:reports,
+        organizationID:organizationID
 
         
   }

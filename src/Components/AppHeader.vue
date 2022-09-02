@@ -59,8 +59,6 @@ export default defineComponent({
   width: 100%;
   justify-content: space-between;
   font-size: 16px;
-  background-color:#404040;
-  color:  lightgrey;
  
 }
 .headerText {
