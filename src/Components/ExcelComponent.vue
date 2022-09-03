@@ -24,7 +24,14 @@
             type="text"
           ></ion-input>
       </ion-item>
-    <div class="uploadBox">
+      <ion-item>
+        <ion-label position="floating">שם המזמין</ion-label>
+        <ion-input
+          v-model="projectClient"
+          type="text"
+        ></ion-input>
+    </ion-item>
+    <div>
       <p>קובץ קלונסאות</p>
       <input
         type="file"
@@ -127,6 +134,7 @@ export default defineComponent({
     const currentPit = ref<any>();
     const projectName = ref("");
     const projectAddress = ref("");
+    const projectClient = ref("");
     const reports = ref<any>([])
       const organizationID = ref();
   onMounted(async()=>{
@@ -176,7 +184,7 @@ export default defineComponent({
     }
 
     const saveProject =async ()=>{
-      await createNewProject(organizationID.value,projectName.value, projectAddress.value, pitsToShow.value, reports.value)
+      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value , pitsToShow.value, reports.value)
       router.replace('/projects')
     }
 
@@ -205,6 +213,7 @@ export default defineComponent({
         currentPit:currentPit,
         projectName: projectName,
         projectAddress: projectAddress,
+        projectClient:projectClient,
         reports:reports,
         organizationID:organizationID
 
@@ -216,11 +225,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.uploadBox{
-   border: 2px solid lightgray;
-   border-collapse: collapse;
-   margin-top: 1%;
-}
+
 
 .splitScreen {
   width: 100%;

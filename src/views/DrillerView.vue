@@ -78,7 +78,7 @@
             <p>סטטוס: {{currentPit?.status}}</p>
             <p>{{currentPit?.garbage? "זבל בקידוח" :  " " }}</p>
             <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
-            <ion-button color="success" @click="setConfirm" >אישור ביצוע</ion-button>
+            <ion-button color="success" @click="setConfirm" >סיום ביצוע</ion-button>
             <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
           </div>
         </ion-content>
