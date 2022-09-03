@@ -69,7 +69,7 @@ const routes: Array<RouteRecordRaw> = [
   }
   ,
   {
-    path: '/daily-report',
+    path: '/daily-report/:id',
     name: 'DailyReport',
     component: DailyReport
   }
@@ -104,7 +104,11 @@ const router = createRouter({
 
 router.beforeEach((to , from , next) => {
   const {isLoggedIn } = useAppState();
-  if(to.fullPath === '/home'){
+  if(to.fullPath === '/home' || to.fullPath === '/create-machine'
+  || to.fullPath === '/create-employee'|| to.fullPath === '/machine/:id' ||
+   to.fullPath === '/employee/:id' || to.fullPath === '/machines'|| to.fullPath === '/employees'|| to.fullPath === '/project/:id' 
+   || to.fullPath === '/projects' || to.fullPath === '/create-project' || to.fullPath === '/driller-view')
+  {
     if(!isLoggedIn.value){
       next('/login');
     }

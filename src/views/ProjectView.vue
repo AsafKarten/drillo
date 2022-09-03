@@ -12,7 +12,7 @@
           <p>{{"כתובת:" + project?.address}}</p>
           <p>{{"מספר מזהה:" + project_id.id}}</p>
 
-
+          <ion-button class="headerButton" @click="goToReports"> דוחות עבודה</ion-button>
           <ion-accordion-group>
 
             <ion-accordion value="drillers">
@@ -417,6 +417,11 @@ const addMachine =async (machine:any)=>{
         else
           isOpenSiteManager.value = true;
       }
+
+      const goToReports = ()=>{
+        router.push('/daily-report/'+ project.value._id)
+    }
+      
      return {
       //methods
         pitClick,
@@ -430,6 +435,7 @@ const addMachine =async (machine:any)=>{
         modalManagerDriller,
         modalManagerMachine,
         modalManagerSiteManager,
+        goToReports,
         //properties
         currentUser : user,
         project:project,

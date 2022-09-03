@@ -5,7 +5,7 @@
     <ion-content :fullscreen="true" >
   
    
-      <h1>מנהל עבודה: {{currentUser?.customData.first}} {{currentUser?.customData.last}}</h1>
+      <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1>
       <h5>פרוייקט: {{project?.name}}</h5>
 
        <ion-card :key="repo.date" v-for="repo in reports">
@@ -44,7 +44,7 @@
 <script lang="ts">
 import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 
 import AppHeader from '../Components/AppHeader.vue'
@@ -69,28 +69,31 @@ export default defineComponent({
 },
   setup(){
     const router = useRouter();
+    const route = useRoute();
     const currentUser = ref<any>()
     const {user , logout, getAllProjects, updateProjectPits} = useAppState();
     const project = ref<any>();
     const reports = ref<any>();
     const report = ref<any>();
-    const project_id = ref<any>();
+    const project_id = ref<any>(route.params);
     const user_id = ref<any>();
     const pits = ref<any>();
     const repoDate = ref<any>()
     const projects =ref<any>()
     const siteManagers = ref<any>()
     const siteManager = ref<any>()
+      const {id} = route.params
 
   onMounted(async()=>{
-    user_id.value = user.value.customData._id
-    console.log(user_id.value);
+    user_id.value = user?.value.customData._id
+    console.log(project_id.value);
     //get all orijects from mongo
       projects.value = await getAllProjects()
       //filter the projects by organization
-      projects.value = projects.value.filter((proj: { organizationID: any; }) => proj.organizationID === user.value.customData.organizationID)
-        console.log(projects);
-        findProjectAndReports();
+      project.value = projects?.value.find((proj: { _id: any; } ) => proj._id.toString()=== id.toString())
+      reports.value = project.value.reports;
+        console.log(project);
+        //findProjectAndReports();
 
     
   });
@@ -143,6 +146,7 @@ export default defineComponent({
         siteManagers:siteManagers,
         siteManager:siteManager,
         projects:projects,
+        id:id,
         
   }
   },
