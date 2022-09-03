@@ -63,7 +63,7 @@ export const useAppState = () => {
       await app.logIn(
         Realm.Credentials.emailPassword(email, password)
       )
-      
+
       // save profile info
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
       const collection = mongodb?.db("drillo").collection("users");
@@ -87,6 +87,12 @@ const getAllEmployees = async()=>{
   // 3. Read and write data with MongoDB queries
   
   return await collection?.find({})
+}
+
+const deleteEmployeeFromDB = async() =>{
+  //await app.deleteUser();
+  console.log(app.currentUser);
+  
 }
 
     const getProject =async () => {
@@ -306,6 +312,7 @@ console.log(error);
         createAccount,
         createEmployeeAccount,
         getAllEmployees,
+        deleteEmployeeFromDB ,
         getProject,
         getProjectByID,
         createNewProject,

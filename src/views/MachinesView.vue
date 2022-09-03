@@ -59,7 +59,9 @@ export default defineComponent({
         router.push('/machine/'+ machine._id)
     }
      return {
+      //methods
         goToMachine,
+        //properties
         currentUser : user,
         drillingMachines:drillingMachines,
         

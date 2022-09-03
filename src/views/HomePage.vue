@@ -35,7 +35,8 @@
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button router-link="/employees">העובדים שלי</ion-button>
+          <ion-button router-link="/employees">העובדים שלי
+          </ion-button>
         </ion-card-content>
       </ion-card>
 
@@ -44,9 +45,11 @@
           <ion-card-subtitle>מכונות קידוח</ion-card-subtitle>
           <ion-card-title>מכונות קידוח</ion-card-title>
         </ion-card-header>
-
+       
         <ion-card-content>
-          <ion-button router-link="/machines">מכונות קידוח</ion-button>
+          
+          <ion-button router-link="/machines">מכונות קידוח
+          </ion-button>
         </ion-card-content>
       </ion-card>
 
@@ -57,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -97,6 +100,7 @@ export default defineComponent({
     });
 
      return {
+       //properties
         currentUser : user,
         showComponent:showComponent,
         

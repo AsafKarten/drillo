@@ -62,7 +62,9 @@ export default defineComponent({
         router.push('/employee/'+ employee._id)
     }
      return {
+      //methods
         goToEmployee,
+        //properties
         currentUser : user,
         employees:employees,
         organization:organization,

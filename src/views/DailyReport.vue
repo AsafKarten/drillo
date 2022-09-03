@@ -128,8 +128,10 @@ export default defineComponent({
 
  
      return {
+      //methods
         confirmReport,
         findProjectAndReports,
+        //properties
         currentUser : user,
         project:project,
         reports:reports,

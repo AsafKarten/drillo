@@ -54,6 +54,7 @@ export default defineComponent({
   });
 
      return {
+      //properties
         currentUser : user,
         machine:machine,
         machine_id:machine_id,

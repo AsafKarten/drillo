@@ -418,6 +418,7 @@ const addMachine =async (machine:any)=>{
           isOpenSiteManager.value = true;
       }
      return {
+      //methods
         pitClick,
         modalManager,
         addDriller,
@@ -429,6 +430,7 @@ const addMachine =async (machine:any)=>{
         modalManagerDriller,
         modalManagerMachine,
         modalManagerSiteManager,
+        //properties
         currentUser : user,
         project:project,
         project_id:project_id,

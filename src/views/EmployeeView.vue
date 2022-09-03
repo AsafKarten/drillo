@@ -14,7 +14,10 @@
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button  router-link="/employees" >חזרה</ion-button>
+          <IonButton color="danger"
+            @click="deleteEmoloyee" >מחיקת עובד
+            <IonIcon slot="end" :icon="trash" />
+          </IonButton>
         </ion-card-content>
       </ion-card>
 
@@ -23,8 +26,9 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
+import { IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
+import { trash } from 'ionicons/icons';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 
@@ -44,13 +48,14 @@ export default defineComponent({
     IonCardHeader, 
     IonCardSubtitle, 
     IonCardTitle,
+    IonIcon,
     AppHeader
   },
   setup(){
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getAllEmployees} = useAppState();
+    const {user , logout,getAllEmployees,deleteEmployeeFromDB } = useAppState();
     const employee_id = ref<any>(route.params);
     const employee = ref<any>();
     const {id} = route.params
@@ -65,16 +70,26 @@ export default defineComponent({
    
    
   });
+  const deleteEmoloyee = ()=>{
+    console.log(employee_id.value);
+    deleteEmployeeFromDB() 
+    
+  }
 
 
    
      return {
+      //methoods
+      deleteEmoloyee,
+     //properties
         currentUser : user,
         employee:employee,
         employee_id:employee_id,
         id:id,
         organization:organization,
         employees:employees,
+        //icons properties
+        trash,
         
   }
   },

@@ -55,7 +55,9 @@ export default defineComponent({
         router.push('/project/'+ project._id)
     }
      return {
+      //methods
         goToProject,
+        //properties
         currentUser : user,
         projects:projects
         

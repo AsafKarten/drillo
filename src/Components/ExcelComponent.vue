@@ -236,4 +236,5 @@ export default defineComponent({
 .screenBottom {
   display: flex;
 }
+
 </style>

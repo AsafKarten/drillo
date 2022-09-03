@@ -2,11 +2,17 @@
   <ion-header :translucent="true">
     <ion-toolbar>
       <div v-if="currentUser" class="header">
-          <ion-button  v-if="showButtons" @click="$router.back()" color="dark">חזרה</ion-button>
-          <ion-button  v-if="showButtons" router-link="/" color="dark">מסך ראשי</ion-button>
+          <ion-button  v-if="showButtons" @click="$router.back()" color="dark">חזרה
+            <IonIcon slot="start" :icon="arrowRedo" />
+          </ion-button>
+          <ion-button  v-if="showButtons" router-link="/" color="dark">מסך ראשי
+            <IonIcon slot="start" :icon="home"/>
+          </ion-button>
           <p class="headerText">מחובר: {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
           <!-- <p class="headerText">{{currentUser?.profile.email}} </p> -->
-          <ion-button  @click="userLogout" color="dark">{{"יציאה"}}</ion-button>
+          <ion-button  @click="userLogout" color="dark">{{"יציאה"}}
+            <IonIcon slot="end" :icon="exit"/>
+          </ion-button>
           
       </div>
     </ion-toolbar>
@@ -14,8 +20,9 @@
 </template>
 
 <script lang="ts">
-import { IonHeader, IonToolbar, IonButton } from '@ionic/vue';
+import { IonHeader, IonToolbar, IonButton,IonIcon } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
+import { arrowRedo, home, exit } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useAppState } from '../realm-state';
 
@@ -24,7 +31,8 @@ export default defineComponent({
   components: {
     IonHeader,
     IonToolbar,
-    IonButton
+    IonButton,
+    IonIcon
   },
   props: {showButtons: Boolean },
   setup(){
@@ -44,9 +52,14 @@ export default defineComponent({
     }
     
     return {
+      //methods
       userLogout,
+       //properties
       currentUser : user,
       userType:userType,
+      arrowRedo,
+      home,
+      exit,
     }
   }
 });
