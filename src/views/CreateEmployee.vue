@@ -31,7 +31,6 @@
         @ionChange="employeeType = JSON.stringify($event.detail.value)" placeholder="סוג עובד">
         <ion-select-option value="driller">קודח</ion-select-option>
         <ion-select-option value="manager">מנהל מערכת</ion-select-option>
-        <ion-select-option value="site manager">מנהל עבודה חיצוני</ion-select-option>
       </ion-select>
 
        </ion-item>
@@ -80,7 +79,7 @@
       const last = ref("");
       const employeeType = ref("")
       const error = ref<any>({});
-      const employeeTypes = ref(["driller", "manager", "site manager"]);
+      const employeeTypes = ref(["driller", "manager"]);
 
       const router = useRouter();
 

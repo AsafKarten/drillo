@@ -74,6 +74,7 @@
         <h6>נתוני קידוח</h6>
         <p>{{"קוטר: "+currentPit.diameter}}</p>
         <p>{{"עומק: "+currentPit.depth}}</p>
+        <p>{{"נפח בטון תיאורטי(קוב): "+currentPit.concreteVolume }}</p>
         <h6>קואורדינטות</h6>
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
@@ -164,8 +165,9 @@ export default defineComponent({
             let diameter =arraylist.value[i].diameter;
             let depth = arraylist.value[i].depth;
             let itm = {x : arraylist.value[i].x , y : arraylist.value[i].y }
+            let concreteVolume = (3.14 * ((diameter/2) * (diameter/2)) * depth)/10000
             const [long, lat] = proj4('+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs', '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees', [itm.x, itm.y]);
-            pits[i]= {p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting'}
+            pits[i]= {p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting',concreteVolume:concreteVolume}
         }
         pitsToShow.value = pits;
         showMap.value = true;

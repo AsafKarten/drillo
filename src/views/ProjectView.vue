@@ -419,7 +419,7 @@ const addMachine =async (machine:any)=>{
       }
 
       const goToReports = ()=>{
-        router.push('/daily-report/'+ project.value._id)
+        router.push('/project-reports/'+ project.value._id)
     }
       
      return {
