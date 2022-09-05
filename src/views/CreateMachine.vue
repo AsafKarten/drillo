@@ -20,6 +20,8 @@
         <ion-label position="floating">דגם</ion-label>
        <ion-input v-model="machineModel" type="text" autocomplete="new-email"></ion-input>
        </ion-item>
+       <UploadFileVue/>
+
         
      
        <!-- <ion-item>
@@ -52,6 +54,9 @@
   import { useRouter } from 'vue-router';
 
   import { useAppState } from '@/realm-state';
+
+  import UploadFileVue from '@/Components/UploadFile.vue';
+
   export default defineComponent({
     name: 'CreateMachine',
     components: {
@@ -64,6 +69,7 @@
       IonLabel,
       IonItem,
       IonButton, 
+      UploadFileVue,
  
     },
     setup(){

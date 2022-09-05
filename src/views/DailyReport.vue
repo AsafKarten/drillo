@@ -7,19 +7,19 @@
    
       <h5>פרוייקט: {{project?.name}}</h5>
 
-       <ion-card :key="repo.date" v-for="repo in reports">
+       <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>{{repo.date+":"+"תאריך"}}</ion-card-subtitle>
+      <ion-card-subtitle>{{report.date+":"+"תאריך"}}</ion-card-subtitle>
       <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-       <ion-item :key="pit._id" v-for="pit in repo.pits">
+       <ion-item :key="pit._id" v-for="pit in report.pits">
         <p class="textMargin">{{pit.p}}</p>
         
         <p class="textMargin">{{pit.status}}</p>
         </ion-item>
-        <ion-button v-if="!repo.approve" @click="confirmReport(repo.date)">אישור ביצוע</ion-button>
+        <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
         <span v-else>אושר</span>
     </ion-card-content>
   </ion-card>
@@ -70,12 +70,13 @@ export default defineComponent({
 
   onMounted(async()=>{
 
-    //get all orijects from mongo
+      //get all projects from mongo
       projects.value = await getAllProjects()
-      //filter the projects by organization
+      //filter the projects by project id
       project.value = projects?.value.find((proj: { _id: any; } ) => proj._id.toString()=== id.toString())
       reports.value = project.value.reports;
-        console.log(project);
+      report.value = reports.value[reports.value.length-1]
+        console.log(report);
 
   });
  

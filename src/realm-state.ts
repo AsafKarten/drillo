@@ -303,6 +303,16 @@ console.log(error);
       return await collection?.find({})
 }
 
+const uploadFile = async (file:BinaryData)=>{
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+const collection = mongodb?.db("drillo").collection("files");
+// 3. Read and write data with MongoDB queries
+collection?.insertOne({file});
+return true;
+}
+
     return{
         isLoggedIn,
         user,
@@ -324,6 +334,7 @@ console.log(error);
         createNewDrillingMachine,
         getAllDrillingMachines, 
         getAllOrganizations,
+        uploadFile,
         
     };
 };

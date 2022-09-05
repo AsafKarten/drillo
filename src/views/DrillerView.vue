@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content>
       <AppHeader :showButtons="false"/>
-  
+      
       <div class="splitScreen">
         <div class="screenTop">
 
