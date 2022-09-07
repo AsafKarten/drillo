@@ -20,6 +20,8 @@
   import {useAppState} from '../realm-state';
   
   import AppHeader from '../Components/AppHeader.vue'
+
+
   
   
   
@@ -39,6 +41,7 @@
       const {user , logout,getAllEmployees, uploadFile} = useAppState();
       const employees = ref<any>()
       const organization = ref<any>()
+   
       
     onMounted(async()=>{
       //add code or delete
@@ -46,7 +49,7 @@
       
     });
   
-    const uploadNewFile =async (file:any) => {
+    const uploadNewFile = (file:any) => {
         console.log(file);
         
     }
@@ -64,6 +67,7 @@
           currentUser : user,
           employees:employees,
           organization:organization,
+
           
     }
     },

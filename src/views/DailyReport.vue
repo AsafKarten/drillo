@@ -4,23 +4,23 @@
     
     <ion-content :fullscreen="true" >
   
-   
+   <create-pdf :report="report"/>
       <h5>פרוייקט: {{project?.name}}</h5>
 
        <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>{{report.date+":"+"תאריך"}}</ion-card-subtitle>
+      <ion-card-subtitle>{{":"+"תאריך"}}</ion-card-subtitle>
       <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-       <ion-item :key="pit._id" v-for="pit in report.pits">
+       <ion-item :key="pit._id" v-for="pit in pits">
         <p class="textMargin">{{pit.p}}</p>
         
         <p class="textMargin">{{pit.status}}</p>
         </ion-item>
-        <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
-        <span v-else>אושר</span>
+        <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
+        <span v-else>אושר</span> -->
     </ion-card-content>
   </ion-card>
     </ion-content>
@@ -33,6 +33,8 @@ import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 
+import CreatePdf from '@/Components/CreatePdf.vue';
+
 //import AppHeader from '../Components/AppHeader.vue'
 
 
@@ -43,13 +45,14 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonButton,
+    //IonButton,
     IonItem,
     IonCard,
     IonCardContent, 
     IonCardHeader, 
     IonCardSubtitle, 
     IonCardTitle,
+    CreatePdf,
     //AppHeader
    
 },
@@ -70,13 +73,17 @@ export default defineComponent({
 
   onMounted(async()=>{
 
+    console.log(id);
+    
       //get all projects from mongo
       projects.value = await getAllProjects()
       //filter the projects by project id
       project.value = projects?.value.find((proj: { _id: any; } ) => proj._id.toString()=== id.toString())
-      reports.value = project.value.reports;
-      report.value = reports.value[reports.value.length-1]
-        console.log(report);
+      console.log(projects.value);
+      reports.value = project?.value.reports;
+      report.value = reports?.value[reports.value.length-1]
+      pits.value = report.value.pits
+        console.log(project);
 
   });
  

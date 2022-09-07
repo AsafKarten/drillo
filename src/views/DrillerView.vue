@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content>
       <AppHeader :showButtons="false"/>
-      
+      <ion-button @click="goToReport">דוח יומי</ion-button>
       <div class="splitScreen">
         <div class="screenTop">
 
@@ -270,11 +270,11 @@ export default defineComponent({
           
           console.log(project.value);
           }
+   
           
-        
-
-          
-          
+      }
+      const goToReport = ()=>{
+        router.push('/daily-report/'+ project.value._id)
       }
       
     //end modal block
@@ -288,6 +288,7 @@ export default defineComponent({
       setPending,
       addToDailyReport,
       findProject,
+      goToReport,
       //properties
       currentUser: user,
       project: project,
