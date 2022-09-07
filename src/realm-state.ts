@@ -122,23 +122,23 @@ const deleteEmployeeFromDB = async() =>{
 
 
      //create new project
-     const createNewProject =async (organizationID: object , name: string, address:string, client:string, pits:[], reports:[]) => {
+    const createNewProject =async (organizationID: object , name: string, address:string, client:string,contactPerson:object, pits:[], reports:[]) => {
    
       try {
         // 1. Get a data source client
-const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
-// 2. Get a database & collection
-const collection = mongodb?.db("drillo").collection("projects");
-// 3. Read and write data with MongoDB queries
-collection?.insertOne({organizationID,name, address, client, pits,reports,creationDate:new Date()});
-return true;
+        const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+        // 2. Get a database & collection
+        const collection = mongodb?.db("drillo").collection("projects");
+        // 3. Read and write data with MongoDB queries
+        collection?.insertOne({organizationID,name, address, client,contactPerson, pits,reports,creationDate:new Date()});
+        return true;
 
 
-} catch (error) {
+      } catch (error) {
 console.log(error);
 
-}
-};
+          }
+    };
 
     const updateProjectPits =async (project : any) => {
         try {

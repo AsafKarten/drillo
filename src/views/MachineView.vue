@@ -48,8 +48,8 @@ export default defineComponent({
     const drillingMachines = await getAllDrillingMachines()
     machine.value = drillingMachines?.find(proj =>proj._id.toString() === machine_id.value.id)
     console.log(machine_id.value);
-   console.log(route.params);
-   console.log(id);
+    console.log(route.params);
+    console.log(id);
    
   });
 

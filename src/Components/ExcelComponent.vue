@@ -31,6 +31,27 @@
           type="text"
         ></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label position="floating">שם איש קשר/מנהל עבודה</ion-label>
+      <ion-input
+        v-model="projectContactPerson"
+        type="text"
+      ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">טלפון איש קשר</ion-label>
+    <ion-input
+      v-model="contactPersonPhone"
+      type="text"
+    ></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating">מייל איש קשר</ion-label>
+  <ion-input
+    v-model="contactPersonMail"
+    type="text"
+  ></ion-input>
+</ion-item>
     <div>
       <p>קובץ קלונסאות</p>
       <input
@@ -74,7 +95,7 @@
         <h6>נתוני קידוח</h6>
         <p>{{"קוטר: "+currentPit.diameter}}</p>
         <p>{{"עומק: "+currentPit.depth}}</p>
-        <p>{{"נפח בטון תיאורטי(קוב): "+currentPit.concreteVolume }}</p>
+        <p>{{"נפח בטון תיאורטי(קוב): "+currentPit.concreteVolume.toFixed(3) }}</p>
         <h6>קואורדינטות</h6>
         <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
          <h6>רשת ישראל החדשה</h6>
@@ -136,6 +157,9 @@ export default defineComponent({
     const projectName = ref("");
     const projectAddress = ref("");
     const projectClient = ref("");
+    const projectContactPerson = ref("");
+    const contactPersonPhone = ref("");
+    const contactPersonMail = ref("");
     const reports = ref<any>([])
       const organizationID = ref();
   onMounted(async()=>{
@@ -186,7 +210,8 @@ export default defineComponent({
     }
 
     const saveProject =async ()=>{
-      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value , pitsToShow.value, reports.value)
+      let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone, mail:contactPersonMail}
+      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, pitsToShow.value, reports.value)
       router.replace('/projects')
     }
 
@@ -216,6 +241,9 @@ export default defineComponent({
         projectName: projectName,
         projectAddress: projectAddress,
         projectClient:projectClient,
+        projectContactPerson:projectContactPerson,
+        contactPersonPhone:contactPersonPhone,
+        contactPersonMail:contactPersonMail,
         reports:reports,
         organizationID:organizationID
 

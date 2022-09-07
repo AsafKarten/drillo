@@ -63,7 +63,7 @@ export default defineComponent({
     const employees = ref<any>()
 
   onMounted(async()=>{
-     //add code or delete
+    //add code or delete
     const allEmployees= await getAllEmployees();
     employee.value = allEmployees?.find((emp: { _id: { toString: () => any; }; }) =>emp._id.toString() === employee_id.value.id)
     console.log(employee.value);
@@ -79,9 +79,9 @@ export default defineComponent({
 
    
      return {
-      //methoods
-      deleteEmoloyee,
-     //properties
+        //methoods
+        deleteEmoloyee,
+        //properties
         currentUser : user,
         employee:employee,
         employee_id:employee_id,
