@@ -113,7 +113,8 @@ router.beforeEach((to , from , next) => {
   if(to.fullPath === '/home' || to.fullPath === '/create-machine'
   || to.fullPath === '/create-employee'|| to.fullPath === '/machine/:id' ||
    to.fullPath === '/employee/:id' || to.fullPath === '/machines'|| to.fullPath === '/employees'|| to.fullPath === '/project/:id' 
-   || to.fullPath === '/projects' || to.fullPath === '/create-project' || to.fullPath === '/driller-view')
+   || to.fullPath === '/projects' || to.fullPath === '/create-project' || to.fullPath === '/driller-view' 
+   || to.fullPath === '/project-reports/:id' || to.fullPath === '/daily-report/:id')
   {
     if(!isLoggedIn.value){
       next('/login');
