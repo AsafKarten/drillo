@@ -13,6 +13,7 @@
           <p>{{"מספר מזהה:" + project_id.id}}</p>
 
           <ion-button class="headerButton" @click="goToReports"> דוחות עבודה</ion-button>
+          <ion-button class="headerButton" @click="modalManagerAddExJob"> הוספת עבודה חיצונית</ion-button>
           <ion-accordion-group>
 
             <ion-accordion value="drillers">
@@ -199,12 +200,66 @@
       </ion-content>
     </ion-modal>
   </ion-page>
+
+  <!--Add external job to project modal-->
+  <ion-modal :is-open="showAddExJob">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title></ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="modalManagerAddExJob">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="hebrewText">
+        <ion-item>
+          <ion-label position="floating">סוג קבל"ן</ion-label>
+          <ion-input
+            v-model="contractorType"
+            type="text"
+          ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">שם</ion-label>
+        <ion-input
+          v-model="contractorName"
+          type="text"
+        ></ion-input>
+    </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">סוג השירות</ion-label>
+    <ion-input
+      v-model="serviceType"
+      type="text"
+    ></ion-input>
+</ion-item>
+<ion-item>
+  <ion-label position="floating">מחיר</ion-label>
+  <ion-input
+    v-model="servicePrice"
+    type="number"
+  ></ion-input>
+</ion-item>
+<ion-item>
+ 
+</ion-item>
+<Datepicker v-model="serviceDate" multiDates></Datepicker>
+  
+
+<ion-button @click="saveExJob">שמור</ion-button>
+      </div>
+    </ion-content>
+  </ion-modal>
 </template>
 
 <script lang="ts">
 import {  IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonBadge,IonItem,
     IonAccordion, 
     IonAccordionGroup,
+    IonDatetime,
+    IonDatetimeButton,
 } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -212,6 +267,9 @@ import {useAppState} from '../realm-state';
 import MapBox from'../views/MapBox.vue';
 
 import AppHeader from '../Components/AppHeader.vue'
+
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 
 
@@ -232,13 +290,17 @@ export default defineComponent({
     IonAccordionGroup,
     IonLabel,
     IonBadge,
-    AppHeader
+    IonInput,
+    //IonDatetime, 
+    //IonDatetimeButton,
+    AppHeader,
+    Datepicker,
 },
   setup(){
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout, getProjectByID,updateProjectMachines,getAllDrillingMachines, getAllProjects,getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
+    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getAllDrillingMachines, getAllProjects,getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
     const project_id = ref<any>(route.params);
     const project = ref<any>();
     const {id} = route.params
@@ -257,6 +319,12 @@ export default defineComponent({
     const projectDrillers = ref<any>();
     const projectMachines = ref<any>();
     const projectManagers = ref<any>();
+    const showAddExJob = ref(false);
+    const contractorType = ref("");  
+    const contractorName = ref("");  
+    const serviceType = ref("");  
+    const servicePrice = ref("");  
+    const serviceDate = ref();  
   onMounted(async()=>{
 //need to fix find project by id and remove the find function here
   machines.value =  await getAllDrillingMachines();
@@ -418,8 +486,47 @@ const addMachine =async (machine:any)=>{
           isOpenSiteManager.value = true;
       }
 
+      const modalManagerAddExJob = ()=>{
+        if(showAddExJob.value)
+        showAddExJob.value=false;
+        else
+        showAddExJob.value = true;
+      }
+
       const goToReports = ()=>{
         router.push('/project-reports/'+ project.value._id)
+    }
+
+    const saveExJob =async ()=>{
+      if(project.value.external_services === undefined)
+          project.value.external_services = []
+          
+      if(serviceDate.value instanceof Date){
+        project.value.external_services.push({
+          contractorType:contractorType.value,
+          contractorName:contractorName.value, 
+          serviceType:serviceType.value, 
+          servicePrice:servicePrice.value, 
+          serviceDate:serviceDate.value
+        })
+        
+      }
+      else if(serviceDate.value instanceof Array){
+        for (let i = 0; i < serviceDate.value.length; i++) {
+          const dateElement = serviceDate.value[i];
+          project.value.external_services.push({
+          contractorType:contractorType.value,
+          contractorName:contractorName.value, 
+          serviceType:serviceType.value, 
+          servicePrice:servicePrice.value, 
+          serviceDate:dateElement
+        })
+        }
+      }
+
+      await updateProjectExternalServices(project.value)
+      console.log(project.value);
+        
     }
       
      return {
@@ -435,7 +542,9 @@ const addMachine =async (machine:any)=>{
         modalManagerDriller,
         modalManagerMachine,
         modalManagerSiteManager,
+        modalManagerAddExJob,
         goToReports,
+        saveExJob,
         //properties
         currentUser : user,
         project:project,
@@ -456,6 +565,12 @@ const addMachine =async (machine:any)=>{
         projectManagers:projectManagers,
         projectMachines:projectMachines,
         machines:machines,
+        showAddExJob:showAddExJob, 
+        contractorType:contractorType,
+        contractorName:contractorName, 
+        serviceType:serviceType, 
+        servicePrice:servicePrice, 
+        serviceDate:serviceDate,
 
   }
   },
