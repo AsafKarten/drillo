@@ -531,6 +531,7 @@ const addMachine =async (machine:any)=>{
       serviceType.value=""
       servicePrice.value=""
       serviceDate.value= null
+      modalManagerAddExJob()
 
     }
       
