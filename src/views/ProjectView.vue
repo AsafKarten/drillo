@@ -500,7 +500,7 @@ const addMachine =async (machine:any)=>{
     const saveExJob =async ()=>{
       if(project.value.external_services === undefined)
           project.value.external_services = []
-          
+
       if(serviceDate.value instanceof Date){
         project.value.external_services.push({
           contractorType:contractorType.value,
@@ -526,7 +526,13 @@ const addMachine =async (machine:any)=>{
 
       await updateProjectExternalServices(project.value)
       console.log(project.value);
-        
+      contractorType.value= ""
+      contractorName.value= "" 
+      serviceType.value=""
+      servicePrice.value=""
+      serviceDate.value= null
+      modalManagerAddExJob()
+
     }
       
      return {
