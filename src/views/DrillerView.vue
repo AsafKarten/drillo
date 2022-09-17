@@ -79,10 +79,51 @@
             <p>{{currentPit?.garbage? "זבל בקידוח" :  " " }}</p>
             <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
             <ion-button color="success" @click="setConfirm" >סיום ביצוע</ion-button>
+            <ion-button @click="modalManagerNotes" color="warning">הערות קידוח</ion-button>
             <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
           </div>
         </ion-content>
       </ion-modal>
+
+      <!--drilling notes modal-->
+      
+      <ion-modal :is-open="isOpenNotes" class="modalHalfScreen">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="modalManagerNotes">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div class="hebrewText">
+            <ion-button color="success" @click="modalManagerDepth('cables')">כבלים</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('infrastructure')">תשתיות</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('pipe')">צינור</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('garbage')" >פסולת</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('stones')" >אבנים</ion-button>
+    
+          </div>
+        </ion-content>
+      </ion-modal>
+
+      <!--note depth modal-->
+      <ion-modal :is-open="isOpenDepth" class="modalHalfScreen">
+     
+        <ion-content class="ion-padding">
+          <ion-item>
+            <ion-label position="floating">עומק</ion-label>
+            <ion-input
+              v-model="noteDepth"
+              type="number"
+            ></ion-input>
+          </ion-item>
+          <ion-button color="success" @click="addNewNoteToPit" >אישור</ion-button>
+        </ion-content>
+      </ion-modal>
+
+     
 
     </ion-content>
   </ion-page>
@@ -100,9 +141,11 @@ import {
   IonTitle,
   IonItem,
   IonLabel,
+  IonInput,
   IonBadge,
   IonAccordion, 
   IonAccordionGroup,
+  IonPopover,
   
 } from "@ionic/vue";
 import { defineComponent, onMounted, ref } from "vue";
@@ -128,8 +171,11 @@ export default defineComponent({
     IonBadge,
     IonAccordion, 
     IonAccordionGroup,
+    //IonPopover,
+    IonInput,
     MapBox,
-    AppHeader
+    AppHeader,
+    
   },
   setup() {
     const currentDate = ref(new Date())
@@ -143,7 +189,11 @@ export default defineComponent({
     const prevPit = ref();
     const isOpen = ref(false);
     const showMap = ref(false)
-
+    const isOpenNotes = ref(false);
+    const noteDepth = ref(0);
+    const isOpenDepth = ref(false);
+    const note = ref("")
+  
     onMounted(async () => {
       projects.value = await getAllProjects();
       findProject()
@@ -210,6 +260,28 @@ export default defineComponent({
         else
           isOpen.value = true;
       }
+      const modalManagerNotes = ()=>{
+      
+        if(isOpenNotes.value === true)
+        {
+          isOpenNotes.value = false;
+         
+        }
+        else
+        isOpenNotes.value = true;
+      }
+      const modalManagerDepth = (str:string)=>{
+      if(isOpenDepth.value === true)
+      {
+        isOpenDepth.value = false;
+       
+      }
+      else{
+        note.value = str
+        isOpenDepth.value = true;
+      }
+      
+    }
 
       const setConfirm = ()=>{     
              currentPit.value.status = 'Done';
@@ -276,6 +348,18 @@ export default defineComponent({
       const goToReport = ()=>{
         router.push('/daily-report/'+ project.value._id)
       }
+
+      const addNewNoteToPit = ()=>{
+        if(currentPit.value.notes == null)
+             currentPit.value.notes = []
+
+        currentPit.value.notes.push({note:note.value, depth:noteDepth.value})
+        console.log(currentPit.value.notes);
+        modalManagerDepth("")
+        note.value=""
+        noteDepth.value = 0
+        
+      }
       
     //end modal block
     return {
@@ -289,6 +373,9 @@ export default defineComponent({
       addToDailyReport,
       findProject,
       goToReport,
+      modalManagerNotes,
+      modalManagerDepth,
+      addNewNoteToPit,
       //properties
       currentUser: user,
       project: project,
@@ -298,7 +385,11 @@ export default defineComponent({
       prevPit:prevPit,
       currentDate: currentDate,
       isOpen: isOpen,
-      showMap:showMap
+      showMap:showMap,
+      isOpenNotes:isOpenNotes,
+      noteDepth:noteDepth,
+      isOpenDepth:isOpenDepth,
+      note:note,
     };
   },
 });
