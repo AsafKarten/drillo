@@ -1,113 +1,93 @@
 <template>
+  <button @click="generatePDF">צור דוח</button>
+  <button @click="getReportDiv">דבג דוח</button>
 
-      
-  
-   <button @click="addfile">צור דוח</button>
+  <div ref="reportDiv" style="display:none;">
 
+        <table style="direction:ltr; border-spacing: 10px; border-collapse: separate;">
+          <thead>
+            <tr>
+              <th>Pit Name</th>
+              <th>Status</th>
+              <th>Depth</th>
+              <th>Diameter</th>
+              <th>X</th>
+              <th>Y</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr :key="pit.p" v-for="pit in report?.pits">
+              <td>{{pit.p}}</td>
+              <td>{{pit.status}}</td>
+              <td>{{pit.depth}}</td>
+              <td>{{pit.diameter}}</td>
+              <td>{{pit.itm.x}}</td>
+              <td>{{pit.itm.y}}</td>
+            </tr>
+          </tbody>
+        </table>
 
-
+  </div>
 
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem } from '@ionic/vue';
-import { defineComponent, onMounted, ref, render } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
 
-import AppHeader from '../Components/AppHeader.vue'
-
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
-
+import pdfMake from 'pdfmake';
+import htmlToPdfmake from 'html-to-pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 
 /* eslint-disable */
 export default defineComponent({
-name: 'UploadFile',
-components: {
-  //IonContent,
-  //IonPage,
-  //IonButton,
-  //IonItem,
-  //AppHeader
-},
-props:{report:Object},
-setup(props){
-  const router = useRouter();
-  const currentUser = ref<any>()
-  const {user , logout,getAllEmployees, uploadFile} = useAppState();
-  const employees = ref<any>()
-  const organization = ref<any>()
-  const pdfDoc = ref<any>()
-const report = props.report
+  name: 'UploadFile',
+  components: {},
+  props:{report:Object},
+  setup(props){
+    const router = useRouter();
+    const currentUser = ref<any>()
+    const {user , logout,getAllEmployees, uploadFile} = useAppState();
 
-  
-onMounted(async()=>{
-  //add code or delete
-   
-  
-});
+    const reportDiv = ref();
 
-const uploadNewFile =async (file:any) => {
-    console.log(file);
-    
-}
-const addfile = async ()=>{
-    // Create a new PDFDocument
-    pdfDoc.value = await PDFDocument.create()
-    // Embed the Times Roman font
-    const timesRomanFont = await pdfDoc.value.embedFont(StandardFonts.TimesRoman)
-    // Add a blank page to the document
-    const page = pdfDoc.value.addPage()
-    // Get the width and height of the page
-const { width, height } = page.getSize()
+    const generatePDF = function () {
+      const d = new Date(Date.parse(props.report?.date));
+      const reportDateString = `${d.getDay()}_${d.getMonth()}_${d.getFullYear()} ${d.getHours()}_${d.getMinutes()}`;
+      const html = htmlToPdfmake(reportDiv.value.innerHTML);
+      const documentDefinition = { content: html };
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      pdfMake.createPdf(documentDefinition).download("Drillo Report " + reportDateString + ".pdf");
+    }
 
-// Draw a string of text toward the top of the page
-const fontSize = 30
-let str = report?.date.toString() + "pdf"
-page.drawText(str, {
-  x: 50,
-  y: height - 4 * fontSize,
-  size: fontSize,
-  font: timesRomanFont,
-  color: rgb(0, 0.53, 0.71),
-})
+    const getReportDiv = function() {
+      console.log("reportDiv.value")
+      console.log(reportDiv.value.innerHTML)
+    }
 
-// Serialize the PDFDocument to bytes (a Uint8Array)
-const pdfBytes = await pdfDoc.value.save()
-console.log(pdfBytes);
+    onMounted(async()=>{
+      //add code or delete
+    });
 
+    return {
+      //methods
+      generatePDF,
+      getReportDiv,
 
-// For example, `pdfBytes` can be:
-//   • Written to a file in Node
-//   • Downloaded from the browser
-//   • Rendered in an <iframe>
-   
-    
-}
-  
- 
-   return {
-    //methods
-    uploadNewFile,
-    addfile,
       //properties
-      currentUser : user,
-      employees:employees,
-      organization:organization,
-      pdfDoc:pdfDoc,
-      
-}
-},
-
+      reportDiv
+    }
+  }
 });
+
+
 </script>
 
 <style scoped>
 .mainContainer{
 display: block;
 direction: rtl;
-
 }
-
 </style>
