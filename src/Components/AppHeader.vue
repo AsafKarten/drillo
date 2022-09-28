@@ -10,10 +10,12 @@
           </ion-button>
           <p class="headerText">מחובר: {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
           <!-- <p class="headerText">{{currentUser?.profile.email}} </p> -->
+
+          <PWAbutton/>
+          
           <ion-button  @click="userLogout" color="dark">{{"יציאה"}}
             <IonIcon slot="end" :icon="exit"/>
           </ion-button>
-          
       </div>
     </ion-toolbar>
   </ion-header>
@@ -26,23 +28,26 @@ import { arrowRedo, home, exit } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useAppState } from '../realm-state';
 
+import PWAbutton from './PWAbutton.vue';
+
 export default defineComponent({
   name: 'AppHeader',
   components: {
     IonHeader,
     IonToolbar,
     IonButton,
-    IonIcon
+    IonIcon,
+    PWAbutton
   },
   props: {showButtons: Boolean },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
     const {user , logout} = useAppState();
-    const userType = ref<any>()
-    
+    const userType = ref<any>();
+
     onMounted(async()=>{
-      userType.value = user.value.customData.userType
+      userType.value = user.value.customData.userType;
     });
 
     const userLogout = async ()=>{
@@ -54,9 +59,12 @@ export default defineComponent({
     return {
       //methods
       userLogout,
-       //properties
+
+      //properties
       currentUser : user,
       userType:userType,
+
+      //icons
       arrowRedo,
       home,
       exit,
