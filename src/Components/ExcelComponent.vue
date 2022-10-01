@@ -90,18 +90,24 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <div>
-        <h5>{{ currentPit.p}}</h5>
-        <h6>נתוני קידוח</h6>
-        <p>{{"קוטר: "+currentPit.diameter}}</p>
-        <p>{{"עומק: "+currentPit.depth}}</p>
-        <p>{{"נפח בטון תיאורטי(קוב): "+currentPit.concreteVolume.toFixed(3) }}</p>
-        <h6>קואורדינטות</h6>
-        <p>{{"Lon: "+currentPit.coordinates.long+ " "}}{{"Lat: "+currentPit.coordinates.lat}}</p>
-         <h6>רשת ישראל החדשה</h6>
-        <p>{{"צפון: "+currentPit.itm.y+ " "}}{{"מערב: "+currentPit.itm.x}}</p>
-        <p>{{currentPit.status}}</p>
+        <div class="hebrewText">
+          <h5>{{currentPit?.p}}</h5>
+          <h6>נתוני קידוח</h6>
+          <p>עומק: <span class="coords">{{currentPit?.diameter}}</span></p>
+          <p>קוטר: <span class="coords">{{currentPit?.depth}}</span></p>
+          <p>נפח בטון תיאורטי: <span class="coords">{{currentPit?.concreteVolume.toFixed(3)}}</span></p>
+          <h6>קואורדינטות</h6>
+          <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
+          <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>
+          <h6>רשת ישראל החדשה</h6>
+          <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
+          <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
+          <p>סטטוס: {{currentPit?.status}}</p>
+          <div :key="note.depth" v-for="note in currentPit?.notes">
+            <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
+          </div>
         </div>
+        
       </ion-content>
     </ion-modal>
       
@@ -256,6 +262,12 @@ export default defineComponent({
 
 <style scoped>
 
+.hebrewText{
+  direction: rtl;
+  line-height: 80%;
+  overflow: scroll;
+  margin-bottom: 10%;
+}
 
 .splitScreen {
   width: 100%;
@@ -272,4 +284,13 @@ export default defineComponent({
   display: flex;
 }
 
+h5,h6{
+  font-weight: bold;
+}
+
+.coords {
+  font-family: monospace;
+  font-size: 150%;
+  letter-spacing: 1px;
+}
 </style>

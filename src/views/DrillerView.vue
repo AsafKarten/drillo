@@ -69,6 +69,7 @@
             <h6>נתוני קידוח</h6>
             <p>עומק: <span class="coords">{{currentPit?.diameter}}</span></p>
             <p>קוטר: <span class="coords">{{currentPit?.depth}}</span></p>
+            <p>נפח בטון תיאורטי: <span class="coords">{{currentPit?.concreteVolume?.toFixed(3)}}</span></p>
             <h6>קואורדינטות</h6>
             <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
             <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>
@@ -79,10 +80,12 @@
             <div :key="note.depth" v-for="note in currentPit?.notes">
             <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
           </div>
-            <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
-            <ion-button color="success" @click="setConfirm" >סיום ביצוע</ion-button>
-            <ion-button @click="modalManagerNotes" color="warning">הערות קידוח</ion-button>
-            <ion-button @click="setGarbage" color="warning">זבל בקידוח</ion-button>
+            <div>
+               <ion-button v-if="currentPit?.status === 'waiting'" @click="setPending" color="success">התחלת ביצוע</ion-button>
+               <ion-button v-if="currentPit?.status === 'Pending'" @click="unsetPending" color="danger">ביטול התחלת ביצוע</ion-button>
+               <ion-button v-if="currentPit?.status === 'Pending'" @click="setConfirm" color="success">סיום ביצוע</ion-button>
+               <ion-button v-if="currentPit?.status === 'Pending'" @click="modalManagerNotes" color="warning">הערות קידוח</ion-button>
+            </div>
           </div>
         </ion-content>
       </ion-modal>
@@ -302,13 +305,13 @@ export default defineComponent({
           }      
       }
 
-      const setGarbage = ()=>{
-        if(!currentPit.value.garbage)
-          currentPit.value.garbage = true;
-          else
-             return
-        
+      const unsetPending= ()=>{  
+        if(currentPit.value.status === 'Pending'){
+             currentPit.value.status = 'waiting';
+             savePitChanges();
+          }      
       }
+      
       const savePitChanges= async()=>{
         let index = currentPit.value.p  * 1  - 1
           project.value.pits[index] = currentPit.value;
@@ -373,9 +376,9 @@ export default defineComponent({
       pitClick,
       modalManager,
       setConfirm,
-      setGarbage,
       savePitChanges,
       setPending,
+      unsetPending,
       addToDailyReport,
       findProject,
       goToReport,
@@ -410,6 +413,7 @@ export default defineComponent({
   direction: rtl;
   line-height: 80%;
   overflow: scroll;
+  margin-bottom: 10%;
 }
 #map {
   height: 100%;
