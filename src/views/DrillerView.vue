@@ -76,7 +76,9 @@
             <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
             <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
             <p>סטטוס: {{currentPit?.status}}</p>
-            <p>{{currentPit?.garbage? "זבל בקידוח" :  " " }}</p>
+            <div :key="note.depth" v-for="note in currentPit?.notes">
+            <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
+          </div>
             <ion-button color="success" @click="setPending" >התחלת ביצוע</ion-button>
             <ion-button color="success" @click="setConfirm" >סיום ביצוע</ion-button>
             <ion-button @click="modalManagerNotes" color="warning">הערות קידוח</ion-button>
@@ -98,11 +100,11 @@
         </ion-header>
         <ion-content class="ion-padding">
           <div class="hebrewText">
-            <ion-button color="success" @click="modalManagerDepth('cables')">כבלים</ion-button>
-            <ion-button color="success" @click="modalManagerDepth('infrastructure')">תשתיות</ion-button>
-            <ion-button color="success" @click="modalManagerDepth('pipe')">צינור</ion-button>
-            <ion-button color="success" @click="modalManagerDepth('garbage')" >פסולת</ion-button>
-            <ion-button color="success" @click="modalManagerDepth('stones')" >אבנים</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('תשתיות')">תשתיות</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('צינור')">צינור</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('פסולת')" >פסולת</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('אבנים')" >אבנים</ion-button>
     
           </div>
         </ion-content>
@@ -209,7 +211,6 @@ export default defineComponent({
       
       for (let index = 0; index < projects.value.length; index++) {
         const element = projects.value[index];
-        console.log(element.drillers);
         let employee = element.drillers.find((emp: { _id: any; }) => emp._id == user.value.customData._id)
 
         if(employee !== undefined){
@@ -230,8 +231,6 @@ export default defineComponent({
 //check error
     const pitClick = (clickData: { _id: any; }) => {
         const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
-        console.log("pitClicked:")
-        console.log(pitClicked)
         prevPit.value = currentPit.value
         currentPit.value = pitClicked
 
@@ -306,7 +305,6 @@ export default defineComponent({
       const savePitChanges= async()=>{
         let index = currentPit.value.p  * 1  - 1
           project.value.pits[index] = currentPit.value;
-          console.log(project.value);
           if(currentPit.value.status === 'Done')
           {
             addToDailyReport();
@@ -339,8 +337,6 @@ export default defineComponent({
           else{
             project.value.reports.push({date:today,pits:[currentPit.value] })
           }
-          
-          console.log(project.value);
           }
    
           
@@ -349,13 +345,16 @@ export default defineComponent({
         router.push('/daily-report/'+ project.value._id)
       }
 
-      const addNewNoteToPit = ()=>{
+      const addNewNoteToPit = async ()=>{
         if(currentPit.value.notes == null)
              currentPit.value.notes = []
 
         currentPit.value.notes.push({note:note.value, depth:noteDepth.value})
-        console.log(currentPit.value.notes);
-        modalManagerDepth("")
+        currentPit.value.notes.sort((a: { depth: any; },b: { depth: any; })=> a.depth * 1 - b.depth * 1)
+        let index = currentPit.value.p  * 1  - 1
+        project.value.pits[index] = currentPit.value;
+        await updateProjectPits(project.value)
+        modalManagerDepth("") 
         note.value=""
         noteDepth.value = 0
         
