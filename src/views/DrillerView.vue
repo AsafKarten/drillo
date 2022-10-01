@@ -100,16 +100,20 @@
         </ion-header>
         <ion-content class="ion-padding">
           <div class="hebrewText">
-            <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים
+              <IonIcon slot="start" :icon="flashOutline" />
+            </ion-button>
             <ion-button color="success" @click="modalManagerDepth('תשתיות')">תשתיות</ion-button>
             <ion-button color="success" @click="modalManagerDepth('צינור')">צינור</ion-button>
-            <ion-button color="success" @click="modalManagerDepth('פסולת')" >פסולת</ion-button>
+            <ion-button color="success" @click="modalManagerDepth('פסולת')" >פסולת
+              <IonIcon slot="start" :icon="trashOutline" />
+            </ion-button>
             <ion-button color="success" @click="modalManagerDepth('אבנים')" >אבנים</ion-button>
     
           </div>
         </ion-content>
       </ion-modal>
-
+    
       <!--note depth modal-->
       <ion-modal :is-open="isOpenDepth" class="modalHalfScreen">
      
@@ -148,8 +152,10 @@ import {
   IonAccordion, 
   IonAccordionGroup,
   IonPopover,
+  IonIcon
   
 } from "@ionic/vue";
+import { flashOutline, trashOutline} from 'ionicons/icons';
 import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAppState } from "../realm-state";
@@ -174,6 +180,7 @@ export default defineComponent({
     IonAccordion, 
     IonAccordionGroup,
     //IonPopover,
+    IonIcon,
     IonInput,
     MapBox,
     AppHeader,
@@ -389,6 +396,10 @@ export default defineComponent({
       noteDepth:noteDepth,
       isOpenDepth:isOpenDepth,
       note:note,
+
+      //ion icons
+      flashOutline,
+      trashOutline,
     };
   },
 });
