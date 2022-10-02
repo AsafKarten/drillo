@@ -102,7 +102,7 @@
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-          <div class="hebrewText">
+          <div class="grid-container">
             <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים
               <IonIcon slot="start" :icon="flashOutline" />
             </ion-button>
@@ -467,5 +467,11 @@ h5,h6{
   font-family: monospace;
   font-size: 150%;
   letter-spacing: 1px;
+}
+
+.grid-container {
+  display: grid;
+  justify-content: space-evenly;
+  align-content: center;
 }
 </style>
