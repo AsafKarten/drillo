@@ -95,6 +95,37 @@ const deleteEmployeeFromDB = async() =>{
   
 }
 
+
+
+const updateEmployeeMachine =async (employee : any) => {
+  try {
+            // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("users");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": employee._id };
+  const update = {
+    "$set": {
+     "machine_id": employee.machine_id
+        }
+    };
+    const options = { "upsert": false };
+    collection?.updateOne(query, update, options)
+    .then(result => {
+     const { matchedCount, modifiedCount } = result;
+     if(matchedCount && modifiedCount) {
+     console.log(`Successfully updated the item.`)
+}
+})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+
     const getProject =async () => {
       
         // 1. Get a data source client
@@ -106,6 +137,8 @@ const deleteEmployeeFromDB = async() =>{
         return await collection?.findOne({})
       
     }
+
+   
 
 
     const getProjectByID =async (id:string) => {
@@ -139,7 +172,7 @@ console.log(error);
 
           }
     };
-
+   
     const updateProjectPits =async (project : any) => {
         try {
                   // 1. Get a data source client
@@ -331,6 +364,35 @@ console.log(error);
       return await collection?.find({})
 }
 
+
+const updateMachineDriller =async (machine : any) => {
+    try {
+              // 1. Get a data source client
+    const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+    // 2. Get a database & collection
+    const collection = mongodb?.db("drillo").collection("drilling_machines");
+    // 3. Read and write data with MongoDB queries
+    const query = { "_id": machine._id };
+    const update = {
+      "$set": {
+       "driller_id": machine.driller_id
+          }
+      };
+      const options = { "upsert": false };
+      collection?.updateOne(query, update, options)
+      .then(result => {
+       const { matchedCount, modifiedCount } = result;
+       if(matchedCount && modifiedCount) {
+       console.log(`Successfully updated the item.`)
+}
+})
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+}
+
 const uploadFile = async (file:BinaryData)=>{
   // 1. Get a data source client
   const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -351,6 +413,7 @@ return true;
         createEmployeeAccount,
         getAllEmployees,
         deleteEmployeeFromDB ,
+        updateEmployeeMachine,
         getProject,
         getProjectByID,
         createNewProject,
@@ -363,6 +426,7 @@ return true;
         createNewDrillingMachine,
         getAllDrillingMachines, 
         getAllOrganizations,
+        updateMachineDriller,
         uploadFile,
         
     };

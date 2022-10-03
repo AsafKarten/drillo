@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonModal, IonButton } from '@ionic/vue';
+import { IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -61,13 +61,18 @@ export default defineComponent({
     IonPage,
     IonButton,
     IonModal,
+    IonButtons,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonItem,
     AppHeader
 },
   setup(){
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getAllDrillingMachines, getAllEmployees} = useAppState();
+    const {user , logout,getAllDrillingMachines, updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
@@ -99,8 +104,12 @@ export default defineComponent({
     
   }
 
-  const addEmployee = (employee: any)=>{
-    console.log(employee);
+  const addEmployee = async (employee: any)=>{
+    machine.value.driller_id = employee._id
+    console.log(machine.value);
+    employee.machine_id = machine.value._id
+    await updateMachineDriller(machine.value)
+    await updateEmployeeMachine(employee)
     
   }
 
