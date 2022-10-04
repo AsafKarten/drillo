@@ -155,7 +155,7 @@ const updateEmployeeMachine =async (employee : any) => {
 
 
      //create new project
-    const createNewProject =async (organizationID: object , name: string, address:string, client:string,contactPerson:object, pits:[], reports:[]) => {
+    const createNewProject =async (organizationID: object , name: string, address:string, client:string,contactPerson:object, pits:[], machines:[], reports:[]) => {
    
       try {
         // 1. Get a data source client
@@ -163,7 +163,7 @@ const updateEmployeeMachine =async (employee : any) => {
         // 2. Get a database & collection
         const collection = mongodb?.db("drillo").collection("projects");
         // 3. Read and write data with MongoDB queries
-        collection?.insertOne({organizationID,name, address, client,contactPerson, pits,reports,creationDate:new Date()});
+        collection?.insertOne({organizationID,name, address, client,contactPerson, pits, machines, reports,creationDate:new Date()});
         return true;
 
 
@@ -229,7 +229,8 @@ console.log(error);
         
       }
   }
-  
+
+  //need to delete this fuction
   const updateProjectSiteManagers =async (project : any) => {
     try {
               // 1. Get a data source client
@@ -257,6 +258,8 @@ console.log(error);
       
     }
 }
+
+
 
 const updateProjectMachines =async (project : any) => {
   try {

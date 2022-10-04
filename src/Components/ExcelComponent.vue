@@ -61,6 +61,12 @@
         accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       />
     </div>
+    <div :key="machine.id" v-for="machine in projectMachines">
+      <p>{{machine.name}}</p>
+      <p>{{machine.type}}</p>
+      <p>{{machine.driller.first}} {{machine.driller.last}}</p>
+      <ion-button @click="removeMachine(machine)">הסר</ion-button>
+    </div>
     <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button>
         
     <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
@@ -126,13 +132,55 @@
           <ion-item :key="machine._id" v-for="machine in drillingMachines">
             <p>{{machine?.name + ": "}} </p>
             <p> {{ machine?.type}}</p>
-            <p>קודח: {{machine.driller.first}} {{machine.driller.last}}</p>
+            <p>קודח: {{machine?.driller.first}} {{machine?.driller.last}}</p>
             <ion-button  @click="addMachine(machine)">בחירת מכונה</ion-button>
+            <ion-button  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
             </ion-item>     
         </div>
         
       </ion-content>
     </ion-modal>
+
+     <!--change driller in machine modal-->
+     <ion-modal :is-open="isOpenDriller">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="changeDrillerModalManager(null)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="hebrewText">
+          <ion-item :key="employee._id" v-for="employee in employees">
+            <p>{{employee._id}}</p>
+            <p>{{employee.first}} {{employee.last}}</p>
+            <ion-button @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
+            <ion-button @click="addEmployee(employee)">בחר</ion-button>
+            </ion-item>      
+        </div>
+        
+      </ion-content>
+    </ion-modal>
+
+       <!--view driller-->
+       <ion-modal :is-open="isOpenEmp">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>{{current_employee?.first}} {{current_employee?.last}}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="viewEmployeeModalManager(null)">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div class="hebrewText">
+            <p>שם: {{current_employee?.first}} {{current_employee?.last}}</p>
+          </div>
+          
+        </ion-content>
+      </ion-modal>
       
     </ion-content>
   </ion-page>
@@ -174,7 +222,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>();
-    const {user , logout, createNewProject, getAllDrillingMachines} = useAppState();
+    const {user , logout, createNewProject, getAllDrillingMachines,  updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -182,6 +230,7 @@ export default defineComponent({
     const pitsToShow = ref<any>([]);
     const showMap = ref(false);
     const isOpen = ref(false);
+    const isOpenDriller = ref(false);
     const isOpenMachine = ref(false);
     const currentPit = ref<any>();
     const projectName = ref("");
@@ -193,9 +242,16 @@ export default defineComponent({
     const reports = ref<any>([])
     const organizationID = ref();
     const drillingMachines = ref<any>()
+    const current_machine = ref<any>()
+    const employees = ref<any>()
+    const current_employee = ref<any>() 
+    const isOpenEmp= ref(false)
+    const projectMachines = ref<any>()
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
     drillingMachines.value = await getAllDrillingMachines();
+    const allEmployees= await getAllEmployees();
+    employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
     
   });
  const addfile = (event:any) =>{
@@ -243,7 +299,7 @@ export default defineComponent({
 
     const saveProject =async ()=>{
       let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone, mail:contactPersonMail}
-      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, pitsToShow.value, reports.value)
+      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, pitsToShow.value, projectMachines.value, reports.value)
       router.replace('/projects')
     }
 
@@ -254,6 +310,21 @@ export default defineComponent({
         else
           isOpen.value = true;
       }
+      
+      const changeDrillerModalManager = (machine: any)=>{
+        if(isOpenDriller.value)
+        isOpenDriller.value=false;
+        else{
+          current_machine.value = machine
+          isOpenDriller.value = true;
+          if(machine?.value.driller !== undefined){
+              current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine?.value.driller.driller_id.toString())
+              current_employee.value = current_employee.value[0]
+              console.log(current_employee.value);
+            }
+        }
+        
+      }
 
       const machinesModalManager = ()=>{
         if(isOpenMachine.value)
@@ -262,18 +333,59 @@ export default defineComponent({
         isOpenMachine.value = true;
       }
 
-      const addMachine = (machine: any)=>{
-        console.log(machine);
+      const viewEmployeeModalManager = (employee: any)=>{
+        if(isOpenEmp.value)
+        isOpenEmp.value=false;
+        else{
+          current_employee.value = employee
+          isOpenEmp.value = true;
+         
+        }
         
       }
+
+      const addMachine = (machine: any)=>{
+        if(projectMachines.value === undefined)
+            projectMachines.value = []
+
+        projectMachines.value.push(machine)
+      }
+      const removeMachine = (machine:any)=>{
+        let i = projectMachines.value.indexOf(machine)
+        projectMachines.value.splice(i,1)
+        console.log(projectMachines.value);
+        
+}
+
+
+  const addEmployee = async (employee: any)=>{
+    current_machine.value.driller = {driller_id : employee._id, first: employee.first, last: employee.last}
+    console.log(current_machine.value);
+    employee.machine_id = current_machine.value._id
+      
+    if(current_employee.value !== undefined){
+         current_employee.value.machine_id = ""
+         await updateEmployeeMachine(current_employee.value)
+        }
+
+    await updateMachineDriller(current_machine.value)
+    await updateEmployeeMachine(employee)
+    current_employee.value = employee
+  }
+
+      
      return {
         //methoods
         addfile,
         pitClick,
         modalManager,
+        changeDrillerModalManager,
         machinesModalManager,
+        viewEmployeeModalManager,
         saveProject,
         addMachine,
+        removeMachine,
+        addEmployee,
        //properties
         currentUser : user,
         file : file,
@@ -283,6 +395,7 @@ export default defineComponent({
         pitsToShow :pitsToShow,
         showMap:showMap,
         isOpen:isOpen,
+        isOpenDriller:isOpenDriller,
         isOpenMachine:isOpenMachine,
         currentPit:currentPit,
         projectName: projectName,
@@ -294,8 +407,12 @@ export default defineComponent({
         reports:reports,
         organizationID:organizationID,
         drillingMachines:drillingMachines,
-
-        
+        current_machine:current_machine,
+        employees:employees,
+        current_employee:current_employee,
+        isOpenEmp:isOpenEmp,
+        projectMachines:projectMachines,
+      
   }
   },
  
