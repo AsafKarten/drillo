@@ -334,9 +334,9 @@ export default defineComponent({
           let reports = project.value.reports
           let today = new Date();
           //if its a new project and this is the first report
-          if(reports == undefined){
-            reports = [];
-            reports.push({date:today,pits:[currentPit.value] })
+          if(reports.length === 0){
+            //reports = [];
+            reports.push({date:today,pits:[currentPit.value,] })
             project.value.reports = reports
           }
           else{
