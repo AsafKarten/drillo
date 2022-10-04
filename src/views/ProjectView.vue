@@ -16,7 +16,7 @@
           <ion-button class="headerButton" @click="modalManagerAddExJob"> הוספת עבודה חיצונית</ion-button>
           <ion-accordion-group>
 
-            <ion-accordion value="drillers">
+            <!-- <ion-accordion value="drillers">
 
               <ion-item slot="header">
                 <ion-label>קודחים</ion-label>
@@ -37,20 +37,21 @@
                 </ion-item>
               </div>
 
-            </ion-accordion>
+            </ion-accordion> -->
 
             <ion-accordion value="machines">
 
               <ion-item slot="header">
                 <ion-label>מכונות קידוח</ion-label>
                 <ion-badge :key="machine._id" v-for="machine in projectMachines" style="margin:2px">
-                  {{ machine.name }}
+                  {{ machine.name }} {{ machine.driller.first + " " + machine.driller.last   }}
                 </ion-badge>
               </ion-item>
 
               <div slot="content">
                 <ion-item :key="machine._id" v-for="machine in projectMachines">
-                  {{ machine.name }} | {{ machine.type }} | {{ machine.model }}
+                  {{ machine.driller.first +" "+ machine.driller.last }}| {{ machine.name }} | {{ machine.type }} | {{ machine.model }} 
+                  <ion-button color="danger" slot="end" @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
                   <ion-button color="danger" slot="end" @click="removeMachine(machine)">הסרה</ion-button>
                 </ion-item>
                 <ion-item>
@@ -62,29 +63,7 @@
 
             </ion-accordion>
 
-            <ion-accordion value="managers">
-
-              <ion-item slot="header">
-                <ion-label>מנהלי פרוייקט</ion-label>
-                <ion-badge :key="manager._id" v-for="manager in projectManagers" style="margin:2px">
-                  {{ manager.first }}
-                </ion-badge>
-              </ion-item>
-
-              <div slot="content">
-                <ion-item :key="manager._id" v-for="manager in projectManagers">
-                  {{ manager.first }} {{ manager.last }}
-                  <ion-button color="danger" slot="end" @click="removeSiteManager(manager)">הסרה</ion-button>
-                </ion-item>
-                <ion-item>
-                  <ion-button class="headerButton" @click="modalManagerSiteManager">
-                    הוספת מנהל עבודה
-                  </ion-button>
-                </ion-item>
-              </div>
-
-            </ion-accordion>
-
+          
           </ion-accordion-group>
 
         </div>
@@ -139,8 +118,8 @@
       </ion-content>
     </ion-modal>
     </ion-content>
-<!--Add driller to project modal-->
-     <ion-modal :is-open="isOpenDriller">
+<!-- Add driller to project modal-->
+  <!--  <ion-modal :is-open="isOpenDriller">
       <ion-header>
         <ion-toolbar>
           <ion-title></ion-title>
@@ -159,10 +138,10 @@
         </ion-item>
         </div>
       </ion-content>
-    </ion-modal>
+    </ion-modal> -->
 
 <!--Add site manager to project modal-->
-      <ion-modal :is-open="isOpenSiteManager">
+      <!-- <ion-modal :is-open="isOpenSiteManager">
       <ion-header>
         <ion-toolbar>
           <ion-title></ion-title>
@@ -181,7 +160,7 @@
         </ion-item>
         </div>
       </ion-content>
-    </ion-modal>
+    </ion-modal> -->
 
     <!--Add machine to project modal-->
      <ion-modal :is-open="isOpenMachine">
@@ -196,9 +175,7 @@
       <ion-content class="ion-padding">
         <div class="hebrewText">
    <ion-item :key="machine._id" v-for="machine in machines">
-        <p >{{machine.name }}{{machine.type }}</p>
-        
-        <p >{{machine.model}}</p>
+        <p >{{machine.name + ", " + machine.type + ", " + machine.model  + ", " + machine.driller.first + ", " + machine.driller.last }}</p>       
         <ion-button @click="addMachine(machine)">הוסף</ion-button>
         </ion-item>
         </div>
@@ -257,6 +234,47 @@
       </div>
     </ion-content>
   </ion-modal>
+ <!--change driller in machine modal-->
+ <ion-modal :is-open="isOpenDriller">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
+      <ion-buttons slot="end">
+        <ion-button @click="changeDrillerModalManager(null)">Close</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <div class="hebrewText">
+      <ion-item :key="employee._id" v-for="employee in employees">
+        <p>{{employee._id}}</p>
+        <p>{{employee.first}} {{employee.last}}</p>
+        <ion-button @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
+        <ion-button @click="addEmployee(employee)">בחר</ion-button>
+        </ion-item>      
+    </div>
+    
+  </ion-content>
+</ion-modal>
+
+   <!--view driller-->
+   <ion-modal :is-open="isOpenEmp">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{current_employee?.first}} {{current_employee?.last}}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="viewEmployeeModalManager(null)">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="hebrewText">
+        <p>שם: {{current_employee?.first}} {{current_employee?.last}}</p>
+      </div>
+      
+    </ion-content>
+  </ion-modal>
+
 </template>
 
 <script lang="ts">
@@ -305,7 +323,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getAllDrillingMachines, getAllProjects,getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
+    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getAllDrillingMachines, getAllProjects, updateMachineDriller, updateEmployeeMachine, getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
     const project_id = ref<any>(route.params);
     const project = ref<any>();
     const {id} = route.params
@@ -330,6 +348,9 @@ export default defineComponent({
     const serviceType = ref("");  
     const servicePrice = ref("");  
     const serviceDate = ref();  
+    const current_machine = ref<any>()
+    const current_employee = ref<any>() 
+    const isOpenEmp= ref(false)
   onMounted(async()=>{
 //need to fix find project by id and remove the find function here
   machines.value =  await getAllDrillingMachines();
@@ -539,6 +560,54 @@ const addMachine =async (machine:any)=>{
       modalManagerAddExJob()
 
     }
+
+    const changeDrillerModalManager = (machine: any)=>{
+        if(isOpenDriller.value)
+        isOpenDriller.value=false;
+        else{
+          current_machine.value = machine
+          isOpenDriller.value = true;
+          if(machine?.value.driller !== undefined){
+              current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine?.value.driller.driller_id.toString())
+              current_employee.value = current_employee.value[0]
+              console.log(current_employee.value);
+            }
+        }
+        
+      }
+
+      const viewEmployeeModalManager = (employee: any)=>{
+        if(isOpenEmp.value)
+        isOpenEmp.value=false;
+        else{
+          current_employee.value = employee
+          isOpenEmp.value = true;
+         
+        }
+        
+      }
+
+      const addMachine2 = (machine: any)=>{
+        if(projectMachines.value === undefined)
+            projectMachines.value = []
+
+        projectMachines.value.push(machine)
+      }
+
+      const addEmployee = async (employee: any)=>{
+    current_machine.value.driller = {driller_id : employee._id, first: employee.first, last: employee.last}
+    console.log(current_machine.value);
+    employee.machine_id = current_machine.value._id
+      
+    if(current_employee.value !== undefined){
+         current_employee.value.machine_id = ""
+         await updateEmployeeMachine(current_employee.value)
+        }
+
+    await updateMachineDriller(current_machine.value)
+    await updateEmployeeMachine(employee)
+    current_employee.value = employee
+  }
       
      return {
       //methods
@@ -556,6 +625,9 @@ const addMachine =async (machine:any)=>{
         modalManagerAddExJob,
         goToReports,
         saveExJob,
+        changeDrillerModalManager,
+        viewEmployeeModalManager,
+        addEmployee,
         //properties
         currentUser : user,
         project:project,
@@ -582,7 +654,9 @@ const addMachine =async (machine:any)=>{
         serviceType:serviceType, 
         servicePrice:servicePrice, 
         serviceDate:serviceDate,
-
+        current_machine:current_machine,
+        current_employee:current_employee,
+        isOpenEmp:isOpenEmp,
   }
   },
  

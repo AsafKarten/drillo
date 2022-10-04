@@ -7,8 +7,7 @@
       <h1>הפרוייקטים שלי</h1>
         <div>
           <ion-item :key="project._id" v-for="project in projects">
-          <p>{{project.name}}</p>
-          <p>{{project.address}}</p>
+          <p>{{project.name + ", " + project.address }}</p>
           <ion-button @click="goToProject(project)">צפייה בפרוייקט</ion-button>
           </ion-item>
           

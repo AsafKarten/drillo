@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <AppHeader :showButtons="false"/>
+      <AppHeader :machine="current_machine" :showButtons="false"/>
       <ion-button @click="goToReport">דוח יומי</ion-button>
       <div class="splitScreen">
         <div class="screenTop">
@@ -164,7 +164,7 @@ import { useRouter } from "vue-router";
 import { useAppState } from "../realm-state";
 import MapBox from "./MapBox.vue";
 
-import AppHeader from '../Components/AppHeader.vue'
+import AppHeader from '../Components/DrillerAppHeader.vue'
 
 export default defineComponent({
   name: "DrillerView",
@@ -205,6 +205,7 @@ export default defineComponent({
     const noteDepth = ref(0);
     const isOpenDepth = ref(false);
     const note = ref("")
+    const current_machine = ref<any>()
   
     onMounted(async () => {
       projects.value = await getAllProjects();
@@ -221,9 +222,14 @@ export default defineComponent({
       
       for (let index = 0; index < projects.value.length; index++) {
         const element = projects.value[index];
-        let employee = element.drillers.find((emp: { _id: any; }) => emp._id == user.value.customData._id)
-
-        if(employee !== undefined){
+        const machines = element.machines
+        let machine = machines.find((machine: { driller: any; }) => machine.driller.driller_id.toString() == user.value.customData._id.toString())
+        console.log(element);
+        
+        if(machine !== undefined){
+          console.log(element);
+          current_machine.value = machine
+          
           project.value = element
           pits.value = element.pits
           showMap.value = true
@@ -399,6 +405,7 @@ export default defineComponent({
       noteDepth:noteDepth,
       isOpenDepth:isOpenDepth,
       note:note,
+      current_machine:current_machine,
 
       //ion icons
       flashOutline,
