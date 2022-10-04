@@ -375,7 +375,7 @@ const updateMachineDriller =async (machine : any) => {
     const query = { "_id": machine._id };
     const update = {
       "$set": {
-       "driller_id": machine.driller_id
+       "driller": machine.driller
           }
       };
       const options = { "upsert": false };

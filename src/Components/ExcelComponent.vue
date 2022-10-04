@@ -61,9 +61,9 @@
         accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       />
     </div>
-
+    <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button>
         
-<ion-button @click="saveProject">שמירת פרוייקט</ion-button>
+    <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
 
       </div>
       <div class="screenBottom">
@@ -110,6 +110,29 @@
         
       </ion-content>
     </ion-modal>
+
+    <!--Add machine to project modal-->
+    <ion-modal :is-open="isOpenMachine">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
+          <ion-buttons slot="end">
+            <ion-button @click="machinesModalManager">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="hebrewText">
+          <ion-item :key="machine._id" v-for="machine in drillingMachines">
+            <p>{{machine?.name + ": "}} </p>
+            <p> {{ machine?.type}}</p>
+            <p>קודח: {{machine.driller.first}} {{machine.driller.last}}</p>
+            <ion-button  @click="addMachine(machine)">בחירת מכונה</ion-button>
+            </ion-item>     
+        </div>
+        
+      </ion-content>
+    </ion-modal>
       
     </ion-content>
   </ion-page>
@@ -151,7 +174,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>();
-    const {user , logout, createNewProject} = useAppState();
+    const {user , logout, createNewProject, getAllDrillingMachines} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -159,6 +182,7 @@ export default defineComponent({
     const pitsToShow = ref<any>([]);
     const showMap = ref(false);
     const isOpen = ref(false);
+    const isOpenMachine = ref(false);
     const currentPit = ref<any>();
     const projectName = ref("");
     const projectAddress = ref("");
@@ -167,9 +191,11 @@ export default defineComponent({
     const contactPersonPhone = ref("");
     const contactPersonMail = ref("");
     const reports = ref<any>([])
-      const organizationID = ref();
+    const organizationID = ref();
+    const drillingMachines = ref<any>()
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
+    drillingMachines.value = await getAllDrillingMachines();
     
   });
  const addfile = (event:any) =>{
@@ -228,12 +254,26 @@ export default defineComponent({
         else
           isOpen.value = true;
       }
+
+      const machinesModalManager = ()=>{
+        if(isOpenMachine.value)
+        isOpenMachine.value=false;
+        else
+        isOpenMachine.value = true;
+      }
+
+      const addMachine = (machine: any)=>{
+        console.log(machine);
+        
+      }
      return {
         //methoods
         addfile,
         pitClick,
         modalManager,
+        machinesModalManager,
         saveProject,
+        addMachine,
        //properties
         currentUser : user,
         file : file,
@@ -243,6 +283,7 @@ export default defineComponent({
         pitsToShow :pitsToShow,
         showMap:showMap,
         isOpen:isOpen,
+        isOpenMachine:isOpenMachine,
         currentPit:currentPit,
         projectName: projectName,
         projectAddress: projectAddress,
@@ -251,7 +292,8 @@ export default defineComponent({
         contactPersonPhone:contactPersonPhone,
         contactPersonMail:contactPersonMail,
         reports:reports,
-        organizationID:organizationID
+        organizationID:organizationID,
+        drillingMachines:drillingMachines,
 
         
   }

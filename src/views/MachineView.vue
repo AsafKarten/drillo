@@ -100,8 +100,8 @@ export default defineComponent({
     const allEmployees= await getAllEmployees();
     employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
 
-    if(machine.value.driller_id !== undefined){
-      current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine.value.driller_id.toString())
+    if(machine.value.driller !== undefined){
+      current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine.value.driller.driller_id.toString())
       current_employee.value = current_employee.value[0]
       showEmp.value = true
       console.log(current_employee.value);
@@ -126,7 +126,7 @@ export default defineComponent({
   }
 
   const addEmployee = async (employee: any)=>{
-    machine.value.driller_id = employee._id
+    machine.value.driller = {driller_id : employee._id, first: employee.first, last: employee.last}
     console.log(machine.value);
     employee.machine_id = machine.value._id
       

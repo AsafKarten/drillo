@@ -47,7 +47,7 @@ export default defineComponent({
     const drillingMachines = ref<any>()
     
   onMounted(async()=>{
-    //add code or delete
+    //filter machines by organization id 
     drillingMachines.value = await getAllDrillingMachines();
     console.log(drillingMachines.value);
     
