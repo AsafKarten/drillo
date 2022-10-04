@@ -9,10 +9,21 @@
       <div>
         <p>name: {{ machine?.name }} </p>
         <p>type: {{ machine?.type }} </p>
-        <p>id: {{ machine_id.id }} </p>
+        <p>id: {{ machine_id?.id }} </p>
         
-    </div>
-      <ion-button @click="addDrillerModalManager">הוספת קודח</ion-button>
+      </div>
+
+      <span v-if="showEmp">
+          <h5> קודח שנבחר למכונה זו</h5>
+          <p>{{current_employee?.first}} {{current_employee?.last}}</p>
+          <p>{{current_employee?.userType}}</p>
+          <ion-button @click="addDrillerModalManager">שינוי קודח</ion-button>
+      </span>
+      <span v-else>
+          <p>לא נבחר קודח למכונה זו</p>
+          <ion-button @click="addDrillerModalManager">בחירת קודח</ion-button>
+      </span>
+      
     
     </ion-content>
 
@@ -78,6 +89,8 @@ export default defineComponent({
     const {id} = route.params
     const isOpenAddDriller = ref(false)
     const employees = ref<any>()
+    const current_employee = ref<any>()
+    const showEmp = ref(false)
     const organization = ref<any>()
     
   onMounted(async()=>{
@@ -86,6 +99,14 @@ export default defineComponent({
 
     const allEmployees= await getAllEmployees();
     employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
+
+    if(machine.value.driller_id !== undefined){
+      current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine.value.driller_id.toString())
+      current_employee.value = current_employee.value[0]
+      showEmp.value = true
+      console.log(current_employee.value);
+      
+    }
     
    
   });
@@ -108,9 +129,15 @@ export default defineComponent({
     machine.value.driller_id = employee._id
     console.log(machine.value);
     employee.machine_id = machine.value._id
+      
+    if(current_employee.value !== undefined){
+         current_employee.value.machine_id = ""
+         await updateEmployeeMachine(current_employee.value)
+        }
+
     await updateMachineDriller(machine.value)
     await updateEmployeeMachine(employee)
-    
+    current_employee.value = employee
   }
 
      return {
@@ -125,6 +152,8 @@ export default defineComponent({
         id:id,
         isOpenAddDriller:isOpenAddDriller,
         employees:employees,
+        current_employee:current_employee,
+        showEmp:showEmp,
         organization:organization,
         
   }
