@@ -7,7 +7,7 @@
    <create-pdf :report="report"/>
       <h5>פרוייקט: {{project?.name}}</h5>
 
-       <ion-card>
+       <ion-card v-show="project">
     <ion-card-header>
       <ion-card-subtitle>{{":"+"תאריך"}}</ion-card-subtitle>
       <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
@@ -34,6 +34,7 @@ import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 
 import CreatePdf from '@/Components/CreatePdf.vue';
+import { userInfo } from 'os';
 
 //import AppHeader from '../Components/AppHeader.vue'
 
@@ -60,7 +61,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {getAllProjects, updateProjectPits} = useAppState();
+    const { user, getAllProjects, updateProjectPits} = useAppState();
     const project = ref<any>();
     const reports = ref<any>();
     const report = ref<any>();
@@ -72,18 +73,25 @@ export default defineComponent({
     const {id} = route.params
 
   onMounted(async()=>{
-
+    //await loginAnonymous() 
     console.log(id);
     
       //get all projects from mongo
       projects.value = await getAllProjects()
       //filter the projects by project id
-      project.value = projects?.value.find((proj: { _id: any; } ) => proj._id.toString()=== id.toString())
+
+      //need to fix
+      //project.value = projects.value.filter((proj: { _id: any; } ) => proj._id.toString() == id)
+      const prj =  projects.value.find((proj: { _id: any; } ) => proj._id.toString() == id.toString())
+      console.log(prj);
+      
+      project.value = prj
       console.log(projects.value);
+      console.log(project.value);
       reports.value = project?.value.reports;
       report.value = reports?.value[reports.value.length-1]
       pits.value = report.value.pits
-        console.log(project);
+      
 
   });
  
@@ -107,6 +115,7 @@ export default defineComponent({
       //methods
         confirmReport,
         //properties
+        currentUser:user,
         project:project,
         reports:reports,
         report:report,
