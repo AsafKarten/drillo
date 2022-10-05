@@ -10,10 +10,10 @@
         <div class="mainContainer">
           <h1> פרוייקט <b>{{project?.name}}</b></h1>
           <p>{{"כתובת:" + project?.address}}</p>
-          <p>{{"מספר מזהה:" + project_id?.id}}</p>
 
           <ion-button class="headerButton" @click="goToReports"> דוחות עבודה</ion-button>
           <ion-button class="headerButton" @click="modalManagerAddExJob"> הוספת עבודה חיצונית</ion-button>
+          <ion-button class="headerButton" @click="modalManagerShowExJob">רשימת עבודות חיצוניות</ion-button>
           <ion-accordion-group>
 
             <!-- <ion-accordion value="drillers">
@@ -195,6 +195,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <div class="hebrewText">
+        <ion-button @click="modalManagerShowExJob">בחירה מתוך עבודות קודמות</ion-button>
         <ion-item>
           <ion-label position="floating">סוג קבל"ן</ion-label>
           <ion-input
@@ -234,6 +235,30 @@
       </div>
     </ion-content>
   </ion-modal>
+
+
+  <!--view external jobs-->
+  <ion-modal :is-open="showViewExJob">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>רשימת עבודה חיצונית</ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="modalManagerShowExJob">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="hebrewText">
+          <ion-item :key="exJob.serviceDate" v-for="exJob in project?.external_services">
+            {{exJob.contractorType +" | "+ exJob.contractorName +" | "+ exJob.serviceType +" | "+ exJob.servicePrice + 'ש"ח'+" | " }}
+          {{ exJob.serviceDate.getDay() +"/"+exJob.serviceDate.getMonth() }}
+          <ion-button @click="modalManagerReAddExJob(exJob)">הוספה מחדש</ion-button>
+          </ion-item>
+      </div>
+    </ion-content>
+  </ion-modal>
+
+
  <!--change driller in machine modal-->
  <ion-modal :is-open="isOpenDriller">
   <ion-header>
@@ -343,6 +368,7 @@ export default defineComponent({
     const projectMachines = ref<any>();
     const projectManagers = ref<any>();
     const showAddExJob = ref(false);
+    const showViewExJob = ref(false);
     const contractorType = ref("");  
     const contractorName = ref("");  
     const serviceType = ref("");  
@@ -521,6 +547,21 @@ const addMachine =async (machine:any)=>{
         showAddExJob.value = true;
       }
 
+      const modalManagerShowExJob = ()=>{
+        if(showViewExJob.value)
+        showViewExJob.value=false;
+        else
+        showViewExJob.value = true;
+      }
+
+      const modalManagerReAddExJob = (exJob:any)=>{
+         contractorType.value = exJob.contractorType
+         contractorName.value = exJob.contractorName
+         serviceType.value = exJob.serviceType
+         servicePrice.value = exJob.servicePrice
+         modalManagerShowExJob()
+      }
+
       const goToReports = ()=>{
         router.push('/project-reports/'+ project.value._id)
     }
@@ -625,10 +666,12 @@ const addMachine =async (machine:any)=>{
         modalManagerMachine,
         modalManagerSiteManager,
         modalManagerAddExJob,
+        modalManagerReAddExJob,
         goToReports,
         saveExJob,
         changeDrillerModalManager,
         viewEmployeeModalManager,
+        modalManagerShowExJob,
         addEmployee,
         //properties
         currentUser : user,
@@ -651,6 +694,7 @@ const addMachine =async (machine:any)=>{
         projectMachines:projectMachines,
         machines:machines,
         showAddExJob:showAddExJob, 
+        showViewExJob:showViewExJob,
         contractorType:contractorType,
         contractorName:contractorName, 
         serviceType:serviceType, 
