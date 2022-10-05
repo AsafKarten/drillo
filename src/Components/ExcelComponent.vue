@@ -53,7 +53,7 @@
   ></ion-input>
 </ion-item>
     <div>
-      <p>קובץ קלונסאות</p>
+      <p>קובץ כלונסים</p>
       <input
         type="file"
         v-on:change="addfile($event)"
@@ -67,6 +67,11 @@
       <p>{{machine.driller.first}} {{machine.driller.last}}</p>
       <ion-button @click="removeMachine(machine)">הסר</ion-button>
     </div>
+    <div>
+      <p> מספר כלונסים:{{projectPits?.length}}</p>
+    </div>
+    <ion-button @click="columnsModalManager">הוספת כלונסים ללא קובץ</ion-button>
+    
     <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button>
         
     <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
@@ -181,6 +186,38 @@
           
         </ion-content>
       </ion-modal>
+
+         <!--add columns manualy modal-->
+         <ion-modal :is-open="isOpeColumn">
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>הוספת כלונסים ידנית</ion-title>
+              <ion-buttons slot="end">
+                <ion-button @click="columnsModalManager">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <div class="hebrewText">
+              <ion-item>
+                <ion-label position="floating">כלונס התחלה</ion-label>
+                <ion-input
+                  v-model="columnStart"
+                  type="number"
+                ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">כלונס סיום</ion-label>
+              <ion-input
+                v-model="columnEnd"
+                type="number"
+              ></ion-input>
+            </ion-item>
+            <ion-button @click="createColumnsManually()">צור</ion-button>
+            </div>
+            
+          </ion-content>
+        </ion-modal>
       
     </ion-content>
   </ion-page>
@@ -232,6 +269,7 @@ export default defineComponent({
     const isOpen = ref(false);
     const isOpenDriller = ref(false);
     const isOpenMachine = ref(false);
+    const isOpeColumn = ref(false);
     const currentPit = ref<any>();
     const projectName = ref("");
     const projectAddress = ref("");
@@ -239,6 +277,7 @@ export default defineComponent({
     const projectContactPerson = ref("");
     const contactPersonPhone = ref("");
     const contactPersonMail = ref("");
+    const projectPits = ref<any>();
     const reports = ref<any>([])
     const organizationID = ref();
     const drillingMachines = ref<any>()
@@ -247,6 +286,8 @@ export default defineComponent({
     const current_employee = ref<any>() 
     const isOpenEmp= ref(false)
     const projectMachines = ref<any>()
+    const columnStart = ref(0)
+    const columnEnd = ref(0)
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
     drillingMachines.value = await getAllDrillingMachines();
@@ -281,10 +322,23 @@ export default defineComponent({
             const [long, lat] = proj4('+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs', '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees', [itm.x, itm.y]);
             pits[i]= {p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting',concreteVolume:concreteVolume}
         }
+        projectPits.value = pits
         pitsToShow.value = pits;
         showMap.value = true;
         console.log(pitsToShow.value);
       };
+    }
+
+    const createColumnsManually = ()=>{
+      console.log("called");
+      
+      var pits= []
+        for(var i = 0; i < columnEnd.value - columnStart.value ; i++){
+            let p = columnStart.value * 1 + i ;
+            pits[i]= {p:p ,depth:"", diameter:"", status:'waiting',concreteVolume:""}
+        }
+        projectPits.value = pits;
+        columnsModalManager();
     }
 
      const pitClick = (clickData: { _id: any; }) => {
@@ -299,7 +353,7 @@ export default defineComponent({
 
     const saveProject =async ()=>{
       let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone, mail:contactPersonMail}
-      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, pitsToShow.value, projectMachines.value, reports.value)
+      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
       router.replace('/projects')
     }
 
@@ -331,6 +385,13 @@ export default defineComponent({
         isOpenMachine.value=false;
         else
         isOpenMachine.value = true;
+      }
+
+      const columnsModalManager = ()=>{
+        if(isOpeColumn.value)
+        isOpeColumn.value=false;
+        else
+        isOpeColumn.value = true;
       }
 
       const viewEmployeeModalManager = (employee: any)=>{
@@ -382,10 +443,12 @@ export default defineComponent({
         changeDrillerModalManager,
         machinesModalManager,
         viewEmployeeModalManager,
+        columnsModalManager,
         saveProject,
         addMachine,
         removeMachine,
         addEmployee,
+        createColumnsManually,
        //properties
         currentUser : user,
         file : file,
@@ -396,6 +459,7 @@ export default defineComponent({
         showMap:showMap,
         isOpen:isOpen,
         isOpenDriller:isOpenDriller,
+        isOpeColumn:isOpeColumn,
         isOpenMachine:isOpenMachine,
         currentPit:currentPit,
         projectName: projectName,
@@ -404,6 +468,7 @@ export default defineComponent({
         projectContactPerson:projectContactPerson,
         contactPersonPhone:contactPersonPhone,
         contactPersonMail:contactPersonMail,
+        projectPits:projectPits,
         reports:reports,
         organizationID:organizationID,
         drillingMachines:drillingMachines,
@@ -412,6 +477,8 @@ export default defineComponent({
         current_employee:current_employee,
         isOpenEmp:isOpenEmp,
         projectMachines:projectMachines,
+        columnStart:columnStart,
+        columnEnd: columnEnd,
       
   }
   },
