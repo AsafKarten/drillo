@@ -208,6 +208,9 @@ export default defineComponent({
     const current_machine = ref<any>()
   
     onMounted(async () => {
+      if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
+          
       projects.value = await getAllProjects();
       findProject()
   

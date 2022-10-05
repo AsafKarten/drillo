@@ -47,16 +47,22 @@ export default defineComponent({
     const drillingMachines = ref<any>()
     
   onMounted(async()=>{
-    //filter machines by organization id 
-    drillingMachines.value = await getAllDrillingMachines();
-    console.log(drillingMachines.value);
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
+    else{
+      //filter machines by organization id 
+      const allMachines = await getAllDrillingMachines();
+      drillingMachines.value = allMachines?.filter((mac)=> mac.organizationID === user?.value.customData.organizationID)
+      console.log(drillingMachines.value);
+    }
+    
     
   });
 
   
 
     const goToMachine =(machine:any)=>{
-        router.push('/machine/'+ machine._id)
+        router.push('/machine/'+ machine._id.toString())
     }
      return {
       //methods

@@ -50,7 +50,9 @@ export default defineComponent({
     const organization = ref<any>()
     
   onMounted(async()=>{
-    //add code or delete
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
+          
     const allEmployees= await getAllEmployees();
     employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
     console.log(employees.value);

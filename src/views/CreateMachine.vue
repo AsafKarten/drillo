@@ -88,6 +88,9 @@
       const {user,logout, createNewDrillingMachine} = useAppState();
 
        onMounted(async()=>{
+        if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
+          
         organizationID.value = user.value.customData.organizationID
        });
      

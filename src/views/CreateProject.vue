@@ -38,7 +38,8 @@ export default defineComponent({
     
     
   onMounted(async()=>{
-    //add code or delete
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
   });
 
   

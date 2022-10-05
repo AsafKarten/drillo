@@ -94,6 +94,8 @@ export default defineComponent({
     const organization = ref<any>()
     
   onMounted(async()=>{
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
     const drillingMachines = await getAllDrillingMachines()
     machine.value = drillingMachines?.find(proj =>proj._id.toString() === machine_id.value.id)
 

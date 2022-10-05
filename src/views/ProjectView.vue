@@ -10,7 +10,7 @@
         <div class="mainContainer">
           <h1> פרוייקט <b>{{project?.name}}</b></h1>
           <p>{{"כתובת:" + project?.address}}</p>
-          <p>{{"מספר מזהה:" + project_id.id}}</p>
+          <p>{{"מספר מזהה:" + project_id?.id}}</p>
 
           <ion-button class="headerButton" @click="goToReports"> דוחות עבודה</ion-button>
           <ion-button class="headerButton" @click="modalManagerAddExJob"> הוספת עבודה חיצונית</ion-button>
@@ -187,7 +187,7 @@
   <ion-modal :is-open="showAddExJob">
     <ion-header>
       <ion-toolbar>
-        <ion-title></ion-title>
+        <ion-title>הוספת עבודה חיצונית</ion-title>
         <ion-buttons slot="end">
           <ion-button @click="modalManagerAddExJob">Close</ion-button>
         </ion-buttons>
@@ -352,6 +352,8 @@ export default defineComponent({
     const current_employee = ref<any>() 
     const isOpenEmp= ref(false)
   onMounted(async()=>{
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
 //need to fix find project by id and remove the find function here
   machines.value =  await getAllDrillingMachines();
   machines.value = machines.value.filter((machine: { organizationID: any; }) => machine.organizationID === user.value.customData.organizationID)

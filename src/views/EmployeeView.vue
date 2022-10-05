@@ -63,7 +63,9 @@ export default defineComponent({
     const employees = ref<any>()
 
   onMounted(async()=>{
-    //add code or delete
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
+          
     const allEmployees= await getAllEmployees();
     employee.value = allEmployees?.find((emp: { _id: { toString: () => any; }; }) =>emp._id.toString() === employee_id.value.id)
     console.log(employee.value);

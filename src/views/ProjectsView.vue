@@ -46,7 +46,10 @@ export default defineComponent({
     
     
   onMounted(async()=>{
-    projects.value = await getAllProjects();
+    if(user?.value.customData.organizationID === undefined)
+          router.push('Login')
+    const allProjects = await getAllProjects();
+    projects.value = allProjects?.filter((prj)=>prj.organizationID === user?.value.customData.organizationID)
   });
 
     
