@@ -74,6 +74,61 @@ export default defineComponent({
         
       }
 //
+ 
+
+      //internal function for converting server pits array to mapbox syntax (FeatureCollection)
+      const formatServerPitsToMapbox = pits => pits.map( pit => {
+        return {
+          type:"Feature",
+          properties: {
+            _id: pit.p,
+            description: pit.p, 
+            status: pit.status,
+            selected: pit.selected?"Selected":"Not"
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [pit.coordinates.long,pit.coordinates.lat]
+          }
+        }
+      });
+
+      //internal function to update map data with the new pits collection
+      const updateMapPits = pits => {
+        map.getSource('pitsSource').setData( { type: 'FeatureCollection', features: pits } );
+        //map.flyTo({ center: zeps[zeps.length-1].geometry.coordinates });
+      };
+
+      const updateMapPitsAndZoom = function([pits,length,selected]) {
+        //remove map markers if pit list is empty
+        if(pits.length == 0)
+        {
+          map.getSource('pitsSource').setData( { type: 'FeatureCollection', features: [] } );
+          return;
+        }
+
+        updateMapPits( formatServerPitsToMapbox(pits) );
+
+        //find the bounds of all pits (minimum and maximum of lat and long = southwestern and northeastern corner)
+        let longMin = 1000, longMax = -1000, latMin = 1000, latMax = -1000;
+        for(let i=0; i<props.pitsToShow.length; i++)
+        {
+          let pitCoords = props.pitsToShow[i].coordinates;
+          if(pitCoords.long < longMin) longMin = pitCoords.long;
+          if(pitCoords.long > longMax) longMax = pitCoords.long;
+          if(pitCoords.lat  < latMin ) latMin  = pitCoords.lat;
+          if(pitCoords.lat  > latMax ) latMax  = pitCoords.lat;
+        }
+        //fit map zoom level and center to show all the points
+        map.fitBounds([[longMin,latMin],[longMax,latMax]], {padding: 50});
+      }
+
+      //update pits on map when a data changes or added
+      const watchAndUpdatePitList = function() {
+        watch( [()=>props.pitsToShow, ()=>props.pitsToShow.length, ()=>props.pitsToShow.map(pit => pit.selected+',').join()], updateMapPitsAndZoom);
+      }
+
+
       const mapLoad = () => {
         map.resize();
         map.addSource('pitsSource', mapboxPitsSourceDefinition);
@@ -96,53 +151,13 @@ export default defineComponent({
             }
           }
         );
+        
+        //first update of pits on the map
+        updateMapPitsAndZoom([props.pitsToShow,"",""]);
+        //start watching for pit list changes and update the map
+        watchAndUpdatePitList();
       };
 
-
-
- 
-
-      //internal function for converting server pits array to mapbox syntax (FeatureCollection)
-      const formatServerPitsToMapbox = pits => pits.map( pit => {
-        return {
-          type:"Feature",
-          properties: {
-            _id: pit.p,
-            description: pit.p, 
-            status: pit.status,
-            selected: pit.selected?"Selected":"Not"
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [pit.coordinates.long,pit.coordinates.lat]
-          }
-        }
-      });
-
-      //update pits on map when a data changes or added
-      watch( [()=>props.pitsToShow, ()=>props.pitsToShow.length, ()=>props.pitsToShow.map(pit => pit.selected+',').join()], ([pits,length,selected]) => {
-        //map.resize();
-        updateMapPits( formatServerPitsToMapbox(pits) );
-
-        //find the bounds of all pits (minimum and maximum of lat and long = southwestern and northeastern corner)
-        let longMin = 1000, longMax = -1000, latMin = 1000, latMax = -1000;
-        for(let i=0; i<props.pitsToShow.length; i++)
-        {
-          let pitCoords = props.pitsToShow[i].coordinates;
-          if(pitCoords.long < longMin) longMin = pitCoords.long;
-          if(pitCoords.long > longMax) longMax = pitCoords.long;
-          if(pitCoords.lat  < latMin ) latMin  = pitCoords.lat;
-          if(pitCoords.lat  > latMax ) latMax  = pitCoords.lat;
-        }
-        //fit map zoom level and center to show all the points
-        map.fitBounds([[longMin,latMin],[longMax,latMax]], {padding: 50});
-      });
-
-      //internal function to update map data with the new pits collection
-      const updateMapPits = pits => {
-        map.getSource('pitsSource').setData( { type: 'FeatureCollection', features: pits } );
-        //map.flyTo({ center: zeps[zeps.length-1].geometry.coordinates });
-      };
 
 //under constructions
       const pitClicked = e => {
