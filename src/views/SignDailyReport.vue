@@ -1,34 +1,23 @@
 <template>
   <ion-page>
-    <!-- <AppHeader :showButtons="false"/> -->
-    
+  <!-- <AppHeader :showButtons="false"/> -->
     <ion-content :fullscreen="true" >
-  
-   <create-pdf :report="report" :signature="false"/>
       <h5>פרוייקט: {{project?.name}}</h5>
-
-       <ion-card v-show="project">
-    <ion-card-header>
-      <ion-card-subtitle>{{":"+"תאריך"}}</ion-card-subtitle>
-      <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-       <ion-item :key="pit._id" v-for="pit in pits">
-        <p class="textMargin">{{pit.p}}</p>
-        
-        <p class="textMargin">{{pit.status}}</p>
-        </ion-item>
-        <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
-        <span v-else>אושר</span> -->
-    </ion-card-content>
-  </ion-card>
-
-    <div style="padding-top: 6px">
-        <ion-button @click="$router.push('/sign-daily-report/' + $route.params.id)" expand="full">לחתימה על הדו"ח</ion-button>
-        <ion-button @click="shareReport" expand="full">שיתוף קישור לחתימה</ion-button>
-    </div>
-
+      <ion-card v-show="project">
+        <ion-card-header>
+          <ion-card-subtitle>{{":"+"תאריך"}}</ion-card-subtitle>
+          <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item :key="pit._id" v-for="pit in pits">
+            <p class="textMargin">{{pit.p}}</p>
+            <p class="textMargin">{{pit.status}}</p>
+          </ion-item>
+          <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
+          <span v-else>אושר</span> -->
+        </ion-card-content>
+      </ion-card>
+      <create-pdf :report="report" :signature="true"/>
     </ion-content>
   </ion-page>
 </template>
@@ -48,7 +37,7 @@ import { userInfo } from 'os';
 
 
 export default defineComponent({
-  name: 'DailyReport',
+  name: 'SignDailyReport',
   components: {
     IonContent,
     IonPage,
@@ -97,6 +86,8 @@ export default defineComponent({
       reports.value = project?.value.reports;
       report.value = reports?.value[reports.value.length-1]
       pits.value = report.value.pits
+      
+
   });
  
   const confirmReport = async(repo_date:Date)=>{
@@ -109,61 +100,15 @@ export default defineComponent({
     console.log(reports.value);
     project.value.reports = reports.value
     await updateProjectPits(project.value)
+    
+    
+    
   }
-
-
-  //sharing functions:
-
-    const fallbackCopyTextToClipboard = function(text:string) {
-      var textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.top = "0";
-      textArea.style.left = "0";
-      textArea.style.position = "fixed";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      try { document.execCommand('copy') } catch (err) { return }
-      document.body.removeChild(textArea);
-    }
-
-    const copyTextToClipboard = function(text:string) {
-      if (!navigator.clipboard) {
-        fallbackCopyTextToClipboard(text); return;
-      }
-      navigator.clipboard.writeText(text)
-    }
-
-    const shareLink = function(link:string) {
-      if (navigator && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && navigator.share) {
-        navigator.share({
-            title: 'Drillo',
-            text: 'Sign a daily report',
-            url: link,
-          }).then(() => { return; }).catch(() => { return; });
-      } else {
-        copyTextToClipboard(link);
-      }
-    }
-
-    const shareReport = function() {
-      const signRoute = router.resolve('/sign-daily-report/' + route.params.id);
-      const signRouteAbsoluteURL = new URL(signRoute.href, window.location.origin).href;
-
-      console.log(signRouteAbsoluteURL)
-      shareLink(signRouteAbsoluteURL);
-    }
-
-
-
-
 
  
      return {
       //methods
         confirmReport,
-        shareReport,
-
         //properties
         currentUser:user,
         project:project,

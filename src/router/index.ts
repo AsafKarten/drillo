@@ -12,6 +12,7 @@ import MachinesView from '../views/MachinesView.vue'
 import EmployeeView from '../views/EmployeeView.vue'
 import MachineView from '../views/MachineView.vue'
 import DailyReport from '../views/DailyReport.vue'
+import SignDailyReport from '../views/SignDailyReport.vue'
 import CreateEmployee from '../views/CreateEmployee.vue'
 import CreateMachine from '../views/CreateMachine.vue'
 import ProjectReports from '../views/ProjectReports.vue'
@@ -73,6 +74,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/daily-report/:id',
     name: 'DailyReport',
     component: DailyReport
+  }
+  ,
+  {
+    path: '/sign-daily-report/:id',
+    name: 'SignDailyReport',
+    component: SignDailyReport
   }
   ,
   {
