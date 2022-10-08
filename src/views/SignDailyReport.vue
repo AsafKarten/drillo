@@ -5,7 +5,7 @@
       <h5>פרוייקט: {{project?.name}}</h5>
       <ion-card v-show="project">
         <ion-card-header>
-          <ion-card-subtitle>{{":"+"תאריך"}}</ion-card-subtitle>
+          <ion-card-subtitle>{{":תאריך"}}</ion-card-subtitle>
           <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -17,31 +17,60 @@
           <span v-else>אושר</span> -->
         </ion-card-content>
       </ion-card>
-      <create-pdf :report="report" :signature="true"/>
+
+      <ion-card v-show="project">
+        <ion-card-header>
+          <ion-card-title>אישור הדו"ח:</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+
+          <ion-item>
+            <ion-label position="end">שם החותם:</ion-label>
+            <ion-input
+              v-model="signatureName"
+              type="text"
+              :required="true"
+            ></ion-input>
+          </ion-item>
+
+          <SignaturePad ref="SignaturePadComponent"/>
+
+          <ion-item>
+            <ion-button color="" @click="clearSignature()">ניקוי</ion-button>
+            <ion-button color="" @click="saveAsPDF()">שמירה כ-PDF</ion-button>
+            <ion-button color="success" @click="confirmReport()">שמירה ואישור הדו"ח</ion-button>
+          </ion-item>
+
+        </ion-card-content>
+      </ion-card>
+
+      <CreatePdf ref="CreatePdfComponent" :report="report" :signatureImage="signatureImageString" :signatureName="signatureName"/>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
+import {IonContent, IonPage, IonButton, IonInput, IonLabel, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 
 import CreatePdf from '@/Components/CreatePdf.vue';
+import SignaturePad from '@/Components/SignaturePad.vue';
 import { userInfo } from 'os';
 
 //import AppHeader from '../Components/AppHeader.vue'
 
-
-
-
 export default defineComponent({
   name: 'SignDailyReport',
   components: {
+
     IonContent,
     IonPage,
-    //IonButton,
+    IonButton,
+    IonLabel,
+    IonInput,
     IonItem,
     IonCard,
     IonCardContent, 
@@ -49,6 +78,7 @@ export default defineComponent({
     IonCardSubtitle, 
     IonCardTitle,
     CreatePdf,
+    SignaturePad,
     //AppHeader
    
 },
@@ -67,10 +97,38 @@ export default defineComponent({
     const siteManager = ref<any>()
     const {id} = route.params
 
-  onMounted(async()=>{
-    //await loginAnonymous() 
-    console.log(id);
+    const signatureName = ref();
+    const signatureImageString = ref<string>();
+    const SignaturePadComponent = ref<any>();
+    const CreatePdfComponent = ref<any>();
+
+
+    const clearSignature = ()=>SignaturePadComponent.value.clear();
+    const saveAsPDF = async()=>{
+      //save the signature as a string of a JPEG image
+      signatureImageString.value = await SignaturePadComponent.value.save('image/jpeg');
+      //await for 1 more line of code so the signature image updates in the createPDF component
+      await (()=>{return null;});
+      //call the generate PDF function inside createPDF component
+      const pdfFileObject = await CreatePdfComponent.value.generatePDF({save: true});
+      console.log(pdfFileObject)
+    };
+
+    const confirmReport = async(repo_date:Date)=>{
+      console.log(repo_date);
+      let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
+      let index = reports.value.indexOf(repo)
+      repo.approve = true;
+      console.log(repo);
+      reports.value[index]=repo;
+      console.log(reports.value);
+      project.value.reports = reports.value
+      await updateProjectPits(project.value)
+    }
     
+    onMounted(async()=>{
+      console.log(id);
+      
       //get all projects from mongo
       projects.value = await getAllProjects()
       //filter the projects by project id
@@ -86,40 +144,30 @@ export default defineComponent({
       reports.value = project?.value.reports;
       report.value = reports?.value[reports.value.length-1]
       pits.value = report.value.pits
-      
+    });
 
-  });
- 
-  const confirmReport = async(repo_date:Date)=>{
-    console.log(repo_date);
-    let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
-    let index = reports.value.indexOf(repo)
-    repo.approve = true;
-    console.log(repo);
-    reports.value[index]=repo;
-    console.log(reports.value);
-    project.value.reports = reports.value
-    await updateProjectPits(project.value)
-    
-    
-    
-  }
-
- 
-     return {
+    return {
       //methods
-        confirmReport,
-        //properties
-        currentUser:user,
-        project:project,
-        reports:reports,
-        report:report,
-        pits:pits,
-        repoDate:repoDate,
-        projects:projects,
-        id:id,
-        
-  }
+      confirmReport,
+      clearSignature,
+      saveAsPDF,
+
+      //properties
+      currentUser:user,
+      project:project,
+      reports:reports,
+      report:report,
+      pits:pits,
+      repoDate:repoDate,
+      projects:projects,
+      id:id,
+      
+      signatureName,
+      signatureImageString,
+      SignaturePadComponent,
+
+      CreatePdfComponent,
+    }
   },
  
 });

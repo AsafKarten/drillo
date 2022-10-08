@@ -1,9 +1,5 @@
 <template>
-  <button @click="generatePDF">צור דוח</button>
-  <button @click="getReportDiv">דבג דוח</button>
-
   <div ref="reportDiv" style="display:none;">
-
         <table style="direction:ltr; border-spacing: 10px; border-collapse: separate;">
           <thead>
             <tr>
@@ -29,25 +25,8 @@
 
         <div>
           <p>חתימה:</p>
-          <p direction="rtl">{{signatureName.split(' ').reverse().join('  ')}}</p> 
+          <p v-if="signatureName" direction="rtl">{{signatureName.split(' ').reverse().join('  ')}}</p> 
         </div>
-  </div>
-
-  <div v-if="signature">
-      <ion-item>
-        <ion-label position="floating">שם החותם:</ion-label>
-        <ion-input
-          v-model="signatureName"
-          type="text"
-        ></ion-input>
-      </ion-item>
-    <Vue3Signature ref="signature1" :sigOption="state.option" :w="'400px'" :h="'250px'"
-                  :disabled="state.disabled" class="example"></Vue3Signature>
-    <button @click="save('image/jpeg')">Save</button>
-    <button @click="clear">Clear</button>
-    <button @click="undo">Undo</button>
-    <button @click="addWaterMark">addWaterMark</button>
-    <button @click="handleDisabled">disabled</button>
   </div>
 
 </template>
@@ -69,9 +48,9 @@ import Vue3Signature from "vue3-signature"
 
 /* eslint-disable */
 export default defineComponent({
-  name: 'UploadFile',
+  name: 'CreatePDF',
   components: {Vue3Signature, IonInput, IonLabel, IonItem, IonButton},
-  props:{report:Object, signature:Boolean},
+  props:{report:Object, signatureImage:String, signatureName:String},
   setup(props){
     const router = useRouter();
     const currentUser = ref<any>()
@@ -79,11 +58,11 @@ export default defineComponent({
 
     const reportDiv = ref();
 
-    const generatePDF = function () {
+    const generatePDF = function ({save = true}) {
       const d = new Date(Date.parse(props.report?.date));
       const reportDateString = `${d.getDay()}_${d.getMonth()}_${d.getFullYear()} ${d.getHours()}_${d.getMinutes()}`;
-      const signature = "<img width='400px' height='250px' src=" + signature1.value.save('image/jpeg') + "/> "
-      const html = htmlToPdfmake(reportDiv.value.innerHTML + signature);
+      const signatureHtmlObject = props.signatureImage?("<img width='300px' height='200px' src=" + props.signatureImage + "/> "):""
+      const html = htmlToPdfmake(reportDiv.value.innerHTML + signatureHtmlObject);
       const documentDefinition = { content: html, defaultStyle: {font: 'assistant'} };
 
       pdfMake.fonts = {
@@ -94,12 +73,10 @@ export default defineComponent({
       }
 
       pdfMake.vfs = hebrewFonts; //pdfFonts.pdfMake.vfs;
-      pdfMake.createPdf(documentDefinition).download("Drillo Report " + reportDateString + ".pdf");
-    }
-
-    const getReportDiv = function() {
-      console.log("reportDiv.value")
-      console.log(reportDiv.value.innerHTML)
+      const pdfFile = pdfMake.createPdf(documentDefinition);
+      if(save) pdfFile.download("Drillo Report " + reportDateString + ".pdf");
+      //other methods: https://pdfmake.github.io/docs/0.1/getting-started/client-side/methods/
+      return pdfFile;
     }
 
     onMounted(async()=>{
@@ -107,55 +84,11 @@ export default defineComponent({
     });
 
 
-
-
-
-
-
-    //SIGNATURE PAD
-
-    const signatureName = ref();
-
-    const state = reactive({
-      count: 0,
-      option: {
-        penColor: "rgb(0, 0, 0)",
-        backgroundColor: "rgb(255,255,255)"
-      },
-      disabled: false
-    })
-
-    const signature1 = ref(Vue3Signature)
-    const save = (t:String) => { console.log( signature1.value.save(t) ) }
-    const clear = () => { signature1.value.clear(); }
-    const undo = () => { signature1.value.undo(); }
-    const handleDisabled = () => { state.disabled = !state.disabled }
-    const addWaterMark = () => { signature1.value.addWaterMark({
-        text: "mark text",          // watermark text, > default ''
-        font: "20px Arial",         // mark font, > default '20px sans-serif'
-        style: 'all',               // fillText and strokeText,  'all'/'stroke'/'fill', > default 'fill
-        fillStyle: "red",           // fillcolor, > default '#333'
-        strokeStyle: "blue",	       // strokecolor, > default '#333'
-        x: 100,                     // fill positionX, > default 20
-        y: 200,                     // fill positionY, > default 20
-        sx: 100,                    // stroke positionX, > default 40
-        sy: 200                     // stroke positionY, > default 40
-    }); }
-
-
-
     return {
       //methods
       generatePDF,
-      getReportDiv,
-
       //properties
       reportDiv,
-
-
-      //SIGNATURE PAD
-      signature1, state, signatureName,
-      save, clear, undo, handleDisabled, addWaterMark
     }
   }
 });
@@ -164,8 +97,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.mainContainer{
-display: block;
-direction: rtl;
-}
+
 </style>
