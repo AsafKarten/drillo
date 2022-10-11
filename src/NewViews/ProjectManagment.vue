@@ -2,7 +2,7 @@
     <ion-page>
       <ion-content :fullscreen="true" >
 
-        <GridButtons :buttons="buttons"/>
+        <GridButtons :buttons="buttons" :options="{buttonHeight:150}"/>
 
       </ion-content>
    
@@ -40,12 +40,15 @@
       const goTo = (route:any) => { router.push(route) }
       const buttons = reactive(
         [
-          {text:"רשימת עובדים",         icon: home, click: ()=>goTo('/WorkersView/') },
-          {text:"הוספת עובד",           icon: home, click: ()=>goTo('/AddWorker/') },
+          {text:"רשימת עובדים",         icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/WorkersView/') },
+          {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/AddWorker/') },
           {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goTo('/AddJob/') }
         ]
       );
-      
+      //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },
+      //IONIC COLORS: primary, secondary, tertiary, success, warning, danger, light, medium, dark
+
+
       onMounted(async()=>{
         if(currentUser?.value.customData.organizationID === undefined)
               router.push('Login')
@@ -72,27 +75,5 @@
   </script>
   
   <style scoped>
-
-  .button-grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 0.5fr));
-    grid-auto-rows: 150px;
-    align-items: stretch;
-    justify-content: stretch;
-
-  }
-
-  .button-grid-container>.button {
-    height: auto;
-  }
-
-  .button>div{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    --ion-margin: 6px;
-    font-weight: bold;
-  }
 
   </style>
