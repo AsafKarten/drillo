@@ -54,7 +54,7 @@ export default defineComponent({
 
     
     const goToProject =(project:any)=>{
-        router.push('/project/'+ project._id)
+        router.push('/project-managment/'+ project._id)
     }
      return {
       //methods

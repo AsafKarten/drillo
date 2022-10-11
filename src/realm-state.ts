@@ -60,9 +60,9 @@ export const useAppState = () => {
       //Create user
       await app.emailPasswordAuth.registerUser(email, password)
       // Authenticate the user
-      await app.logIn(
-        Realm.Credentials.emailPassword(email, password)
-      )
+      // await app.logIn(
+      //   Realm.Credentials.emailPassword(email, password)
+      // )
 
       // save profile info
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -141,16 +141,21 @@ const updateEmployeeMachine =async (employee : any) => {
    
 
 
-    const getProjectByID =async (id:string) => {
+    const getProjectByID =async (_id:string) => {
       
+      //import mongodb = require("mongodb");
+      //const ObjectID = mongodb.ObjectID;
+      
+
       // 1. Get a data source client
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
       // 2. Get a database & collection
       const collection = mongodb?.db("drillo").collection("projects");
       // 3. Read and write data with MongoDB queries
-      const query = { "_id":id };
-      return await collection?.findOne(query)
-    
+      const id = new  Realm.BSON.ObjectID(_id)
+      const query  =  {'_id':id};
+      return await collection?.find(query)
+     
   }
 
 

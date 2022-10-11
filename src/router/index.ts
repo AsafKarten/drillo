@@ -16,6 +16,9 @@ import SignDailyReport from '../views/SignDailyReport.vue'
 import CreateEmployee from '../views/CreateEmployee.vue'
 import CreateMachine from '../views/CreateMachine.vue'
 import ProjectReports from '../views/ProjectReports.vue'
+//new components imports
+import ProjectManagment from '../NewViews/ProjectManagment.vue'
+
 import { useAppState } from '../realm-state';
 const routes: Array<RouteRecordRaw> = [
   {
@@ -108,7 +111,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/project-reports/:id',
     name: 'ProjectReports',
     component: ProjectReports
+  },
+  //new routes
+  
+  {
+    path: '/project-managment/:id',
+    name: 'ProjectManagment',
+    component: ProjectManagment
   }
+ 
 ]
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

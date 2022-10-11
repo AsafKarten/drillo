@@ -383,9 +383,14 @@ export default defineComponent({
 //need to fix find project by id and remove the find function here
   machines.value =  await getAllDrillingMachines();
   machines.value = machines.value.filter((machine: { organizationID: any; }) => machine.organizationID === user.value.customData.organizationID)
-    const projects = await getAllProjects()
+    // const projects = await getAllProjects()
     employees.value = await getAllEmployees()
-    project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
+    // project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
+
+    project.value = await getProjectByID(project_id.value)
+    project.value = project.value[0]
+    console.log(project.value);
+     
     projectDrillers.value = project?.value.drillers
     projectMachines.value = project?.value.machines
     projectManagers.value = project?.value.site_managers
