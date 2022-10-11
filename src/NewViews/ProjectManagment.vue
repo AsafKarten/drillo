@@ -2,16 +2,7 @@
     <ion-page>
       <ion-content :fullscreen="true" >
 
-        <div class="button-grid-container">
-
-          <ion-button v-for="(button,index) in buttons" :key="index" fill="outline" @click="button.click">
-            <div>
-              <ion-icon :icon="button.icon" size="large" class="ion-margin"></ion-icon>
-              <ion-label>{{button.text}}</ion-label>
-            </div>
-          </ion-button>
-
-        </div>
+        <GridButtons :buttons="buttons"/>
 
       </ion-content>
    
@@ -19,14 +10,15 @@
   </template>
   
   <script lang="ts">
-  import {  IonContent, IonPage, IonButton, IonLabel, IonIcon } from '@ionic/vue';
-  import { defineComponent, onMounted, reactive, ref, render } from 'vue';
+  import { IonContent, IonPage } from '@ionic/vue';
+  import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
-  import {useAppState} from '../realm-state';
+  import { useAppState } from '../realm-state';
+  import GridButtons from './Utilities/GridButtons.vue';
   
   
   import '@vuepic/vue-datepicker/dist/main.css'
-  import { arrowRedo, home, exit } from 'ionicons/icons';
+  import { home } from 'ionicons/icons';
   
   
   export default defineComponent({
@@ -34,9 +26,7 @@
     components: {
        IonContent,
        IonPage,
-       IonButton, 
-       IonLabel,
-       IonIcon 
+       GridButtons
     },
     setup(){
       const router = useRouter();
@@ -75,12 +65,7 @@
         project:project,
         project_id:project_id,
 
-        buttons,
-
-      //icons
-        arrowRedo,
-        home,
-        exit, 
+        buttons, 
       }
     }
   });
