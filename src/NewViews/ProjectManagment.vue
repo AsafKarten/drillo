@@ -1,37 +1,26 @@
 <template>
     <ion-page>
       <ion-content :fullscreen="true" >
-        <ion-grid :fixed="true">
 
-            <ion-row >
-              <ion-col>
-                <ion-button class="ion-align-items-stretch ion-align-self-stretch" >רשימת עובדים
-                    <IonIcon slot="start" :icon="home"/>
-                </ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button class="ion-align-items-stretch ion-align-self-stretch" >הוספת עובד
-                    <IonIcon slot="start" :icon="home"/>
-                </ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button class="ion-align-items-stretch ion-align-self-stretch" >הוספת עבודה חיצונית
-                    <IonIcon slot="start" :icon="home"/>
-                </ion-button>
-              </ion-col>
-            </ion-row>
-            
+        <div class="button-grid-container">
 
-          </ion-grid>
-    
+          <ion-button v-for="(button,index) in buttons" :key="index" fill="outline" @click="button.click">
+            <div>
+              <ion-icon :icon="button.icon" size="large" class="ion-margin"></ion-icon>
+              <ion-label>{{button.text}}</ion-label>
+            </div>
+          </ion-button>
+
+        </div>
+
       </ion-content>
    
     </ion-page>
   </template>
   
   <script lang="ts">
-  import {  IonContent, IonPage, IonCol, IonGrid, IonRow, IonButton, IonIcon } from '@ionic/vue';
-  import { defineComponent, onMounted, ref, render } from 'vue';
+  import {  IonContent, IonPage, IonButton, IonLabel, IonIcon } from '@ionic/vue';
+  import { defineComponent, onMounted, reactive, ref, render } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {useAppState} from '../realm-state';
   
@@ -45,13 +34,10 @@
     components: {
        IonContent,
        IonPage,
-       IonCol, 
-       IonGrid, 
-       IonRow,
        IonButton, 
+       IonLabel,
        IonIcon 
-   
-  },
+    },
     setup(){
       const router = useRouter();
       const route = useRoute();
@@ -59,42 +45,69 @@
       const currentUser = ref<any>(user)
       const project_id = ref<any>(route.params);
       const project = ref<any>();
-      
-    onMounted(async()=>{
-      if(currentUser?.value.customData.organizationID === undefined)
-            router.push('Login')
-  
-      project.value = await getProjectByID(project_id.value)
-      project.value = project.value[0]
-      console.log(project.value);
-   
-    });
-  
-        
-       return {
-        //methods
-        
-        //properties
-          currentUser : currentUser,
-          project:project,
-          project_id:project_id,
 
-        //icons
-          arrowRedo,
-          home,
-          exit,
-       
-         
+
+      const goTo = (route:any) => { router.push(route) }
+      const buttons = reactive(
+        [
+          {text:"רשימת עובדים",         icon: home, click: ()=>goTo('/WorkersView/') },
+          {text:"הוספת עובד",           icon: home, click: ()=>goTo('/AddWorker/') },
+          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goTo('/AddJob/') }
+        ]
+      );
+      
+      onMounted(async()=>{
+        if(currentUser?.value.customData.organizationID === undefined)
+              router.push('Login')
+    
+        project.value = await getProjectByID(project_id.value)
+        project.value = project.value[0]
+        console.log(project.value);
+    
+      });
+    
+          
+      return {
+      //methods
+      
+      //properties
+        currentUser : currentUser,
+        project:project,
+        project_id:project_id,
+
+        buttons,
+
+      //icons
+        arrowRedo,
+        home,
+        exit, 
+      }
     }
-    },
-   
   });
   </script>
   
   <style scoped>
-  .mainButtons{
-   width: auto;
-   height: auto;
+
+  .button-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 0.5fr));
+    grid-auto-rows: 150px;
+    align-items: stretch;
+    justify-content: stretch;
+
+  }
+
+  .button-grid-container>.button {
+    height: auto;
+  }
+
+  .button>div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    --ion-margin: 6px;
+    font-weight: bold;
   }
 
   </style>
