@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-      <ion-content :fullscreen="true" >
+      <ion-content  :fullscreen="true" >
 
             <div :key="machine._id" v-for="machine in machines">
                 <h3>{{machine.type +" "+ machine.model}}</h3>
@@ -23,7 +23,7 @@
   
   <script lang="ts">
   import { IonContent, IonPage, IonItem, IonAvatar, IonLabel } from '@ionic/vue';
-  import { defineComponent, onMounted, reactive, ref } from 'vue';
+  import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
 
@@ -86,5 +86,5 @@
   </script>
   
   <style scoped>
-
+   
   </style>

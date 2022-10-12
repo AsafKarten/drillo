@@ -73,7 +73,7 @@ import {
   alertController,
 } from "@ionic/vue";
 
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAppState } from "../realm-state";
 
