@@ -59,11 +59,7 @@ export const useAppState = () => {
      const createEmployeeAccount =async (email:string, password:string,first:string,last:string, userType:string, organizationID:string) => {
       //Create user
       await app.emailPasswordAuth.registerUser(email, password)
-      // Authenticate the user
-      // await app.logIn(
-      //   Realm.Credentials.emailPassword(email, password)
-      // )
-
+    
       // save profile info
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
       const collection = mongodb?.db("drillo").collection("users");

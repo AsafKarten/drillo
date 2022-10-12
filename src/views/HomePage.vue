@@ -90,10 +90,11 @@ export default defineComponent({
     const showComponent = ref(false)
     
     onMounted(async()=>{
+      console.log(user);
+      
       if(user.value.customData.userType === 'driller')
           router.replace('/driller-view')
-      else if(user.value.customData.userType === 'site manager')
-          router.replace('/daily-report')
+  
       else 
         showComponent.value = true
       

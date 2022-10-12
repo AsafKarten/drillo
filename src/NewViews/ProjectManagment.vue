@@ -40,7 +40,7 @@
       const buttons = reactive(
         [
           {text:"רשימת עובדים",         icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/WorkersView/') },
-          {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/AddWorker/') },
+          {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/create-employee/') },
           {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goToAddJob() }
         ]
       );

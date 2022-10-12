@@ -70,7 +70,9 @@ import {
   IonInput,
   IonButton,
   IonItem,
+  alertController,
 } from "@ionic/vue";
+
 import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAppState } from "../realm-state";
@@ -93,7 +95,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const { user, getProjectByID } = useAppState();
+    const { user, getProjectByID ,updateProjectExternalServices } = useAppState();
     const currentUser = ref<any>(user);
     const project_id = ref<any>(route.params);
     const project = ref<any>();
@@ -111,6 +113,8 @@ export default defineComponent({
     const serviceDate = ref();
 
     onMounted(async () => {
+        console.log(currentUser.value);
+        
       if (currentUser?.value.customData.organizationID === undefined)
         router.push("Login");
 
@@ -118,8 +122,19 @@ export default defineComponent({
       console.log(project.value);
     });
 
-    const saveExJob = () => {
-      const job = {
+    const presentAlert = async () => {
+        const alert = await alertController.create({
+          header: 'קבל"ן חיצוני נוסף בהצלחה',
+          subHeader: 'קבל"ן חיצוני נוסף בהצלחה',
+          message: 'קבל"ן חיצוני נוסף בהצלחה',
+          buttons: ['אישור'],
+        });
+        await alert.present();
+        router.push("/project-managment/"+ project.value._id.toString());
+    }
+
+    const saveExJob = async() => {
+      var job = {
         businessID: businessID.value,
         businessCity: businessCity.value,
         businessStreet: businessStreet.value,
@@ -133,12 +148,29 @@ export default defineComponent({
         serviceDate: serviceDate.value,
       };
 
-      console.log(job);
+      if(project.value.external_services === undefined)
+          project.value.external_services = []
+
+      if(serviceDate.value instanceof Date){
+        project.value.external_services.push({job})
+        
+      }
+      else if(serviceDate.value instanceof Array){
+        for (let i = 0; i < serviceDate.value.length; i++) {
+          const dateElement = serviceDate.value[i];
+            job.serviceDate = dateElement
+          project.value.external_services.push({job})
+         }}
+         await updateProjectExternalServices(project.value)
+         console.log(project.value);
+         await presentAlert()
+        
     };
 
     return {
       //methods
       saveExJob,
+      presentAlert,
 
       //properties
       currentUser,

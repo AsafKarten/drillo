@@ -1,29 +1,24 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">יצירת עובד חדש</ion-title>
-        </ion-toolbar>
-      </ion-header>
      
       <div id="container"> 
-        <h1>יצירת עובד חדש</h1>
-        <h3>לאחר סיום יצירת עובד חדש המערכת תתנתק ויהיה צורך להתחבר מחדש!</h3>
+        <h3>יצירת עובד חדש</h3>
+       
      <ion-item>
-          <ion-label position="floating">First Name</ion-label>
+          <ion-label position="floating">שם פרטי</ion-label>
        <ion-input v-model="first" type="text" autocomplete="new-first"></ion-input>
        </ion-item>
        <ion-item>
-           <ion-label position="floating">Last Name</ion-label>
+           <ion-label position="floating">שם משפחה</ion-label>
        <ion-input v-model="last" type="text" autocomplete="new-last"></ion-input>
        </ion-item>
        <ion-item>
-        <ion-label position="floating">Email</ion-label>
+        <ion-label position="floating">כתובת מייל</ion-label>
        <ion-input v-model="email" type="text" autocomplete="new-email"></ion-input>
        </ion-item>
         <ion-item>
-        <ion-label position="floating">Password</ion-label>
+        <ion-label position="floating">סיסמה</ion-label>
        <ion-input v-model="password" type="text" autocomplete="new-password"></ion-input>
        </ion-item>
        <ion-item>
@@ -49,7 +44,7 @@
 </template>
 
 <script lang="ts">
-  import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar,IonInput, IonLabel ,IonItem,IonButton, IonSelect, IonSelectOption } from '@ionic/vue';
+  import { IonContent, IonPage,IonInput, IonLabel ,IonItem,IonButton, IonSelect, IonSelectOption } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   
   import { useRouter } from 'vue-router';
@@ -59,10 +54,7 @@
     name: 'CreateEmployee',
     components: {
       IonContent,
-      IonHeader,
       IonPage,
-      IonTitle,
-      IonToolbar,
       IonInput,
       IonLabel,
       IonItem,
@@ -71,19 +63,21 @@
       IonSelectOption
     },
     setup(){
-      const currentUser = ref<any>();
+      const {user, createEmployeeAccount} = useAppState();
+      const router = useRouter();
+      const currentUser = ref<any>(user);
       const organizationID = ref<any>();
       const email = ref("");
       const password = ref("");
       const first = ref("");
       const last = ref("");
-      const employeeType = ref("")
+      const employeeType = ref()
       const error = ref<any>({});
       const employeeTypes = ref(["driller", "manager"]);
 
-      const router = useRouter();
+      
 
-      const {user,logout, createEmployeeAccount} = useAppState();
+      
 
        onMounted(async()=>{
         organizationID.value = user.value.customData.organizationID
@@ -95,20 +89,14 @@
           console.log(employeeType.value , organizationID.value);
           
           await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value , organizationID.value)
-          await userLogout()
+
         } catch (err) {
           console.error("Failed to log in", err)
           error.value = err;
         }
       }
 
-       const userLogout = async ()=>{
-      await logout();
-      currentUser.value = null;
-      router.replace("/login");
-      
-      
-    }
+   
       
       
       return{ 
