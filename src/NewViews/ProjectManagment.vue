@@ -36,12 +36,12 @@
       const project = ref<any>();
 
 
-      const goTo = (route:any) => { router.push(route) }
+     // const goTo = (route:any) => { router.push(route) }
       const buttons = reactive(
         [
-          {text:"רשימת עובדים",         icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/workers-view/') },
+          {text:"רשימת עובדים",         icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/workers-view/'+ project.value._id) },
           {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/add-employee/') },
-          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goToAddJob() }
+          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goTo('/add-job/'+ project.value._id) }
         ]
       );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },
@@ -57,14 +57,14 @@
     
       });
 
-      const goToAddJob =()=>{
-        router.push('/add-job/'+ project.value._id)
+      const goTo =(route:any)=>{
+        router.push(route)
     }
     
           
       return {
          //methods
-         goToAddJob,
+         goTo,
          //properties
          currentUser,
          project,
