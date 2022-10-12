@@ -59,6 +59,15 @@ export const useAppState = () => {
      const createEmployeeAccount =async (email:string, password:string,first:string,last:string, userType:string, organizationID:string) => {
       //Create user
       await app.emailPasswordAuth.registerUser(email, password)
+
+      const employeeCredentials = Realm.Credentials.emailPassword(
+        email,
+        password
+      );
+
+      const employee = await app.logIn(employeeCredentials);
+      // The active user is now employee
+      console.assert(employee.id === app?.currentUser?.id);
     
       // save profile info
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -71,6 +80,11 @@ export const useAppState = () => {
     await app?.currentUser?.refreshCustomData();
     user.value = app?.currentUser
     console.log(user.value);
+
+    // Remove the current user from the device
+    await app.removeUser(employee); 
+    console.log(user.value);
+    
     
       return true;
 };
