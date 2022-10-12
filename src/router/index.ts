@@ -18,6 +18,7 @@ import CreateMachine from '../views/CreateMachine.vue'
 import ProjectReports from '../views/ProjectReports.vue'
 //new components imports
 import ProjectManagment from '../NewViews/ProjectManagment.vue'
+import AddJob from '../NewViews/AddJob.vue'
 
 import { useAppState } from '../realm-state';
 const routes: Array<RouteRecordRaw> = [
@@ -118,8 +119,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/project-managment/:id',
     name: 'ProjectManagment',
     component: ProjectManagment
-  }
- 
+  },
+  {
+    path: '/add-job/:id',
+    name: 'AddJob',
+    component: AddJob
+  },
 ]
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

@@ -154,7 +154,7 @@ const updateEmployeeMachine =async (employee : any) => {
       // 3. Read and write data with MongoDB queries
       const id = new  Realm.BSON.ObjectID(_id)
       const query  =  {'_id':id};
-      return await collection?.find(query)
+      return await collection?.findOne(query)
      
   }
 

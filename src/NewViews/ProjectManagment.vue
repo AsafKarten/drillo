@@ -17,12 +17,11 @@
   import GridButtons from './Utilities/GridButtons.vue';
   
   
-  import '@vuepic/vue-datepicker/dist/main.css'
   import { home } from 'ionicons/icons';
   
   
   export default defineComponent({
-    name: 'ProjectManagment.vue',
+    name: 'ProjectManagment',
     components: {
        IonContent,
        IonPage,
@@ -42,7 +41,7 @@
         [
           {text:"רשימת עובדים",         icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/WorkersView/') },
           {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/AddWorker/') },
-          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goTo('/AddJob/') }
+          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goToAddJob() }
         ]
       );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },
@@ -54,21 +53,24 @@
               router.push('Login')
     
         project.value = await getProjectByID(project_id.value)
-        project.value = project.value[0]
         console.log(project.value);
     
       });
+
+      const goToAddJob =()=>{
+        router.push('/add-job/'+ project.value._id)
+    }
     
           
       return {
-      //methods
-      
-      //properties
-        currentUser : currentUser,
-        project:project,
-        project_id:project_id,
+         //methods
+         goToAddJob,
+         //properties
+         currentUser,
+         project,
+         project_id,
 
-        buttons, 
+         buttons, 
       }
     }
   });
