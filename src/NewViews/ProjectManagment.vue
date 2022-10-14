@@ -2,6 +2,7 @@
     <ion-page>
       <ion-content :fullscreen="true" >
 
+        <AppHeader/>
         <GridButtons :buttons="buttons" :options="{buttonHeight:150}"/>
 
       </ion-content>
@@ -15,6 +16,8 @@
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
   import GridButtons from './Utilities/GridButtons.vue';
+
+  import AppHeader from '../Components/AppHeader.vue'
   
   
   import { home } from 'ionicons/icons';
@@ -25,7 +28,8 @@
     components: {
        IonContent,
        IonPage,
-       GridButtons
+       GridButtons,
+       AppHeader,
     },
     setup(){
       const router = useRouter();
@@ -40,8 +44,14 @@
       const buttons = reactive(
         [
           {text:"רשימת עובדים",         icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/workers-view/'+ project.value._id) },
-          {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/add-employee/') },
-          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goTo('/add-job/'+ project.value._id) }
+          {text:"הוספת עובד",           icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
+          {text:"הוספת עבודה חיצונית", icon: home, click: ()=>goTo('/add-job/'+ project.value._id) },
+          {text:"יומן עבודה", icon: home, click: ()=>goTo('/work-diary/'+ project.value._id) },
+          {text:"מכונות קידוח", icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
+          {text:"דוחות עבודה", icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
+          {text:"מפת קידוחים", icon: home, click: ()=>goTo('/map/'+ project.value._id) },
+          {text:"מסמכי אתר", icon: home, click: ()=>goTo('/Project-files/'+ project.value._id) },
+          {text:"ציוד", icon: home, click: ()=>goTo('/project-equipment/'+ project.value._id) },
         ]
       );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },

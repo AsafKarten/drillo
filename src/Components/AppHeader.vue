@@ -1,28 +1,32 @@
 <template>
   <ion-header :translucent="true">
+    <ion-toolbar color="dark">
+      <ion-buttons slot="start">
+        <ion-back-button default-href="/" @click="$router.back()"></ion-back-button> 
+        <ion-back-button :icon="home" default-href="/" @click="$router.replace('/')"></ion-back-button> 
+      </ion-buttons> 
+      <ion-buttons slot="end">
+        <ion-menu-button auto-hide="false"></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+
     <ion-toolbar>
       <div v-if="currentUser" class="header">
           <ion-button  v-if="showButtons" @click="$router.back()" color="dark">חזרה
             <IonIcon slot="start" :icon="arrowRedo" />
           </ion-button>
-          <ion-button  v-if="showButtons" router-link="/" color="dark">מסך ראשי
-            <IonIcon slot="start" :icon="home"/>
-          </ion-button>
-          <p class="headerText">מחובר: {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
-          <!-- <p class="headerText">{{currentUser?.profile.email}} </p> -->
+         
+          <p class="headerText">בוקר טוב  {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+        
 
           <PWAbutton/>
-          
-          <ion-button  @click="userLogout" color="dark">{{"יציאה"}}
-            <IonIcon slot="end" :icon="exit"/>
-          </ion-button>
       </div>
     </ion-toolbar>
   </ion-header>
 </template>
 
 <script lang="ts">
-import { IonHeader, IonToolbar, IonButton,IonIcon } from '@ionic/vue';
+import { IonHeader, IonToolbar, IonButton,IonIcon , IonButtons, IonMenuButton , IonBackButton, IonTitle } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { arrowRedo, home, exit } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
@@ -37,6 +41,9 @@ export default defineComponent({
     IonToolbar,
     IonButton,
     IonIcon,
+    IonButtons, 
+    IonMenuButton, 
+    IonBackButton,
     PWAbutton
   },
   props: {showButtons: Boolean },

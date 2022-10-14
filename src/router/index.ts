@@ -20,6 +20,7 @@ import ProjectReports from '../views/ProjectReports.vue'
 import ProjectManagment from '../NewViews/ProjectManagment.vue'
 import AddJob from '../NewViews/AddJob.vue'
 import WorkersView from '../NewViews/WorkersView.vue'
+import AddWorker from '../NewViews/AddWorker.vue'
 
 import { useAppState } from '../realm-state';
 const routes: Array<RouteRecordRaw> = [
@@ -130,6 +131,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/workers-view/:id',
     name: 'WorkersView',
     component: WorkersView
+  },
+  {
+    path: '/add-worker/:id',
+    name: 'AddWorker',
+    component: AddWorker
   },
 ]
 const router = createRouter({

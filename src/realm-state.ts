@@ -89,6 +89,18 @@ export const useAppState = () => {
       return true;
 };
 
+//get driller employees by organizationID and userType
+const getOrganizationDrillers = async()=>{
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("users");
+  // 3. Read and write data with MongoDB queries
+  const organizationID = user?.value.customData.organizationID.toString()
+  return await collection?.find({ organizationID: organizationID , userType:"driller" })
+}
+
+
 const getAllEmployees = async()=>{
   // 1. Get a data source client
   const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -245,6 +257,7 @@ console.log(error);
       }
   }
 
+
   //need to delete this fuction
   const updateProjectSiteManagers =async (project : any) => {
     try {
@@ -295,11 +308,13 @@ const updateProjectMachines =async (project : any) => {
      const { matchedCount, modifiedCount } = result;
      if(matchedCount && modifiedCount) {
      console.log(`Successfully updated the item.`)
+     return true
 }
 })
     
   } catch (error) {
     console.log(error);
+    return false
     
   }
 }
@@ -429,6 +444,7 @@ return true;
         logout,
         createAccount,
         createEmployeeAccount,
+        getOrganizationDrillers,
         getAllEmployees,
         deleteEmployeeFromDB ,
         updateEmployeeMachine,
