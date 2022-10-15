@@ -23,6 +23,7 @@ import WorkersView from '../NewViews/WorkersView.vue'
 import AddWorker from '../NewViews/AddWorker.vue'
 import ProjectMachines from '../NewViews/ProjectMachines.vue'
 import AddMachine from '../NewViews/AddMachine.vue'
+import ProjectMap from '../NewViews/ProjectMap.vue'
 
 import { useAppState } from '../realm-state';
 const routes: Array<RouteRecordRaw> = [
@@ -148,6 +149,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/add-machine/:id',
     name: 'AddMachine',
     component: AddMachine
+  },
+  {
+    path: '/project-map/:id',
+    name: 'ProjectMap',
+    component: ProjectMap
   },
 ]
 const router = createRouter({

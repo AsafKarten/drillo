@@ -187,7 +187,7 @@ export default defineComponent({
 .mapboxContainer {
     position: relative;
     width: 100%;
-    height: auto;
+    height: 100%;
     min-width: 300px;
     min-height: 200px;
 }

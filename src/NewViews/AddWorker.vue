@@ -2,7 +2,7 @@
     <ion-page>
       <ion-content  :fullscreen="true" >
 
-                <AppHeader/>
+                <AppHeader :str="'הוספת עובד'"/>
                 <ion-item :key="driller._id" v-for="driller in drillers">
                     <ion-avatar slot="start">
                       <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />

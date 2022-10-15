@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <AppHeader/>
+      <AppHeader :str="str"/>
       <ion-item>
         <ion-label position="floating">שם עסק הקבל"ן</ion-label>
         <ion-input v-model="contractorName" type="text"></ion-input>
@@ -116,6 +116,8 @@ export default defineComponent({
     const servicePrice = ref("");
     const serviceDate = ref();
 
+    const str = ref(`הוספת קבל"ן חיצוני`)
+
     onMounted(async () => {
         console.log(currentUser.value);
         
@@ -192,6 +194,8 @@ export default defineComponent({
       serviceType,
       servicePrice,
       serviceDate,
+
+      str,
     };
   },
 });

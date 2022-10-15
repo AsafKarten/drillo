@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-      <AppHeader :showButtons="true"/>
+      <AppHeader :str="'דוחות עבודה'"/>
       
       <ion-content :fullscreen="true" >
     
@@ -20,8 +20,7 @@
           
           <p class="textMargin">{{pit.status}}</p>
           </ion-item>
-          <ion-button v-if="!repo.approve" @click="confirmReport(repo.date)">אישור ביצוע</ion-button>
-          <span v-else>אושר</span>
+
       </ion-card-content>
     </ion-card>
   
@@ -57,7 +56,6 @@
     components: {
       IonContent,
       IonPage,
-      IonButton,
       IonItem,
       IonCard,
       IonCardContent, 

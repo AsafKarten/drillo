@@ -1,7 +1,7 @@
 <template>
     <ion-page>
       <ion-content  :fullscreen="true" >
-        <AppHeader/>
+        <AppHeader :str="'מכונות קידוח'"/>
        <MachinesDrillersList v-if="project" :projectProps="project"/>
 
       </ion-content>

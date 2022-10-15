@@ -3,8 +3,11 @@
     <ion-toolbar color="dark">
       <ion-buttons slot="start">
         <ion-back-button text="" default-href="/" @click="$router.back()"> </ion-back-button> 
+      </ion-buttons> 
+      <ion-buttons class="home" slot="start">
         <ion-back-button text="" :icon="home" default-href="/" @click="$router.replace('/')"> </ion-back-button> 
       </ion-buttons> 
+      <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
         <ion-menu-button auto-hide="false"></ion-menu-button>
       </ion-buttons>
@@ -12,9 +15,6 @@
 
     <ion-toolbar>
       <div v-if="currentUser" class="header">
-          <ion-button  v-if="showButtons" @click="$router.back()" color="dark">חזרה
-            <IonIcon slot="start" :icon="arrowRedo" />
-          </ion-button>
          
           <p class="headerText">בוקר טוב  {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
         
@@ -39,14 +39,12 @@ export default defineComponent({
   components: {
     IonHeader,
     IonToolbar,
-    IonButton,
-    IonIcon,
     IonButtons, 
     IonMenuButton, 
     IonBackButton,
     PWAbutton
   },
-  props: {showButtons: Boolean },
+  props: {showButtons: Boolean, str:String },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
@@ -96,5 +94,12 @@ export default defineComponent({
   margin-top: 1%;
   margin-left: 2px;
   margin-right: 2px;
+}
+.home{
+  margin-right: 5%;
+  
+}
+.pageName{
+  margin-right: 10%;
 }
 </style>

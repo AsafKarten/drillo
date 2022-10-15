@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-content  :fullscreen="true" >
+        <AppHeader :str="'הוספת מכונת קידוח'"/>
         <MachinesList/>
     </ion-content>
   </ion-page>
@@ -13,6 +14,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAppState } from '../realm-state';
 import MachinesList from './Utilities/MachinesList.vue';
+import AppHeader from '@/Components/AppHeader.vue';
 
 
 
@@ -22,7 +24,10 @@ import MachinesList from './Utilities/MachinesList.vue';
 export default defineComponent({
 name: 'AddMachine',
 components: {
-    MachinesList
+    IonPage,
+    IonContent,
+    MachinesList,
+    AppHeader
 },
 props:{projectProps:Object},
 setup(projectProps){

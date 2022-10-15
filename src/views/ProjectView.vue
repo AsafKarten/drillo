@@ -347,9 +347,9 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const route = useRoute();
-    const currentUser = ref<any>()
     const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getAllDrillingMachines, getAllProjects, updateMachineDriller, updateEmployeeMachine, getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
-    const project_id = ref<any>(route.params);
+    const project_id = ref<any>(route.params.id);
+    const currentUser = ref<any>(user)
     const project = ref<any>();
     const {id} = route.params
     const machines = ref<any>()
@@ -386,12 +386,13 @@ export default defineComponent({
     // const projects = await getAllProjects()
     employees.value = await getAllEmployees()
     // project.value = projects?.find(proj =>proj._id.toString() === project_id.value.id)
-
-    project.value = await getProjectByID(project_id.value)
-    project.value = project.value[0]
+    console.log(project_id.value);
+    
+    project.value = await getProjectByID(project_id.value.toString())
+    //project.value = project.value
     console.log(project.value);
      
-    projectDrillers.value = project?.value.drillers
+    projectDrillers.value = project?.value.ma
     projectMachines.value = project?.value.machines
     projectManagers.value = project?.value.site_managers
     siteManagers.value = employees?.value.filter((emp: { userType: string; organizationID: any; })=> emp.userType === "site manager" && emp.organizationID === user.value.customData.organizationID)
