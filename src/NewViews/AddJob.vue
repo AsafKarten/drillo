@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
+      <AppHeader/>
       <ion-item>
         <ion-label position="floating">שם עסק הקבל"ן</ion-label>
         <ion-input v-model="contractorName" type="text"></ion-input>
@@ -81,6 +82,8 @@ import Datepicker from "@vuepic/vue-datepicker";
 
 import "@vuepic/vue-datepicker/dist/main.css";
 
+import AppHeader from '../Components/AppHeader.vue'
+
 export default defineComponent({
   name: "AddJob",
   components: {
@@ -91,6 +94,7 @@ export default defineComponent({
     IonInput,
     IonButton,
     Datepicker,
+    AppHeader,
   },
   setup() {
     const router = useRouter();

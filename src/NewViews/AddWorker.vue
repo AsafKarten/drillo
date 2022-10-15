@@ -2,7 +2,7 @@
     <ion-page>
       <ion-content  :fullscreen="true" >
 
-
+                <AppHeader/>
                 <ion-item :key="driller._id" v-for="driller in drillers">
                     <ion-avatar slot="start">
                       <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -49,7 +49,7 @@
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
 
-  
+  import AppHeader from '../Components/AppHeader.vue'
   
 
   
@@ -68,6 +68,7 @@
        IonToolbar, 
        IonButtons,
        IonHeader,
+       AppHeader,
        
     },
     setup(){

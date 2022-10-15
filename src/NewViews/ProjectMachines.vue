@@ -1,8 +1,8 @@
 <template>
     <ion-page>
       <ion-content  :fullscreen="true" >
-            <AppHeader/>
-            <MachinesDrillersList v-if="project" :projectProps="project"/>
+        <AppHeader/>
+       <MachinesDrillersList v-if="project" :projectProps="project"/>
 
       </ion-content>
    
@@ -14,15 +14,15 @@
   import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
+
   import AppHeader from '../Components/AppHeader.vue'
-  import MachinesDrillersList from './Utilities/MachinesDrillersList.vue'
-  
+  import MachinesDrillersList from './Utilities/MachinesDrillersList.vue';
   
 
   
   
   export default defineComponent({
-    name: 'WorkersView',
+    name: 'ProjectMachines',
     components: {
     IonContent,
     IonPage,

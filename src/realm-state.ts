@@ -387,6 +387,16 @@ console.log(error);
             return await collection?.find({})
     }
 
+    const getOrganizationDrillingMachines = async()=>{
+      // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("drilling_machines");
+      // 3. Read and write data with MongoDB queries
+      
+      return await collection?.find({organizationID:user?.value.customData.organizationID})
+}
+
     const getAllOrganizations= async()=>{
       // 1. Get a data source client
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -459,6 +469,7 @@ return true;
         getAllProjects,
         createNewDrillingMachine,
         getAllDrillingMachines, 
+        getOrganizationDrillingMachines,
         getAllOrganizations,
         updateMachineDriller,
         uploadFile,

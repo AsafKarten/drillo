@@ -2,8 +2,8 @@
   <ion-header :translucent="true">
     <ion-toolbar color="dark">
       <ion-buttons slot="start">
-        <ion-back-button default-href="/" @click="$router.back()"></ion-back-button> 
-        <ion-back-button :icon="home" default-href="/" @click="$router.replace('/')"></ion-back-button> 
+        <ion-back-button text="" default-href="/" @click="$router.back()"> </ion-back-button> 
+        <ion-back-button text="" :icon="home" default-href="/" @click="$router.replace('/')"> </ion-back-button> 
       </ion-buttons> 
       <ion-buttons slot="end">
         <ion-menu-button auto-hide="false"></ion-menu-button>
