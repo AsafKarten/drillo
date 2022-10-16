@@ -24,6 +24,9 @@ import AddWorker from '../NewViews/AddWorker.vue'
 import ProjectMachines from '../NewViews/ProjectMachines.vue'
 import AddMachine from '../NewViews/AddMachine.vue'
 import ProjectMap from '../NewViews/ProjectMap.vue'
+import ProjectFiles from '../NewViews/ProjectFiles.vue'
+import ProjectTools from '../NewViews/ProjectTools.vue'
+import PitsList from '../NewViews/PitsList.vue'
 
 import { useAppState } from '../realm-state';
 const routes: Array<RouteRecordRaw> = [
@@ -154,6 +157,21 @@ const routes: Array<RouteRecordRaw> = [
     path: '/project-map/:id',
     name: 'ProjectMap',
     component: ProjectMap
+  },
+  {
+    path: '/project-files/:id',
+    name: 'ProjectFiles',
+    component: ProjectFiles
+  },
+  {
+    path: '/project-tools/:id',
+    name: 'ProjectTools',
+    component: ProjectTools
+  },
+  {
+    path: '/pits-list/:id',
+    name: 'PitsList',
+    component: PitsList
   },
 ]
 const router = createRouter({

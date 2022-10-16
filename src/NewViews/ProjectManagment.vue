@@ -55,8 +55,8 @@ import { home } from 'ionicons/icons';
           {text:"הוספת מכונת קידוח",     icon: home, click: ()=>goTo('/add-machine/'+ project.value._id) },
           {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
-          {text:"מסמכי אתר",             icon: home, click: ()=>goTo('/Project-files/'+ project.value._id) },
-          {text:"ציוד",                  icon: home, click: ()=>goTo('/project-equipment/'+ project.value._id) },
+          {text:"מסמכי אתר",             icon: home, click: ()=>goTo('/project-files/'+ project.value._id) },
+          {text:"ציוד",                  icon: home, click: ()=>goTo('/project-tools/'+ project.value._id) },
           {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/pits-list/'+ project.value._id) },
           {text:"הזמנת הובלה",          icon: home, click: ()=>goTo('/machine-transportation/'+ project.value._id) },
         ]

@@ -44,7 +44,7 @@ export default defineComponent({
     IonBackButton,
     PWAbutton
   },
-  props: {showButtons: Boolean, str:String },
+  props: {str:String },
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
