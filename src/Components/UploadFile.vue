@@ -19,7 +19,6 @@
   import { useRouter } from 'vue-router';
   import {useAppState} from '../realm-state';
   
-  import AppHeader from '../Components/AppHeader.vue'
 
 
   
@@ -29,11 +28,7 @@
   export default defineComponent({
     name: 'UploadFile',
     components: {
-      //IonContent,
-      //IonPage,
-      //IonButton,
-      //IonItem,
-      //AppHeader
+      
   },
     setup(){
       const router = useRouter();

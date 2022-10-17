@@ -10,6 +10,9 @@
               שם המסמך ותוקף
             </ion-label>
           </ion-item>
+      
+
+        
       </ion-content>
     </ion-page>
   
@@ -21,6 +24,8 @@
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
   import AppHeader from '@/Components/AppHeader.vue';
+
+
   
   
   
@@ -30,13 +35,14 @@
   export default defineComponent({
   name: 'ProjectFiles',
   components: {
-      IonPage,
-      IonContent,
-      IonLabel, 
-      IonItem,
-      IonThumbnail,
-      AppHeader
-  },
+    IonPage,
+    IonContent,
+    IonLabel,
+    IonItem,
+    IonThumbnail,
+    AppHeader,
+  
+},
   props:{},
   setup(){
   const router = useRouter();
