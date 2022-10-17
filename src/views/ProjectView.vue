@@ -347,7 +347,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const route = useRoute();
-    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getAllDrillingMachines, getAllProjects, updateMachineDriller, updateEmployeeMachine, getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
+    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getDrillingMachinesByID, getAllProjects, updateMachineDriller, updateEmployeeMachine, getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
     const project_id = ref<any>(route.params.id);
     const currentUser = ref<any>(user)
     const project = ref<any>();
@@ -381,7 +381,7 @@ export default defineComponent({
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
 //need to fix find project by id and remove the find function here
-  machines.value =  await getAllDrillingMachines();
+  machines.value =  await getDrillingMachinesByID();
   machines.value = machines.value.filter((machine: { organizationID: any; }) => machine.organizationID === user.value.customData.organizationID)
     // const projects = await getAllProjects()
     employees.value = await getAllEmployees()

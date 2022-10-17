@@ -43,7 +43,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout, getAllDrillingMachines} = useAppState();
+    const {user , logout, getDrillingMachinesByID} = useAppState();
     const drillingMachines = ref<any>()
     
   onMounted(async()=>{
@@ -51,9 +51,11 @@ export default defineComponent({
           router.push('Login')
     else{
       //filter machines by organization id 
-      const allMachines = await getAllDrillingMachines();
-      drillingMachines.value = allMachines?.filter((mac)=> mac.organizationID === user?.value.customData.organizationID)
-      console.log(drillingMachines.value);
+      const allMachines = await getDrillingMachinesByID();
+      console.log(allMachines);
+      drillingMachines.value= allMachines
+      // drillingMachines.value = allMachines?.filter((mac)=> mac.organizationID === user?.value.customData.organizationID)
+      // console.log(drillingMachines.value);
     }
     
     

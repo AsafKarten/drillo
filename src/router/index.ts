@@ -27,8 +27,12 @@ import ProjectMap from '../NewViews/ProjectMap.vue'
 import ProjectFiles from '../NewViews/ProjectFiles.vue'
 import ProjectTools from '../NewViews/ProjectTools.vue'
 import PitsList from '../NewViews/PitsList.vue'
+import FieldProjectManagment from '../NewViews/FieldProjectManagment.vue'
+import MachineManagment from '../NewViews/MachineManagment.vue';
+import MachineCrew from '../NewViews/MachineCrew.vue'
 
 import { useAppState } from '../realm-state';
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -172,6 +176,21 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pits-list/:id',
     name: 'PitsList',
     component: PitsList
+  },
+  {
+    path: '/field-project-managment/',
+    name: 'FieldProjectManagment',
+    component: FieldProjectManagment
+  },
+  {
+    path: '/machine-managment/:id',
+    name: 'MachineManagment',
+    component: MachineManagment
+  },
+  {
+    path: '/machine-crew/:id',
+    name: 'MachineCrew',
+    component: MachineCrew
   },
 ]
 const router = createRouter({

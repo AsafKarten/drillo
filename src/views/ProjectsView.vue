@@ -40,16 +40,19 @@ export default defineComponent({
 },
   setup(){
     const router = useRouter();
-    const currentUser = ref<any>()
-    const {user , logout, getAllProjects} = useAppState();
+   
+    const {user , logout, getAllProjectByOrganizationID} = useAppState();
+     const currentUser = ref<any>(user)
     const projects = ref<any>([]);
     
     
   onMounted(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
-    const allProjects = await getAllProjects();
-    projects.value = allProjects?.filter((prj)=>prj.organizationID === user?.value.customData.organizationID)
+    const allProjects = await getAllProjectByOrganizationID();
+    console.log(allProjects);
+    
+    projects.value = allProjects
   });
 
     
@@ -60,8 +63,8 @@ export default defineComponent({
       //methods
         goToProject,
         //properties
-        currentUser : user,
-        projects:projects
+        currentUser,
+        projects
         
   }
   },

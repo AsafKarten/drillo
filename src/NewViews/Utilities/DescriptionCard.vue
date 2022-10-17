@@ -4,6 +4,7 @@
             <ion-card-header>
               <ion-card-title>{{header}}</ion-card-title>
               <ion-card-subtitle>{{subtitle}}</ion-card-subtitle>
+              <ion-card-subtitle v-if="text">{{text}}</ion-card-subtitle>
             </ion-card-header>
         </ion-card>
     </div>
@@ -35,7 +36,7 @@
 
        
     },
-    props:{header:String, subtitle: String },
+    props:{header:String, subtitle: String , text: String},
     setup(){
       const router = useRouter();
       const route = useRoute();

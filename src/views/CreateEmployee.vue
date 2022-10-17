@@ -73,7 +73,7 @@
       const last = ref("");
       const employeeType = ref()
       const error = ref<any>({});
-      const employeeTypes = ref(["driller", "manager"]);
+      const employeeTypes = ref(['driller', 'manager']);
 
       
 

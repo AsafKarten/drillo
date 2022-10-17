@@ -1,8 +1,9 @@
 <template>
   <ion-page v-show="showComponent">
-    <AppHeader :showButtons="false"/>
-    
     <ion-content :fullscreen="true" >
+    <AppHeader :str="'מסך בית'"/>
+    <DescriptionCard :header="organization?.name" :subtitle="'ח.פ' + ' '+organization?.businessID"/>
+    
   
     <div class="homeContainer">
 
@@ -66,6 +67,7 @@ import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
 
 import AppHeader from '../Components/AppHeader.vue'
+import DescriptionCard from '@/NewViews/Utilities/DescriptionCard.vue';
 
 
 
@@ -77,33 +79,40 @@ export default defineComponent({
     IonPage,
     IonButton,
     IonCard,
-    IonCardContent, 
-    IonCardHeader, 
-    IonCardSubtitle, 
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
     IonCardTitle,
-    AppHeader
+    AppHeader,
+    DescriptionCard
 },
   setup(){
     const router = useRouter();
-    const currentUser = ref<any>()
-    const {user , logout} = useAppState();
+   
+    const {user , getOrganizationData} = useAppState(); 
+    const currentUser = ref<any>(user)
     const showComponent = ref(false)
+    const organization = ref<any>()
     
     onMounted(async()=>{
       console.log(user);
       
-      if(user.value.customData.userType === 'driller')
-          router.replace('/driller-view')
+      if(currentUser.value.customData.userType === 'driller')
+          router.replace('/field-project-managment')
   
       else 
+        organization.value = await getOrganizationData()
+        console.log(organization.value);
+        
         showComponent.value = true
       
     });
 
      return {
        //properties
-        currentUser : user,
-        showComponent:showComponent,
+        currentUser,
+        showComponent,
+        organization,
         
   }
   },

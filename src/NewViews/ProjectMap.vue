@@ -42,6 +42,7 @@
             <div :key="note.depth" v-for="note in currentPit?.notes">
               <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
             </div>
+            <PitsButtons v-if="currentUser?.customData.userType === 'driller' && currentPit" :projectProps="project" :pitProps="currentPit"/>
           </div>
         </ion-content>
       </ion-modal>
@@ -59,26 +60,25 @@
   import MapBox from'../views/MapBox.vue';
   
   import AppHeader from '../Components/AppHeader.vue'
+import PitsButtons from './Utilities/PitsButtons.vue';
   
   
   
   export default defineComponent({
     name: 'ProjectMap',
     components: {
-      IonContent,
-      IonHeader,
-      IonPage,
-      IonToolbar,
-      IonButton,
-      IonButtons,
-      IonModal,
-      IonTitle,
-  
-      MapBox,
-   
-      AppHeader,
-  
-  },
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonToolbar,
+    IonButton,
+    IonButtons,
+    IonModal,
+    IonTitle,
+    MapBox,
+    AppHeader,
+    PitsButtons
+},
     setup(){
       const router = useRouter();
       const route = useRoute();

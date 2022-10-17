@@ -1,38 +1,25 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">הוספת מכונת קידוח חדשה</ion-title>
-        </ion-toolbar>
-      </ion-header>
+    <AppHeader :str="'יצירת מכונת קידוח'"/>
 
       <div id="container">
      <ion-item>
           <ion-label position="floating">שם המכונה</ion-label>
        <ion-input v-model="machineName" type="text" autocomplete="new-first"></ion-input>
        </ion-item>
-       <ion-item>
+       <!-- <ion-item>
            <ion-label position="floating">סוג מכונה</ion-label>
        <ion-input v-model="machineType" type="text" autocomplete="new-last"></ion-input>
-       </ion-item>
+       </ion-item> -->
        <ion-item>
-        <ion-label position="floating">דגם</ion-label>
-       <ion-input v-model="machineModel" type="text" autocomplete="new-email"></ion-input>
+        <ion-label position="floating">מספר רישוי</ion-label>
+       <ion-input v-model="licensNumber" type="text" autocomplete="new"></ion-input>
        </ion-item>
-       <UploadFileVue/>
+       <!--מספר רישוי-->
 
         
-     
-       <!-- <ion-item>
-             <ion-select :compareWith="employeeTypes"
-        @ionChange="employeeType = JSON.stringify($event.detail.value)" placeholder="סוג עובד">
-        <ion-select-option value="driller">קודח</ion-select-option>
-        <ion-select-option value="manager">מנהל מערכת</ion-select-option>
-        <ion-select-option value="site manager">מנהל עבודה חיצוני</ion-select-option>
-      </ion-select>
 
-       </ion-item> -->
        
         <div style="padding-top: 6px">
             <ion-button @click="createMachine" expand="full">צור מכונה</ion-button>
@@ -54,29 +41,25 @@
   import { useRouter } from 'vue-router';
 
   import { useAppState } from '@/realm-state';
+import AppHeader from '@/Components/AppHeader.vue';
 
-  import UploadFileVue from '@/Components/UploadFile.vue';
 
   export default defineComponent({
     name: 'CreateMachine',
     components: {
-      IonContent,
-      IonHeader,
-      IonPage,
-      IonTitle,
-      IonToolbar,
-      IonInput,
-      IonLabel,
-      IonItem,
-      IonButton, 
-      UploadFileVue,
- 
-    },
+    IonContent,
+    IonPage,
+    IonInput,
+    IonLabel,
+    IonItem,
+    IonButton,
+    AppHeader
+},
     setup(){
       const currentUser = ref<any>();
       const organizationID = ref<any>();
       const machineName = ref("");
-      const machineType = ref("");
+      const licensNumber = ref("");
       const machineModel = ref("");
       
       //const employeeType = ref("")
@@ -97,7 +80,7 @@
       const createMachine = async()=>{
         try {
          
-          await createNewDrillingMachine(machineName.value,machineType.value,machineModel.value , organizationID.value)
+          await createNewDrillingMachine(machineName.value,licensNumber.value, organizationID.value)
           router.replace('/machines')
         } catch (err) {
           console.error("Failed to add new drilling machine", err)
@@ -114,7 +97,7 @@
         organizationID,
         machineModel,
         machineName,
-        machineType,
+        licensNumber,
         //employeeType,
         //employeeTypes,
         error

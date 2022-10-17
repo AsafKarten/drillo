@@ -259,7 +259,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>();
-    const {user , logout, createNewProject, getAllDrillingMachines,  updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , logout, createNewProject, getDrillingMachinesByID,  updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -290,7 +290,7 @@ export default defineComponent({
     const columnEnd = ref(0)
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
-    drillingMachines.value = await getAllDrillingMachines();
+    drillingMachines.value = await getDrillingMachinesByID();
     const allEmployees= await getAllEmployees();
     employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
     

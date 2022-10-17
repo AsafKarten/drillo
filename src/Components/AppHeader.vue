@@ -9,7 +9,7 @@
       </ion-buttons> 
       <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
-        <ion-menu-button auto-hide="false"></ion-menu-button>
+        <ion-menu-button @click="userLogout" auto-hide="false"></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
 

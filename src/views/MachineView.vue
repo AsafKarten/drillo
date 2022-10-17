@@ -83,7 +83,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getAllDrillingMachines, updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , logout,getDrillingMachinesByID, updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
@@ -96,7 +96,7 @@ export default defineComponent({
   onMounted(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
-    const drillingMachines = await getAllDrillingMachines()
+    const drillingMachines = await getDrillingMachinesByID()
     machine.value = drillingMachines?.find(proj =>proj._id.toString() === machine_id.value.id)
 
     const allEmployees= await getAllEmployees();

@@ -9,6 +9,16 @@ user.value = app?.currentUser;
 export const useAppState = () => {
     const isLoggedIn = computed(()=>user.value !== null);
 
+    const getOrganizationData = async () =>{
+        // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("organization");
+  // 3. Read and write data with MongoDB queries
+  const organizationID = user?.value.customData.organizationID
+  return await collection?.findOne({ _id: organizationID })
+    }
+
     //login email & password function
     const login =async (email:string, password: string) => {
         const credentials = Realm.Credentials.emailPassword(email, password);
@@ -19,8 +29,7 @@ export const useAppState = () => {
         user.value = app?.currentUser
         if(user.value.customData.userType === "driller")
           return "driller";
-        if(user.value.customData.userType === "site manager")
-           return "site manager";
+      
            
         return true;
     };
@@ -117,6 +126,17 @@ const deleteEmployeeFromDB = async() =>{
   
 }
 
+const getEmployeesByOrganizationID = async()=>{
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("users");
+  // 3. Read and write data with MongoDB queries
+  const organizationID = user?.value.customData.organizationID
+  return await collection?.find({organizationID:organizationID})
+}
+
+
 
 
 const updateEmployeeMachine =async (employee : any) => {
@@ -179,6 +199,24 @@ const updateEmployeeMachine =async (employee : any) => {
       return await collection?.findOne(query)
      
   }
+
+
+  const getAllProjectByOrganizationID =async () => {
+      
+    //import mongodb = require("mongodb");
+    //const ObjectID = mongodb.ObjectID;
+    
+
+    // 1. Get a data source client
+    const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+    // 2. Get a database & collection
+    const collection = mongodb?.db("drillo").collection("projects");
+    // 3. Read and write data with MongoDB queries
+    
+    return await collection?.find({organizationID:user?.value.customData.organizationID})
+   
+}
+
 
 
      //create new project
@@ -357,7 +395,7 @@ const updateProjectExternalServices =async (project : any) => {
             return await collection?.find({})
     }
      //create new project
-     const createNewDrillingMachine =async (name: string, type:string, model:string, organizationID:string) => {
+     const createNewDrillingMachine =async (name: string, licens_number:string, organizationID:string) => {
    
       try {
         // 1. Get a data source client
@@ -365,7 +403,7 @@ const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
 // 2. Get a database & collection
 const collection = mongodb?.db("drillo").collection("drilling_machines");
 // 3. Read and write data with MongoDB queries
-collection?.insertOne({name, type, model, organizationID});
+collection?.insertOne({name, licens_number, organizationID});
 return true;
 
 
@@ -377,15 +415,26 @@ console.log(error);
 
 
    
-    const getAllDrillingMachines = async()=>{
+    const getDrillingMachinesByID = async()=>{
             // 1. Get a data source client
             const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
             // 2. Get a database & collection
             const collection = mongodb?.db("drillo").collection("drilling_machines");
             // 3. Read and write data with MongoDB queries
-            
-            return await collection?.find({})
+            const organizationID = user?.value.customData.organizationID
+            return await collection?.find({organizationID:organizationID})
     }
+
+    const getDrillingMachineByID = async(id: string)=>{
+      // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("drilling_machines");
+      // 3. Read and write data with MongoDB queries
+      const mID = new Realm.BSON.ObjectID(id)
+      const organizationID = user?.value.customData.organizationID
+      return await collection?.findOne({_id:mID})
+}
 
     const getOrganizationDrillingMachines = async()=>{
       // 1. Get a data source client
@@ -450,16 +499,19 @@ return true;
         isLoggedIn,
         user,
         //functions
+        getOrganizationData,
         login,
         logout,
         createAccount,
         createEmployeeAccount,
         getOrganizationDrillers,
         getAllEmployees,
+        getEmployeesByOrganizationID,
         deleteEmployeeFromDB ,
         updateEmployeeMachine,
         getProject,
         getProjectByID,
+        getAllProjectByOrganizationID,
         createNewProject,
         updateProjectPits,
         updateProjectMachines,
@@ -468,7 +520,8 @@ return true;
         updateProjectSiteManagers,
         getAllProjects,
         createNewDrillingMachine,
-        getAllDrillingMachines, 
+        getDrillingMachinesByID, 
+        getDrillingMachineByID,
         getOrganizationDrillingMachines,
         getAllOrganizations,
         updateMachineDriller,

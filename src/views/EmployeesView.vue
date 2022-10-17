@@ -44,8 +44,9 @@ export default defineComponent({
 },
   setup(){
     const router = useRouter();
-    const currentUser = ref<any>()
-    const {user , logout,getAllEmployees} = useAppState();
+    
+    const {user , logout,getEmployeesByOrganizationID} = useAppState();
+    const currentUser = ref<any>(user)
     const employees = ref<any>()
     const organization = ref<any>()
     
@@ -53,9 +54,9 @@ export default defineComponent({
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
           
-    const allEmployees= await getAllEmployees();
-    employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
-    console.log(employees.value);
+    const allEmployees= await getEmployeesByOrganizationID();
+    employees.value = allEmployees?.filter(emp => emp.userID !== currentUser?.value.customData.userID)
+    console.log(allEmployees);
     
   });
 
@@ -67,7 +68,7 @@ export default defineComponent({
       //methods
         goToEmployee,
         //properties
-        currentUser : user,
+        currentUser : currentUser,
         employees:employees,
         organization:organization,
         

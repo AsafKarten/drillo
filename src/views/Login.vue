@@ -87,10 +87,7 @@ export default defineComponent({
       try {
       let resp = await login(email.value, password.value)
       if(resp === "driller")
-          router.replace("/driller-view");
-
-      else if (resp === "site manager")
-          router.replace("/daily-report");
+          router.replace("/field-project-managment");
           
       else
         router.replace("/home");
