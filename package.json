@@ -20,6 +20,7 @@
     "@ionic/vue-router": "^6.0.0",
     "@types/proj4": "^2.5.2",
     "@vuepic/vue-datepicker": "^3.4.8",
+    "browser-image-resizer": "^2.4.1",
     "core-js": "^3.6.5",
     "html-to-pdfmake": "^2.4.6",
     "jspdf": "^2.5.1",
