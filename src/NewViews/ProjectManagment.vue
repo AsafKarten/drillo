@@ -1,17 +1,19 @@
 <template>
-    <ion-page>
-      <ion-content :fullscreen="true" >
+  <ion-page>
+    <ion-content :fullscreen="true" >
 
-        <AppHeader :str="'ניהול פרוייקט'"/>
-        <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
-        <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
+      <AppHeader :str="'ניהול פרוייקט'"/>
+      <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
+      <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 
-      </ion-content>
-   
-    </ion-page>
-  </template>
+      <FileUpload :originID="project_id" :projectID="project_id"/>
+
+    </ion-content>
   
-  <script lang="ts">
+  </ion-page>
+</template>
+  
+<script lang="ts">
   import { IonContent, IonPage } from '@ionic/vue';
   import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
@@ -20,11 +22,9 @@
   import DescriptionCard from './Utilities/DescriptionCard.vue'
   import AppHeader from '../Components/AppHeader.vue'
   
+  import FileUpload from './Utilities/FileUpload.vue'
   
-import { home } from 'ionicons/icons';
-
-
-  
+  import { home } from 'ionicons/icons';
   
   export default defineComponent({
     name: 'ProjectManagment',
@@ -33,7 +33,9 @@ import { home } from 'ionicons/icons';
     IonPage,
     GridButtons,
     AppHeader,
-    DescriptionCard
+    DescriptionCard,
+
+    FileUpload
 },
     setup(){
       const router = useRouter();
@@ -65,7 +67,7 @@ import { home } from 'ionicons/icons';
       //IONIC COLORS: primary, secondary, tertiary, success, warning, danger, light, medium, dark
 
 
-      onMounted(async()=>{
+    onMounted(async()=>{
         if(currentUser?.value.customData.organizationID === undefined)
               router.push('Login')
     
@@ -77,6 +79,15 @@ import { home } from 'ionicons/icons';
       const goTo =(route:any)=>{
         router.push(route)
     }
+
+
+
+
+
+
+      
+
+
     
           
       return {
