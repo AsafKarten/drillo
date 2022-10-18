@@ -6,7 +6,7 @@
       <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 
-      <FileUpload :originID="project_id" :projectID="project_id"/>
+      <FileUpload :originID="project_id" :projectID="project_id" @fileUploaded="(id)=>console.log(id)"/>
 
     </ion-content>
   
