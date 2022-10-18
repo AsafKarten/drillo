@@ -53,7 +53,7 @@ import { home } from 'ionicons/icons';
           {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
            {text:"ניהול מכונת קידוח",          icon: home, click: ()=>goTo('/machine-managment/'+ machine_id.value) },
           {text:"יומן עבודה",            icon: home, click: ()=>goTo('/work-diary/'+ project.value._id) },
-          {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
+          {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/field-map/'+ project.value._id) },
           {text:"מסמכי אתר",             icon: home, click: ()=>goTo('/project-files/'+ project.value._id) },
           {text:"ציוד",                  icon: home, click: ()=>goTo('/project-tools/'+ project.value._id) },
           {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/pits-list/'+ project.value._id) },

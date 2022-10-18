@@ -10,6 +10,7 @@
               שם המסמך ותוקף
             </ion-label>
           </ion-item>
+          <FileUpload/>
       
 
         
@@ -24,7 +25,7 @@
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
   import AppHeader from '@/Components/AppHeader.vue';
-
+  import FileUpload from './Utilities/FileUpload.vue'
 
   
   
@@ -41,6 +42,7 @@
     IonItem,
     IonThumbnail,
     AppHeader,
+    FileUpload,
   
 },
   props:{},
