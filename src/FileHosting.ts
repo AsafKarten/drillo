@@ -59,11 +59,11 @@ export const fileHosting = () => {
             content: content,
             projectID: projectID,
             originID: originID,
-            uploadedBy: useAppState().user.id,
+            uploadedBy: app.currentUser?.customData._id,
             date: Date.now()
         }
         //console.log("fileData:")
-        //console.log(fileData)
+        //console.log(app.currentUser?.customData._id)
 
         
         try {
