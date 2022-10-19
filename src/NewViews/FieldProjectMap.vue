@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-      <ion-content>
+      <ion-content :scroll-y='false'>
         <AppHeader :str=" 'מכונת קידוח:' + ' ' + current_machine?.name "/>
         <!-- <ion-button @click="goToReport">דוח יומי</ion-button> -->
         <!-- <div class="splitScreen"> -->
@@ -157,7 +157,8 @@
     IonAccordion, 
     IonAccordionGroup,
     IonPopover,
-    IonIcon
+    IonIcon,
+  
     
   } from "@ionic/vue";
   import { flashOutline, trashOutline} from 'ionicons/icons';

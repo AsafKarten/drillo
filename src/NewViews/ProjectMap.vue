@@ -2,7 +2,7 @@
     <ion-page>
       <AppHeader :str="'מפת אתר קידוח'"/>
       
-      <ion-content :fullscreen="true" >
+      <ion-content :fullscreen="true" :scroll-y="false" >
     
     
   
@@ -76,7 +76,7 @@
     IonTitle,
     MapBox,
     AppHeader,
-    
+
 },
     setup(){
       const router = useRouter();
