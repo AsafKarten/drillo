@@ -463,8 +463,7 @@ import { home } from 'ionicons/icons';
     margin-bottom: 10%;
   }
   #map {
-    height: 100%;
-    width: 100%;
+      height: 100%;
   }
   
   #container strong {

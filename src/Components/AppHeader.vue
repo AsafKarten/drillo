@@ -5,7 +5,7 @@
         <ion-back-button text="" default-href="/" @click="$router.back()"> </ion-back-button> 
       </ion-buttons> 
       <ion-buttons class="home" slot="start">
-        <ion-back-button text="" :icon="home" default-href="/" @click="$router.replace('/')"> </ion-back-button> 
+        <ion-back-button text="" :icon="home" default-href="/" @click="goToHome"> </ion-back-button> 
       </ion-buttons> 
       <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
@@ -47,12 +47,13 @@ export default defineComponent({
   props: {str:String },
   setup(){
     const router = useRouter();
-    const currentUser = ref<any>()
+    
     const {user , logout} = useAppState();
-    const userType = ref<any>();
+    const currentUser = ref<any>(user)
+
 
     onMounted(async()=>{
-      userType.value = user.value.customData.userType;
+      //add code or delete
     });
 
     const userLogout = async ()=>{
@@ -60,14 +61,22 @@ export default defineComponent({
       currentUser.value = null;
       router.replace("/login");
     }
+
+    const goToHome = ()=>{
+      if(currentUser?.value.customData.userType === 'driller')
+              router.replace("/field-project-managment");
+
+      else if(currentUser?.value.customData.userType === 'manager')
+             router.replace("/");
+    }
     
     return {
       //methods
       userLogout,
+      goToHome,
 
       //properties
-      currentUser : user,
-      userType:userType,
+      currentUser,
 
       //icons
       arrowRedo,

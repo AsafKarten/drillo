@@ -39,7 +39,7 @@
       const route = useRoute();
       const {user , getDrillingMachineByID} = useAppState();
       const currentUser = ref<any>(user)
-      const machine_id = ref<any>(route.params);
+      const machine_id = ref<any>(route.params.id);
       const project = ref<any>();
       const machine = ref<any>()
 
@@ -66,6 +66,9 @@
               router.push('Login')
     
            machine.value =  await getDrillingMachineByID(machine_id.value)
+           console.log(machine.value);
+           console.log(machine_id.value);
+           
        
     
       });

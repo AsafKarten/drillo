@@ -41,37 +41,88 @@
   
             </ion-accordion-group>
          
-  
-        <ion-modal :is-open="isOpen" class="modalHalfScreen">
-          <ion-header>
-            <ion-toolbar>
-              <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
-              <ion-buttons slot="end">
-                <ion-button @click="modalManager('close')">Close</ion-button>
-              </ion-buttons>
-            </ion-toolbar>
-          </ion-header>
-          <ion-content class="ion-padding">
-            <div class="hebrewText">
-              <h5>{{currentPit?.p}}</h5>
-              <h6>נתוני קידוח</h6>
-              <p>עומק: <span class="coords">{{currentPit?.diameter}}</span></p>
-              <p>קוטר: <span class="coords">{{currentPit?.depth}}</span></p>
-              <p>נפח בטון תיאורטי: <span class="coords">{{currentPit?.concreteVolume?.toFixed(3)}}</span></p>
-              <h6>קואורדינטות</h6>
-              <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
-              <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>
-              <h6>רשת ישראל החדשה</h6>
-              <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
-              <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
-              <p>סטטוס: {{currentPit?.status}}</p>
-              <div :key="note.depth" v-for="note in currentPit?.notes">
-              <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
-            </div>
-            </div>
-          </ion-content>
-        </ion-modal>
-  
+            <ion-modal :is-open="isOpen" >
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button @click="modalManager('close')">Close</ion-button>
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content class="ion-padding">
+                <div class="hebrewText">
+                  <h5>{{currentPit?.p}}</h5>
+                  <h6>נתוני קידוח</h6>
+                  <p>עומק: <span class="coords">{{currentPit?.diameter}}</span></p>
+                  <p>קוטר: <span class="coords">{{currentPit?.depth}}</span></p>
+                  <p>נפח בטון תיאורטי: <span class="coords">{{currentPit?.concreteVolume?.toFixed(3)}}</span></p>
+                  <h6>קואורדינטות</h6>
+                  <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
+                  <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>
+                  <h6>רשת ישראל החדשה</h6>
+                  <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
+                  <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
+                  <p>סטטוס: {{currentPit?.status}}</p>
+                  <div :key="note.depth" v-for="note in currentPit?.notes">
+                  <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
+                </div>
+                  <div>
+                    <GridButtons v-if="currentPit?.status === 'waiting'" :buttons="pendingButton" :options="{buttonHeight:110}"/>
+                    <GridButtons v-if="currentPit?.status === 'Pending'" :buttons="buttons" :options="{buttonHeight:110}"/>
+                     <!-- <ion-button  @click="setPending" color="success">התחלת ביצוע</ion-button>
+                     <ion-button v-if="currentPit?.status === 'Pending'" @click="unsetPending" color="danger">ביטול התחלת ביצוע</ion-button>
+                     <ion-button v-if="currentPit?.status === 'Pending'" @click="setConfirm" color="success">סיום ביצוע</ion-button>
+                     <ion-button v-if="currentPit?.status === 'Pending'" @click="modalManagerNotes" color="warning">הערות קידוח</ion-button> -->
+                  </div>
+                </div>
+              </ion-content>
+            </ion-modal>
+      
+            <!--drilling notes modal-->
+            
+            <ion-modal :is-open="isOpenNotes">
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button @click="modalManagerNotes">Close</ion-button>
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content class="ion-padding">
+                <div class="grid-container">
+                  <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים
+                    <IonIcon slot="start" :icon="flashOutline" />
+                  </ion-button>
+                  <ion-button color="success" @click="modalManagerDepth('תשתיות')">תשתיות</ion-button>
+                  <ion-button color="success" @click="modalManagerDepth('צינור')">צינור</ion-button>
+                  <ion-button color="success" @click="modalManagerDepth('פסולת')" >פסולת
+                    <IonIcon slot="start" :icon="trashOutline" />
+                  </ion-button>
+                  <ion-button color="success" @click="modalManagerDepth('אבנים')" >אבנים</ion-button>
+          
+                </div>
+              </ion-content>
+            </ion-modal>
+          
+            <!--note depth modal-->
+            <ion-modal :is-open="isOpenDepth" >
+           
+              <ion-content class="ion-padding">
+                <ion-item>
+                  <ion-label position="floating">עומק</ion-label>
+                  <ion-input
+                    v-model="noteDepth"
+                    type="number"
+                  ></ion-input>
+                </ion-item>
+                <ion-button color="success" @click="addNewNoteToPit" >אישור</ion-button>
+              </ion-content>
+            </ion-modal>
+      
+           
+      
        
   
       </ion-content>
@@ -98,12 +149,14 @@
     
   } from "@ionic/vue";
   import { flashOutline, trashOutline} from 'ionicons/icons';
-  import { defineComponent, onMounted, ref } from "vue";
+  import { defineComponent, onMounted, ref, reactive } from "vue";
   import { useRoute, useRouter } from "vue-router";
   import { useAppState } from "../realm-state";
  
   
   import AppHeader from '../Components/AppHeader.vue'
+  import GridButtons from "./Utilities/GridButtons.vue";
+  import { home } from 'ionicons/icons';
   
   export default defineComponent({
     name: "PitsList",
@@ -122,34 +175,61 @@
       IonAccordion, 
       IonAccordionGroup,
       //IonPopover,
-      //IonIcon,
-      //IonInput,
+      IonIcon,
+      IonInput,
       //MapBox,
       AppHeader,
+      GridButtons,
       
     },
     setup() {
       const currentDate = ref(new Date())
       const router = useRouter();
-      const route = useRoute();
-     
-      const { user, logout, getProjectByID,updateProjectPits } = useAppState();
+      const route = useRoute()
+      const { user, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
       const currentUser = ref<any>(user);
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
+      const projects = ref<any>();
       const pits = ref<any>([]);
       const currentPit = ref();
       const prevPit = ref();
       const isOpen = ref(false);
+      const showMap = ref(false)
+      const isOpenNotes = ref(false);
+      const noteDepth = ref(0);
+      const isOpenDepth = ref(false);
+      const note = ref("")
+      const current_machine = ref<any>()
+
+        const pendingButton = reactive(
+        [
+          {text:"תחילת ביצוע",  icon: home,  click: ()=>setPending() },
+        
+        ]
+      );
+
+      const buttons = reactive(
+        [
+          {text:"ביטול תחילת ביצוע",  icon: home,  click: ()=>unsetPending() },
+          {text:"אישור סיום ביצוע",  icon: home,  click: ()=>setConfirm() },
+          {text:"הוספת הערות קידוח",  icon: home,  click: ()=>modalManagerNotes()},
+        
+        ]
+      );
      
     
       onMounted(async () => {
-        if(currentUser?.value.customData.organizationID === undefined)
-              router.push('Login')
-    
-        project.value = await getProjectByID(project_id.value)
-        pits.value = project.value.pits
-        console.log(project.value);
+        if(user?.value.customData.organizationID === undefined)
+            router.push('Login')
+            
+        project.value = await getProjectByID(project_id.value);
+       
+            pits.value = project.value.pits
+            showMap.value = true
+            pits.value.forEach((pit:any) => pit.selected = false );
+            current_machine.value = await getDrillingMachineByID(currentUser?.value.customData.machine_id.$oid)
+            console.log(current_machine.value);
              
       });
   
@@ -186,6 +266,107 @@
           else
             isOpen.value = true;
         }
+
+        const modalManagerNotes = ()=>{
+        
+        if(isOpenNotes.value === true)
+        {
+          isOpenNotes.value = false;
+         
+        }
+        else
+        isOpenNotes.value = true;
+      }
+      const modalManagerDepth = (str:string)=>{
+      if(isOpenDepth.value === true)
+      {
+        isOpenDepth.value = false;
+       
+      }
+      else{
+        note.value = str
+        isOpenDepth.value = true;
+      }
+      
+    }
+
+      const setConfirm = ()=>{     
+             currentPit.value.status = 'Done';
+             currentPit.value.finishDate = new Date()
+             savePitChanges();           
+      }
+
+      const setPending = ()=>{  
+        if(currentPit.value.status === 'waiting'){
+             currentPit.value.status = 'Pending';
+             savePitChanges();
+          }      
+      }
+
+      const unsetPending= ()=>{  
+        if(currentPit.value.status === 'Pending'){
+             currentPit.value.status = 'waiting';
+             savePitChanges();
+          }      
+      }
+      
+      const savePitChanges= async()=>{
+        let index = currentPit.value.p  * 1  - 1
+          project.value.pits[index] = currentPit.value;
+          if(currentPit.value.status === 'Done')
+          {
+            addToDailyReport();
+          }
+          
+          await updateProjectPits(project.value)
+          modalManager("close")
+      }
+
+      const addToDailyReport = ()=>{
+          let reports = project.value.reports
+          let today = new Date();
+          //if its a new project and this is the first report
+          if(reports.length === 0){
+            //reports = [];
+            reports.push({date:today,pits:[currentPit.value,] })
+            project.value.reports = reports
+          }
+          else{
+            
+            let index = reports.length  * 1  - 1
+            let report = reports[index] ;
+            let repoDate = new Date(report.date)
+
+            //if the last report is today's report
+            if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
+            project.value.reports[index].pits.push(currentPit.value)
+          }
+          //else- its a new report for today
+          else{
+            project.value.reports.push({date:today,pits:[currentPit.value] })
+          }
+          }
+   
+          
+      }
+      const goToReport = ()=>{
+        router.push('/daily-report/'+ project.value._id)
+      }
+
+      const addNewNoteToPit = async ()=>{
+        if(currentPit.value.notes == null)
+             currentPit.value.notes = []
+
+        currentPit.value.notes.push({note:note.value, depth:noteDepth.value})
+        currentPit.value.notes.sort((a: { depth: any; },b: { depth: any; })=> a.depth * 1 - b.depth * 1)
+        let index = currentPit.value.p  * 1  - 1
+        project.value.pits[index] = currentPit.value;
+        await updateProjectPits(project.value)
+        modalManagerDepth("") 
+        note.value=""
+        noteDepth.value = 0
+        
+      }
         
   
      
@@ -196,16 +377,36 @@
         //methoods
         pitClick,
         modalManager,
+        setConfirm,
+        savePitChanges,
+        setPending,
+        unsetPending,
+        addToDailyReport,
+        goToReport,
+        modalManagerNotes,
+        modalManagerDepth,
+        addNewNoteToPit,
      
         //properties
-        currentUser: user,
+        project_id,
+        currentUser,
         project: project,
+        projects:projects,
         pits: pits,
         currentPit:currentPit,
         prevPit:prevPit,
         currentDate: currentDate,
         isOpen: isOpen,
-   
+        showMap:showMap,
+        isOpenNotes:isOpenNotes,
+        noteDepth:noteDepth,
+        isOpenDepth:isOpenDepth,
+        note:note,
+        current_machine:current_machine,
+
+        pendingButton,
+        buttons,
+  
   
         //ion icons
         flashOutline,

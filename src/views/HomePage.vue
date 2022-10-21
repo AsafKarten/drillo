@@ -95,17 +95,16 @@ export default defineComponent({
     const organization = ref<any>()
     
     onMounted(async()=>{
-      console.log(user);
       
-      if(currentUser.value.customData.userType === 'driller')
-          router.replace('/field-project-managment')
-  
-      else 
+      if(currentUser?.value.customData.organizationID === undefined)
+              router.push('Login')
+              
+      else {
         organization.value = await getOrganizationData()
         console.log(organization.value);
         
         showComponent.value = true
-      
+      }
     });
 
      return {
