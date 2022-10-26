@@ -6,7 +6,7 @@
       <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 
-      <FileUpload :originID="project_id" :projectID="project_id" @fileUploaded="(id)=>console.log(id)"/>
+      <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/>
 
     </ion-content>
   
@@ -50,7 +50,7 @@
       const buttons = reactive(
         [
           {text:"רשימת עובדים",          icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/workers-view/'+ project.value._id) },
-          {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
+          {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 2, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
           {text:"הוספת עבודה חיצונית",  icon: home, click: ()=>goTo('/add-job/'+ project.value._id) },
           {text:"יומן עבודה",            icon: home, click: ()=>goTo('/work-diary/'+ project.value._id) },
           {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
@@ -88,7 +88,7 @@
       
 
 
-    
+    const logFileUploaded = (id:any)=>console.log(id)
           
       return {
          //methods
@@ -99,6 +99,9 @@
          project_id,
 
          buttons, 
+
+
+        logFileUploaded
       }
     }
   });

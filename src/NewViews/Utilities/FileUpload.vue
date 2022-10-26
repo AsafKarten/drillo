@@ -6,21 +6,22 @@
       <ion-button slot="end" @click="uploadFile" :disabled="uploading||!selectedFile">העלאה</ion-button>
     </ion-item>
 
+    <FilePreview v-if="withPreview" :fileID="uploadedFileID" :file="selectedFile"/>
+<!--
     <ion-item>
-      <img v-if="selectedFilePreview"
-        :src="selectedFilePreview"
-        width="300"
-        height="300"
+      <img v-if="uploadedFilePreview"
+        :src="uploadedFilePreview"
+        width="300" height="300"
       />
     </ion-item>
 
     <ion-item>
       <embed v-if="uploadedFilePreview"
         :src="uploadedFilePreview"
-        width="100%"
-        height="500"
+        width="100%" height="500"
       />
     </ion-item>
+-->
 
   </div>
 </template>
@@ -29,11 +30,12 @@
   import { IonInput, IonButton, IonItem } from '@ionic/vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import {fileHosting} from '../../FileHosting';
+  import FilePreview from './FilePreview.vue';
 
   export default defineComponent({
     name: 'FileUpload',
-    components: {IonInput, IonButton, IonItem},
-    props: {originID:Object, projectID:Object },
+    components: {IonInput, IonButton, IonItem, FilePreview},
+    props: {originID:Object, projectID:Object, withPreview:Boolean },
     emits: ['fileUploaded'],
     setup(props, {emit} ){
 
@@ -44,6 +46,8 @@
       const selectedFile = ref<any>()
       const selectedFilePreview = ref<any>()
       const uploadedFilePreview = ref<any>()
+
+const uploadedFileID = ref<any>()
 
       const fileChanged = async (event:any) => {
         selectedFile.value = event.target.files[0];
@@ -70,9 +74,9 @@
           emit('fileUploaded', fileID);
           uploading.value = false;
 
-          console.log("File uploaded. here it is from the server:")
-          let file = await fileHosting().getFile(fileID.toString());
-          uploadedFilePreview.value = file.content;
+          uploadedFileID.value = fileID.toString();
+          /* let file = await fileHosting().getFile(fileID.toString());
+          uploadedFilePreview.value = file.content; */
         }
       }
 
@@ -85,7 +89,9 @@
         selectedFilePreview,
         uploadedFilePreview,
         uploading,
-        message
+        message,
+
+        uploadedFileID
       }
     }
   });

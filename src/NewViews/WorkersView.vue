@@ -1,34 +1,28 @@
 <template>
-    <ion-page>
-      <ion-content  :fullscreen="true" >
-            <AppHeader :str="'רשימת עובדים'"/>
-            <MachinesDrillersList v-if="project" :projectProps="project"/>
+  <ion-page>
+    <ion-content  :fullscreen="true" >
+      <AppHeader :str="'רשימת עובדים'"/>
+      <MachinesDrillersList v-if="project" :projectProps="project"/>
+    </ion-content>
+  </ion-page>
+</template>
 
-      </ion-content>
-   
-    </ion-page>
-  </template>
-  
-  <script lang="ts">
+<script lang="ts">
   import { IonContent, IonPage } from '@ionic/vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
   import AppHeader from '../Components/AppHeader.vue'
   import MachinesDrillersList from './Utilities/MachinesDrillersList.vue'
-  
-  
 
-  
-  
   export default defineComponent({
-    name: 'WorkersView',
-    components: {
-    IonContent,
-    IonPage,
-    AppHeader,
-    MachinesDrillersList
-},
+      name: 'WorkersView',
+      components: {
+      IonContent,
+      IonPage,
+      AppHeader,
+      MachinesDrillersList
+    },
     setup(){
       const router = useRouter();
       const route = useRoute();
@@ -39,39 +33,31 @@
 
       const machines = ref<any>()
       const currentWorker = ref<any>()
-    
-
 
       onMounted(async()=>{
         if(currentUser?.value.customData.organizationID === undefined)
-              router.push('Login')
+          router.push('Login')
     
         project.value = await getProjectByID(project_id.value)
         machines.value = project?.value.machines
         console.log(project.value);
-    
       });
 
-    
-    
-          
       return {
-         //methods
-       
-         //properties
-         currentUser,
-         project,
-         project_id,
+        //methods
+      
+        //properties
+        currentUser,
+        project,
+        project_id,
 
-         machines,
-         currentWorker,
-
-          
+        machines,
+        currentWorker,
       }
     }
   });
-  </script>
+</script>
+
+<style scoped>
   
-  <style scoped>
-   
-  </style>
+</style>
