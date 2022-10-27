@@ -15,9 +15,9 @@
             </div>
 
    
-  </template>
+</template>
   
-  <script lang="ts">
+<script lang="ts">
   import { IonContent, IonPage, IonItem, IonAvatar, IonLabel } from '@ionic/vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';

@@ -81,17 +81,26 @@ export const fileHosting = () => {
         const id = new Realm.BSON.ObjectID(_id)
         const query = {'_id':id};
         const file = await collection?.findOne(query);
-        //console.log(file.content)
         //file.content = b64toBlob(file.content);
         return file;
     }
 
- 
+    const getFileThumbnail = async(_id:string) => {
+        const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+        const collection = mongodb?.db("drillo").collection("uploaded_files");
+        const id = new Realm.BSON.ObjectID(_id)
+        const query = {'_id':id};
+        const items = { "thumbnail": "$thumbnail" };
+        const file = await collection?.findOne(query, { projection: items } );
+        //file.content = b64toBlob(file.content);
+        return file.thumbnail;
+    }
 
     return {
     resizeImage,
     uploadFile,
     getFile,
+    getFileThumbnail,
     makePDFthumbnail,
     b64toBlob
     };
