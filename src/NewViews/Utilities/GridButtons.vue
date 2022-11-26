@@ -6,6 +6,7 @@
       :key="button.index||index"
       :fill="button.fill||'outline'"
       :color="button.color"
+      :disabled="button.disabled || false"
       @click="button.click"
     >
 

@@ -45,12 +45,12 @@
 
         const buttons = reactive(
         [
-          {text:"טיפולים",          icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/machine-maintainance/'+ machine_id.value) },
-          {text:"תדלוק וצריכת דלק",            icon: home, fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/machine-gas/'+ machine_id.value) },
-           {text:"אישורים",          icon: home, click: ()=>goTo('/machine-certifications/'+ machine_id.value) },
-          {text:"ביטוח",            icon: home, click: ()=>goTo('/machine-insurance/'+ machine_id.value) },
-          {text:"טסט",         icon: home, click: ()=>goTo('/machine-test/'+ machine_id.value) },
-          {text:"אבטחה",             icon: home, click: ()=>goTo('/machine-security/'+ machine_id.value) },
+          {text:"טיפולים",          icon: home, disabled:"true", badge:{count: 3, color:"warning"} ,click: ()=>goTo('/machine-maintainance/'+ machine_id.value) },
+          {text:"תדלוק וצריכת דלק",            icon: home, disabled:"true", fill:"solid", color: "success", badge:{count: 591, color:"danger"} ,click: ()=>goTo('/machine-gas/'+ machine_id.value) },
+           {text:"אישורים",          icon: home, disabled:"true", click: ()=>goTo('/machine-certifications/'+ machine_id.value) },
+          {text:"ביטוח",            icon: home, disabled:"true", click: ()=>goTo('/machine-insurance/'+ machine_id.value) },
+          {text:"טסט",         icon: home, disabled:"true", click: ()=>goTo('/machine-test/'+ machine_id.value) },
+          {text:"אבטחה",             icon: home, disabled:"true", click: ()=>goTo('/machine-security/'+ machine_id.value) },
        
         ]
       );
