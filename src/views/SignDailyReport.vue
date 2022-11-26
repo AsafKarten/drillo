@@ -85,8 +85,9 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const route = useRoute();
-    const currentUser = ref<any>()
-    const { user, getAllProjects, updateProjectPits} = useAppState();
+    
+    const {user, getReportByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
+    const currentUser = ref<any>(user)
     const project = ref<any>();
     const reports = ref<any>();
     const report = ref<any>();
@@ -130,16 +131,16 @@ export default defineComponent({
       console.log(id);
       
       //get all projects from mongo
-      projects.value = await getAllProjects()
+      //projects.value = await getAllProjects()
       //filter the projects by project id
 
       //need to fix
       //project.value = projects.value.filter((proj: { _id: any; } ) => proj._id.toString() == id)
-      const prj =  projects.value.find((proj: { _id: any; } ) => proj._id.toString() == id.toString())
-      console.log(prj);
+      //const prj =  projects.value.find((proj: { _id: any; } ) => proj._id.toString() == id)
+      //console.log(prj);
       
-      project.value = prj
-      console.log(projects.value);
+      project.value = await getReportByID(id.toString())
+      //console.log(projects.value);
       console.log(project.value);
       reports.value = project?.value.reports;
       report.value = reports?.value[reports.value.length-1]
@@ -153,14 +154,14 @@ export default defineComponent({
       saveAsPDF,
 
       //properties
-      currentUser:user,
-      project:project,
-      reports:reports,
-      report:report,
-      pits:pits,
-      repoDate:repoDate,
-      projects:projects,
-      id:id,
+      currentUser,
+      project,
+      reports,
+      report,
+      pits,
+      repoDate,
+      projects,
+      id,
       
       signatureName,
       signatureImageString,

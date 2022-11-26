@@ -10,7 +10,7 @@
               שם המסמך ותוקף
             </ion-label>
           </ion-item>
-          <FileUpload/>
+          <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/>
       
 
         
@@ -66,10 +66,11 @@
   });
   
   
-  
+  const logFileUploaded = (id:any)=>console.log(id)
     
   return {
    //methods
+   logFileUploaded,
   
    //properties
    currentUser,

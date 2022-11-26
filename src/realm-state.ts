@@ -495,6 +495,23 @@ collection?.insertOne({file});
 return true;
 }
 
+const getReportByID =async (_id:string) => {
+      
+  //import mongodb = require("mongodb");
+  //const ObjectID = mongodb.ObjectID;
+  
+
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("daily_reports");
+  // 3. Read and write data with MongoDB queries
+  const id = new  Realm.BSON.ObjectID(_id)
+  const query  =  {'_id':id};
+  return await collection?.findOne(query)
+ 
+}
+
     return{
         isLoggedIn,
         user,
@@ -526,6 +543,7 @@ return true;
         getAllOrganizations,
         updateMachineDriller,
         uploadFile,
+        getReportByID,
         
     };
 };

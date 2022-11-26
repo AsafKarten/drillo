@@ -352,7 +352,7 @@ export default defineComponent({
     }
 
     const saveProject =async ()=>{
-      let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone, mail:contactPersonMail}
+      let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone.value, mail:contactPersonMail.value}
       await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
       router.replace('/projects')
     }
