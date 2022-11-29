@@ -34,6 +34,13 @@ export const useAppState = () => {
         return true;
     };
 
+    const loginAnon = async ()=>{
+      const credentials = Realm.Credentials.anonymous();
+      await app.logIn(credentials);
+      user.value = app?.currentUser
+      return true;
+    }
+
     //logout function
     const logout =async () => {
         await app.currentUser?.logOut();
@@ -97,6 +104,8 @@ export const useAppState = () => {
     
       return true;
 };
+
+
 
 //get driller employees by organizationID and userType
 const getOrganizationDrillers = async()=>{
@@ -518,6 +527,7 @@ const getReportByID =async (_id:string) => {
         //functions
         getOrganizationData,
         login,
+        loginAnon,
         logout,
         createAccount,
         createEmployeeAccount,

@@ -86,7 +86,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     
-    const {user, getReportByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
+    const {user, loginAnon, getReportByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
     const currentUser = ref<any>(user)
     const project = ref<any>();
     const reports = ref<any>();
@@ -115,6 +115,7 @@ export default defineComponent({
       console.log(pdfFileObject)
     };
 
+    //remake this function with noy's help
     const confirmReport = async(repo_date:Date)=>{
       console.log(repo_date);
       let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
@@ -128,6 +129,10 @@ export default defineComponent({
     }
     
     onMounted(async()=>{
+      if(!currentUser.value)
+      {
+        await loginAnon()
+      }
       console.log(id);
       
       //get all projects from mongo

@@ -5,8 +5,9 @@
       <ion-content :fullscreen="true" >
     
      
-        <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1>
+        <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
+        <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>
   
          <ion-card :key="repo.date" v-for="repo in reports">
       <ion-card-header>
@@ -62,25 +63,27 @@
       IonCardHeader, 
       IonCardSubtitle, 
       IonCardTitle,
+      IonButton,
       AppHeader
      
   },
     setup(){
       const router = useRouter();
       const route = useRoute();
-      const currentUser = ref<any>()
+     
       const {user , logout, getAllProjects, updateProjectPits} = useAppState();
+      const currentUser = ref<any>(user)
       const project = ref<any>();
       const reports = ref<any>();
       const report = ref<any>();
-      const project_id = ref<any>(route.params);
+      const project_id = ref<any>(route.params);//not working 
       const user_id = ref<any>();
       const pits = ref<any>();
       const repoDate = ref<any>()
       const projects =ref<any>()
       const siteManagers = ref<any>()
       const siteManager = ref<any>()
-        const {id} = route.params
+      const {id} = route.params
   
     onMounted(async()=>{
       user_id.value = user?.value.customData._id
@@ -126,12 +129,18 @@
       
       
     }
+
+    const goTo =(route:any)=>{
+        router.push(route)
+    }
+    
   
    
        return {
         //methods
           confirmReport,
           findProjectAndReports,
+          goTo,
           //properties
           currentUser : user,
           project:project,
