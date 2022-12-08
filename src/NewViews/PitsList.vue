@@ -186,7 +186,7 @@
       const currentDate = ref(new Date())
       const router = useRouter();
       const route = useRoute()
-      const { user, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
+      const { user, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
       const currentUser = ref<any>(user);
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
@@ -315,38 +315,49 @@
           project.value.pits[index] = currentPit.value;
           if(currentPit.value.status === 'Done')
           {
-            addToDailyReport();
+            await addToDailyReport();
           }
           
           await updateProjectPits(project.value)
+          //await saveNewReport(currentPit.value)
           modalManager("close")
       }
 
-      const addToDailyReport = ()=>{
+      const addToDailyReport = async()=>{
           let reports = project.value.reports
           let today = new Date();
           //if its a new project and this is the first report
           if(reports.length === 0){
-            //reports = [];
-            reports.push({date:today,pits:[currentPit.value,] })
+            let pits = [currentPit.value]
+            let report = {date: today, pits }
+            let resp = await saveNewReport(report)
+            reports.push({date:today,report_id:resp })
             project.value.reports = reports
           }
           else{
             
             let index = reports.length  * 1  - 1
-            let report = reports[index] ;
+            let report = reports[index]
             let repoDate = new Date(report.date)
 
             //if the last report is today's report
             if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
-            project.value.reports[index].pits.push(currentPit.value)
+            //project.value.reports[index].pits.push(currentPit.value)
+            let report_id = report.report_id ;
+            report = await getReportByID(report_id)
+            report.pits.push(currentPit.value)
+            await updateReportByID(report)
           }
           //else- its a new report for today
           else{
-            project.value.reports.push({date:today,pits:[currentPit.value] })
+            let pits = [currentPit.value]
+            let report = {date: today, pits }
+            let resp = await saveNewReport(report)
+            reports.push({date:today,report_id:resp })
+            project.value.reports = reports
+            //project.value.reports.push({date:today,pits:[currentPit.value] })
           }
           }
-   
           
       }
       const goToReport = ()=>{

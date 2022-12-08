@@ -7,7 +7,7 @@
      
         <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
-        <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>
+       <!-- <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>-->
   
          <ion-card :key="repo.date" v-for="repo in reports">
       <ion-card-header>
@@ -23,6 +23,7 @@
           </ion-item>
 
       </ion-card-content>
+      <ion-button @click="goTo('/sign-daily-report/'+repo.report_id)">מעבר לדו"ח יומי</ion-button>
     </ion-card>
   
           <!-- <div :key="repo.date" v-for="repo in reports">

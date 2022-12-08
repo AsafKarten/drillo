@@ -2,8 +2,8 @@
   <ion-page>
   <!-- <AppHeader :showButtons="false"/> -->
     <ion-content :fullscreen="true" >
-      <h5>פרוייקט: {{project?.name}}</h5>
-      <ion-card v-show="project">
+      <!-- <h5>פרוייקט: {{project?.name}}</h5> -->
+      <ion-card v-show="report">
         <ion-card-header>
           <ion-card-subtitle>{{":תאריך"}}</ion-card-subtitle>
           <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
@@ -18,7 +18,7 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card v-show="project">
+      <ion-card v-show="report">
         <ion-card-header>
           <ion-card-title>אישור הדו"ח:</ion-card-title>
         </ion-card-header>
@@ -86,7 +86,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     
-    const {user, loginAnon, getReportByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
+    const {user, loginAnon, getReportByID,updateReportSigByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
     const currentUser = ref<any>(user)
     const project = ref<any>();
     const reports = ref<any>();
@@ -116,16 +116,20 @@ export default defineComponent({
     };
 
     //remake this function with noy's help
-    const confirmReport = async(repo_date:Date)=>{
-      console.log(repo_date);
-      let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
-      let index = reports.value.indexOf(repo)
-      repo.approve = true;
-      console.log(repo);
-      reports.value[index]=repo;
-      console.log(reports.value);
-      project.value.reports = reports.value
-      await updateProjectPits(project.value)
+    const confirmReport = async()=>{
+      await saveAsPDF()
+      report.value.signature = signatureImageString.value
+      report.value.signatureName = signatureName.value
+      await updateReportSigByID(report.value)
+      // console.log(repo_date);
+      // let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
+      // let index = reports.value.indexOf(repo)
+      // repo.approve = true;
+      // console.log(repo);
+      // reports.value[index]=repo;
+      // console.log(reports.value);
+      // project.value.reports = reports.value
+      // await updateProjectPits(project.value)
     }
     
     onMounted(async()=>{
@@ -134,22 +138,10 @@ export default defineComponent({
         await loginAnon()
       }
       console.log(id);
-      
-      //get all projects from mongo
-      //projects.value = await getAllProjects()
-      //filter the projects by project id
-
-      //need to fix
-      //project.value = projects.value.filter((proj: { _id: any; } ) => proj._id.toString() == id)
-      //const prj =  projects.value.find((proj: { _id: any; } ) => proj._id.toString() == id)
-      //console.log(prj);
-      
-      project.value = await getReportByID(id.toString())
-      //console.log(projects.value);
-      console.log(project.value);
-      reports.value = project?.value.reports;
-      report.value = reports?.value[reports.value.length-1]
+      report.value = await getReportByID(id.toString())
       pits.value = report.value.pits
+      console.log(report.value);
+      
     });
 
     return {

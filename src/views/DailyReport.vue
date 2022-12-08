@@ -67,7 +67,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const { user, getAllProjects, updateProjectPits} = useAppState();
+    const { user,getReportByID,updateReportByID, getAllProjects, updateProjectPits} = useAppState();
     const project = ref<any>();
     const reports = ref<any>();
     const report = ref<any>();
@@ -83,19 +83,19 @@ export default defineComponent({
     console.log(id);
     
       //get all projects from mongo
-      projects.value = await getAllProjects()
+      //projects.value = await getAllProjects()
       //filter the projects by project id
 
       //need to fix
       //project.value = projects.value.filter((proj: { _id: any; } ) => proj._id.toString() == id)
-      const prj =  projects.value.find((proj: { _id: any; } ) => proj._id.toString() == id.toString())
-      console.log(prj);
+      //const prj =  projects.value.find((proj: { _id: any; } ) => proj._id.toString() == id.toString())
+      //console.log(prj);
       
-      project.value = prj
-      console.log(projects.value);
-      console.log(project.value);
-      reports.value = project?.value.reports;
-      report.value = reports?.value[reports.value.length-1]
+      //project.value = prj
+      //console.log(projects.value);
+      //console.log(project.value);
+      //reports.value = project?.value.reports;
+      report.value = await getReportByID(id.toString())
       pits.value = report.value.pits
   });
  
