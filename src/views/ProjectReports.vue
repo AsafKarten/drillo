@@ -11,31 +11,30 @@
   
          <ion-card :key="repo.date" v-for="repo in reports">
       <ion-card-header>
-        <ion-card-subtitle>{{repo.date+":"+"תאריך"}}</ion-card-subtitle>
+        <ion-card-subtitle>{{ "תאריך" + ":"+ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-subtitle>
         <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
       </ion-card-header>
   
       <ion-card-content>
          <ion-item :key="pit._id" v-for="pit in repo.pits">
+          
           <p class="textMargin">{{pit.p}}</p>
           
-          <p class="textMargin">{{pit.status}}</p>
+          <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p>
           </ion-item>
 
       </ion-card-content>
-      <ion-button @click="goTo('/sign-daily-report/'+repo.report_id)">מעבר לדו"ח יומי</ion-button>
+      <ion-item >
+        <p class="textMargin">{{"שם החותם:"}}</p>
+        <p class="textMargin">{{repo.signatureName}}</p>
+        <ion-thumbnail slot="end"> 
+          <img  alt="signature" :src="repo.signature" />
+        </ion-thumbnail>
+      </ion-item>
+       
+      
+      <ion-button v-show="!repo.signature" @click="goTo('/sign-daily-report/'+repo._id)">מעבר לדו"ח יומי</ion-button>
     </ion-card>
-  
-          <!-- <div :key="repo.date" v-for="repo in reports">
-          <p>{{repo.date}}</p>
-          <ion-item :key="pit._id" v-for="pit in repo.pits">
-          <p>{{pit.p}}</p>
-          <p>{{pit._id}}</p>
-          <p>{{pit.status}}</p>
-          </ion-item>
-          <ion-button v-if="!repo.approve" @click="confirmReport(repo.date)">אישור ביצוע</ion-button>
-          <span v-else>אושר</span>
-        </div> -->
   
     
       </ion-content>
@@ -43,7 +42,7 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
+  import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail, } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {useAppState} from '../realm-state';
@@ -65,6 +64,7 @@
       IonCardSubtitle, 
       IonCardTitle,
       IonButton,
+      IonThumbnail,
       AppHeader
      
   },
@@ -72,7 +72,7 @@
       const router = useRouter();
       const route = useRoute();
      
-      const {user , logout, getAllProjects, updateProjectPits} = useAppState();
+      const {user , getProjectByID, getReportByID, getAllProjects, updateProjectPits} = useAppState();
       const currentUser = ref<any>(user)
       const project = ref<any>();
       const reports = ref<any>();
@@ -89,47 +89,27 @@
     onMounted(async()=>{
       user_id.value = user?.value.customData._id
       console.log(project_id.value);
-      //get all orijects from mongo
-        projects.value = await getAllProjects()
-        //filter the projects by organization
-        project.value = projects?.value.find((proj: { _id: any; } ) => proj._id.toString()=== id.toString())
-        reports.value = project.value.reports;
-          console.log(project);
-          //findProjectAndReports();
+      
+        project.value = await getProjectByID(id.toString()) 
+        console.log(project);
+        await getAllReports()
   
       
     });
-    const findProjectAndReports = ()=>{
-  
-      for (let index = 0; index < projects.value.length; index++) {
-            const tempProject =  projects.value[index]
-            siteManagers.value = tempProject.site_managers
-            //find the project the user is assigned to
-            let tempManager = tempProject.site_managers.find((sm: { _id: any; }) => sm._id.toString() === user.value.customData._id.toString())
-            if(tempManager !== undefined){
-              siteManager.value = tempManager
-              project.value = tempProject
-              reports.value = project.value.reports;
-              return true;
-            }  
+    const getAllReports = async ()=>{
+        let tempArr = []
+      for (let index = 0; index < project.value.reports.length; index++) {
+        //remove this if after creating new project
+        if(project?.value.reports[index].report_id !== undefined){
+          let report = await getReportByID(project?.value.reports[index].report_id.toString())
+          tempArr.push(report)
+        }
+          
+          
           }
-      
+      reports.value = tempArr
     }
   
-    const confirmReport = async(repo_date:Date)=>{
-      console.log(repo_date);
-      let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
-      let index = reports.value.indexOf(repo)
-      repo.approve = true;
-      console.log(repo);
-      reports.value[index]=repo;
-      console.log(reports.value);
-      project.value.reports = reports.value
-      await updateProjectPits(project.value)
-      
-      
-      
-    }
 
     const goTo =(route:any)=>{
         router.push(route)
@@ -139,8 +119,7 @@
    
        return {
         //methods
-          confirmReport,
-          findProjectAndReports,
+          getAllReports,
           goTo,
           //properties
           currentUser : user,
@@ -165,6 +144,10 @@
   <style scoped>
   .textMargin{
     margin-left: 1%;
+    
+  }
+  .sig {
+    width: 20%;
   }
   
   </style>

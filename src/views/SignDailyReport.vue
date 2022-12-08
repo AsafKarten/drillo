@@ -115,23 +115,6 @@ export default defineComponent({
       console.log(pdfFileObject)
     };
 
-    //remake this function with noy's help
-    const confirmReport = async()=>{
-      await saveAsPDF()
-      report.value.signature = signatureImageString.value
-      report.value.signatureName = signatureName.value
-      await updateReportSigByID(report.value)
-      // console.log(repo_date);
-      // let repo = reports?.value.find( (rep: { date: Date; }) =>rep.date === repo_date)
-      // let index = reports.value.indexOf(repo)
-      // repo.approve = true;
-      // console.log(repo);
-      // reports.value[index]=repo;
-      // console.log(reports.value);
-      // project.value.reports = reports.value
-      // await updateProjectPits(project.value)
-    }
-    
     onMounted(async()=>{
       if(!currentUser.value)
       {
@@ -143,6 +126,16 @@ export default defineComponent({
       console.log(report.value);
       
     });
+
+    
+    const confirmReport = async()=>{
+      await saveAsPDF()
+      report.value.signature = signatureImageString.value
+      report.value.signatureName = signatureName.value
+      await updateReportSigByID(report.value)
+    }
+    
+
 
     return {
       //methods
