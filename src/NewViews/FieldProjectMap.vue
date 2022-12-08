@@ -359,7 +359,7 @@ import { home } from 'ionicons/icons';
             project.value.pits[index] = currentPit.value;
             if(currentPit.value.status === 'Done')
             {
-              addToDailyReport();
+             await addToDailyReport();
             }
             
             await updateProjectPits(project.value)

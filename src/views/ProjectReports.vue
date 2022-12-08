@@ -24,7 +24,7 @@
           </ion-item>
 
       </ion-card-content>
-      <ion-item >
+      <ion-item v-show="repo.signature" >
         <p class="textMargin">{{"שם החותם:"}}</p>
         <p class="textMargin">{{repo.signatureName}}</p>
         <ion-thumbnail slot="end"> 
@@ -93,6 +93,8 @@
         project.value = await getProjectByID(id.toString()) 
         console.log(project);
         await getAllReports()
+        console.log(reports.value);
+        
   
       
     });
@@ -103,6 +105,8 @@
         if(project?.value.reports[index].report_id !== undefined){
           let report = await getReportByID(project?.value.reports[index].report_id.toString())
           tempArr.push(report)
+          console.log(report);
+          
         }
           
           

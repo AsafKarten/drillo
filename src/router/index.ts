@@ -33,6 +33,7 @@ import MachineCrew from '../NewViews/MachineCrew.vue'
 import FieldProjectMap from '../NewViews/FieldProjectMap.vue'
 
 import { useAppState } from '../realm-state';
+import { User } from 'realm-web';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -55,11 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     component: CreateAccount
   }
   ,
-  {
-    path: '/driller-view',
-    name: 'DrillerView',
-    component: DrillerView
-  }  ,
+  // {
+  //   path: '/driller-view',
+  //   name: 'DrillerView',
+  //   component: DrillerView
+  // }  ,
   {
     path: '/create-project',
     name: 'createProject',
@@ -205,24 +206,44 @@ const router = createRouter({
 })
 
 router.beforeEach((to , from , next) => {
-  const {isLoggedIn } = useAppState();
-  if(to.fullPath === '/home' || to.fullPath === '/create-machine'
-  || to.fullPath === '/create-employee'|| to.fullPath === '/machine/:id' ||
-   to.fullPath === '/employee/:id' || to.fullPath === '/machines'|| to.fullPath === '/employees'|| to.fullPath === '/project/:id' 
-   || to.fullPath === '/projects' || to.fullPath === '/create-project' || to.fullPath === '/driller-view' 
-   || to.fullPath === '/project-reports/:id' || to.fullPath === '/daily-report/:id')
+  const {isLoggedIn, user } = useAppState();
+  if(to.fullPath === '/home')
   {
     if(!isLoggedIn.value){
       next('/login');
     }
+    if(user.value.customData.userType === 'driller'){
+      next('/field-project-managment/'); 
+    }
+    
   }
   if(to.fullPath === '/login'){
     if(isLoggedIn.value){
+
+      if(user.value.customData.userType === 'driller'){
+      next('/field-project-managment/'); 
+    }
+      else if(user.value.customData.userType === 'manager'){
       next('./home');
     }
+    }
   }
+  // if(to.fullPath==='/create-project' || to.fullPath==='/create-project' || to.fullPath==='/projects' || to.fullPath==='/project/:id'
+  // || to.fullPath==='/employees' || to.fullPath==='/machines' || to.fullPath==='/daily-report/:id' || to.fullPath==='/employee/:id'
+  // || to.fullPath==='/machine/:id' || to.fullPath==='/create-employee' || to.fullPath==='/create-machine' || to.fullPath==='/project-reports/:id'
+  // || to.fullPath==='/project-managment/:id' || to.fullPath==='/add-job/:id' || to.fullPath==='/workers-view/:id' || to.fullPath==='/add-worker/:id'
+  // || to.fullPath==='/project-machines/:id' || to.fullPath==='/add-machine/:id' || to.fullPath==='/project-map/:id' || to.fullPath==='/project-files/:id' 
+  // || to.fullPath==='/project-tools/:id' || to.fullPath==='/pits-list/:id' || to.fullPath==='/field-project-managment/' || to.fullPath==='/machine-managment/:id'
+  // || to.fullPath==='/machine-crew/:id' || to.fullPath==='/field-map/:id')
+  // {
+  //   if(!isLoggedIn.value){
+  //     next('/login');
+  //   }
+  // }
+
+  next()
  
-  next();
+  
 })
 
 export default router
