@@ -4,7 +4,7 @@ import HomePage from '../views/HomePage.vue'
 import LoginPage from '../views/Login.vue'
 import CreateAccount from '../views/CreateAccount.vue'
 import CreateProject from '../views/CreateProject.vue'
-import DrillerView from '../views/DrillerView.vue'
+//import DrillerView from '../views/DrillerView.vue'
 import ProjectsView from '../views/ProjectsView.vue'
 import ProjectView from '../views/ProjectView.vue'
 import EmployeesView from '../views/EmployeesView.vue'
@@ -211,9 +211,11 @@ router.beforeEach((to , from , next) => {
   {
     if(!isLoggedIn.value){
       next('/login');
+      return
     }
     if(user.value.customData.userType === 'driller'){
-      next('/field-project-managment/'); 
+      next('/field-project-managment/');
+      return 
     }
     
   }
@@ -221,25 +223,28 @@ router.beforeEach((to , from , next) => {
     if(isLoggedIn.value){
 
       if(user.value.customData.userType === 'driller'){
-      next('/field-project-managment/'); 
+      next('/field-project-managment/');
+      return 
     }
       else if(user.value.customData.userType === 'manager'){
       next('./home');
+      return
     }
     }
   }
-  // if(to.fullPath==='/create-project' || to.fullPath==='/create-project' || to.fullPath==='/projects' || to.fullPath==='/project/:id'
-  // || to.fullPath==='/employees' || to.fullPath==='/machines' || to.fullPath==='/daily-report/:id' || to.fullPath==='/employee/:id'
-  // || to.fullPath==='/machine/:id' || to.fullPath==='/create-employee' || to.fullPath==='/create-machine' || to.fullPath==='/project-reports/:id'
-  // || to.fullPath==='/project-managment/:id' || to.fullPath==='/add-job/:id' || to.fullPath==='/workers-view/:id' || to.fullPath==='/add-worker/:id'
-  // || to.fullPath==='/project-machines/:id' || to.fullPath==='/add-machine/:id' || to.fullPath==='/project-map/:id' || to.fullPath==='/project-files/:id' 
-  // || to.fullPath==='/project-tools/:id' || to.fullPath==='/pits-list/:id' || to.fullPath==='/field-project-managment/' || to.fullPath==='/machine-managment/:id'
-  // || to.fullPath==='/machine-crew/:id' || to.fullPath==='/field-map/:id')
-  // {
-  //   if(!isLoggedIn.value){
-  //     next('/login');
-  //   }
-  // }
+  if(to.fullPath==='/create-project' || to.fullPath==='/create-project' || to.fullPath==='/projects' || to.fullPath==='/project/:id'
+  || to.fullPath==='/employees' || to.fullPath==='/machines' || to.fullPath==='/daily-report/:id' || to.fullPath==='/employee/:id'
+  || to.fullPath==='/machine/:id' || to.fullPath==='/create-employee' || to.fullPath==='/create-machine' || to.fullPath==='/project-reports/:id'
+  || to.fullPath==='/project-managment/:id' || to.fullPath==='/add-job/:id' || to.fullPath==='/workers-view/:id' || to.fullPath==='/add-worker/:id'
+  || to.fullPath==='/project-machines/:id' || to.fullPath==='/add-machine/:id' || to.fullPath==='/project-map/:id' || to.fullPath==='/project-files/:id' 
+  || to.fullPath==='/project-tools/:id' || to.fullPath==='/pits-list/:id' || to.fullPath==='/field-project-managment/' || to.fullPath==='/machine-managment/:id'
+  || to.fullPath==='/machine-crew/:id' || to.fullPath==='/field-map/:id')
+  {
+    if(!isLoggedIn.value){
+      next('/login');
+      return
+    }
+  }
 
   next()
  
