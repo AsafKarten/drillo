@@ -16,7 +16,7 @@
     <ion-toolbar>
       <div v-if="currentUser" class="header">
          
-          <p class="headerText">בוקר טוב  {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+          <p class="headerText">{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
         
 
           <PWAbutton/>
@@ -50,11 +50,36 @@ export default defineComponent({
     
     const {user , logout} = useAppState();
     const currentUser = ref<any>(user)
+    const greeting = ref('')
 
 
     onMounted(async()=>{
-      //add code or delete
+      getGreeting()
     });
+
+    const getGreeting = ()=>{
+        let now = new Date()
+        if(now.getHours() >= 4 && now.getHours() <= 10 ){
+          greeting.value = 'בוקר טוב'
+          return
+        }
+        if(now.getHours() >= 11 && now.getHours() <= 14 ){
+          greeting.value = 'צהריים טובים'
+          return
+        }
+        if(now.getHours() >= 15 && now.getHours() <= 17 ){
+          greeting.value = 'אחר צהריים טובים'
+          return
+        }
+        if(now.getHours() >= 18 && now.getHours() <= 20 ){
+          greeting.value = 'ערב טוב'
+          return
+        }
+        if(now.getHours() >= 21 && now.getHours() <= 23 || now.getHours() >= 0 && now.getHours() <= 3 ){
+          greeting.value = 'לילה טוב'
+          return
+        }
+    }
 
     const userLogout = async ()=>{
       await logout();
@@ -74,9 +99,11 @@ export default defineComponent({
       //methods
       userLogout,
       goToHome,
+      getGreeting,
 
       //properties
       currentUser,
+      greeting,
 
       //icons
       arrowRedo,
