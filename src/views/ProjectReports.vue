@@ -33,7 +33,8 @@
       </ion-item>
        
       
-      <ion-button v-show="!repo.signature" @click="goTo('/sign-daily-report/'+repo._id)">מעבר לדו"ח יומי</ion-button>
+      <!-- <ion-button v-show="!repo.signature" @click="goTo('/sign-daily-report/'+repo._id)">מעבר לחתימת דו"ח יומי</ion-button> -->
+      <ion-button @click="goTo('/daily-report/'+repo._id)">מעבר לדו"ח יומי</ion-button>
     </ion-card>
   
     
@@ -111,7 +112,7 @@
           
           
           }
-      reports.value = tempArr
+      reports.value = tempArr.reverse()
     }
   
 
