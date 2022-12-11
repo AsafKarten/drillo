@@ -14,11 +14,17 @@
     </ion-card-header>
 
     <ion-card-content>
-       <ion-item :key="pit._id" v-for="pit in pits">
-        <p class="textMargin">{{pit.p}}</p>
+       <div :key="pit._id" v-for="pit in pits">
+        <p class="textMargin">{{"כלונס מספר: " + pit.p  }}</p>
         
-        <p class="textMargin">{{pit.status}}</p>
-        </ion-item>
+        <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
+        <ion-item :key="n.depth" v-for="n in pit.notes">
+          
+          <p class="textMargin">{{n.note}}</p>
+          
+          <p class="textMargin">{{n.depth}}{{' מטר '}}</p>
+          </ion-item>
+        </div>
         <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
         <span v-else>אושר</span> -->
     </ion-card-content>
