@@ -415,6 +415,11 @@
       }
 
       const openPopover = (type: string)=> {
+
+        if(currentPit.value.status === 'Done'){
+            return
+          }
+          
         if(type === 'Diameter'){
           tempDiameter.value = currentPit.value.diameter
           popoverOpenDiameter.value = true

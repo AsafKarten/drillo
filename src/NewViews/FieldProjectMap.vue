@@ -67,8 +67,34 @@
             <div class="hebrewText">
               <h5>{{currentPit?.p}}</h5>
               <h6>נתוני קידוח</h6>
-              <p>עומק: <span class="coords">{{currentPit?.diameter}}</span></p>
-              <p>קוטר: <span class="coords">{{currentPit?.depth}}</span></p>
+              <p>עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
+
+              <ion-popover :is-open="popoverOpen" @didDismiss="popoverOpen = false">
+                <ion-content class="ion-padding">
+                  <ion-item>
+                    <ion-label position="floating">שינוי עומק</ion-label>
+                    <ion-input
+                      v-model="tempDepth"
+                      type="number"
+                    ></ion-input>
+                  </ion-item>
+                  <ion-button color="success" @click="changePitDiameterOrDepth('Depth')">אישור</ion-button>
+                </ion-content>
+              </ion-popover>
+
+              <p>קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
+              <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
+                <ion-content class="ion-padding">
+                  <ion-item>
+                    <ion-label position="floating">שינוי קוטר</ion-label>
+                    <ion-input
+                      v-model="tempDiameter"
+                      type="number"
+                    ></ion-input>
+                  </ion-item>
+                  <ion-button color="success" @click="changePitDiameterOrDepth('Diameter')">אישור</ion-button>
+                </ion-content>
+              </ion-popover>
               <p>נפח בטון תיאורטי: <span class="coords">{{currentPit?.concreteVolume?.toFixed(3)}}</span></p>
               <h6>קואורדינטות</h6>
               <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
@@ -187,7 +213,7 @@ import { home } from 'ionicons/icons';
     //   IonBadge,
     //   IonAccordion, 
     //   IonAccordionGroup,
-    //IonPopover,
+    IonPopover,
     IonIcon,
     IonInput,
     MapBox,
@@ -214,6 +240,12 @@ import { home } from 'ionicons/icons';
       const isOpenDepth = ref(false);
       const note = ref("")
       const current_machine = ref<any>()
+
+        //popover change diameter and depth
+        const popoverOpen = ref(false)
+      const popoverOpenDiameter = ref(false)
+      const tempDepth = ref<any>()
+      const tempDiameter = ref<any>()
 
         const pendingButton = reactive(
         [
@@ -422,6 +454,46 @@ import { home } from 'ionicons/icons';
           noteDepth.value = 0
           
         }
+
+        const openPopover = (type: string)=> {
+          if(currentPit.value.status === 'Done'){
+            return
+          }
+        if(type === 'Diameter'){
+          tempDiameter.value = currentPit.value.diameter
+          popoverOpenDiameter.value = true
+        }
+        if(type === 'Depth'){
+          tempDepth.value = currentPit.value.depth
+          popoverOpen.value = true
+        }
+        
+        
+        
+      }
+
+      const changePitDiameterOrDepth= async(type: string)=>{
+        
+        let index = currentPit.value.p  * 1  - 1
+        let tempPit = currentPit.value
+        if(type === 'Depth'){
+          tempPit.depth = tempDepth
+          tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
+          popoverOpen.value = false
+        }
+        if(type === 'Diameter'){
+          tempPit.diameter = tempDiameter
+          tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
+          popoverOpenDiameter.value = false
+        }
+        project.value.pits[index] = tempPit;
+        currentPit.value = tempPit
+        
+          
+        await updateProjectPits(project.value)
+        
+      }
+        
         
       //end modal block
       return {
@@ -438,6 +510,9 @@ import { home } from 'ionicons/icons';
         modalManagerNotes,
         modalManagerDepth,
         addNewNoteToPit,
+        openPopover,
+        changePitDiameterOrDepth,
+     
         //properties
         project_id,
         currentUser,
@@ -454,6 +529,11 @@ import { home } from 'ionicons/icons';
         isOpenDepth:isOpenDepth,
         note:note,
         current_machine:current_machine,
+
+        popoverOpen,
+        popoverOpenDiameter,
+        tempDepth,
+        tempDiameter,
 
         pendingButton,
         buttons,
