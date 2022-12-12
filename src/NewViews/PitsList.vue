@@ -70,7 +70,7 @@
                   </ion-popover>
 
                   <p>קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
-                  <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpen = false">
+                  <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
                     <ion-content class="ion-padding">
                       <ion-item>
                         <ion-label position="floating">שינוי קוטר</ion-label>
