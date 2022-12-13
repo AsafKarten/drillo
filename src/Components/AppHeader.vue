@@ -9,7 +9,8 @@
       </ion-buttons> 
       <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
-        <ion-menu-button @click="userLogout" auto-hide="false"></ion-menu-button>
+        <ion-back-button text="" :icon="exit" default-href="/" @click="userLogout"> </ion-back-button> 
+        <!-- <ion-menu-button @click="userLogout" auto-hide="false"></ion-menu-button> -->
       </ion-buttons>
     </ion-toolbar>
 
@@ -40,7 +41,7 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonButtons, 
-    IonMenuButton, 
+    //IonMenuButton, 
     IonBackButton,
     PWAbutton
   },

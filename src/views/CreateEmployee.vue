@@ -71,7 +71,7 @@
       const password = ref("");
       const first = ref("");
       const last = ref("");
-      const employeeType = ref()
+      const employeeType = ref("")
       const error = ref<any>({});
       const employeeTypes = ref(['driller', 'manager']);
 

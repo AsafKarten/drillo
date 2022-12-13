@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <!-- <AppHeader :showButtons="false"/> -->
+    <AppHeader :str="'דוח עבודה יומי'"/>
     
     <ion-content :fullscreen="true" >
   
@@ -55,7 +55,7 @@ import {useAppState} from '../realm-state';
 import CreatePdf from '@/Components/CreatePdf.vue';
 import { userInfo } from 'os';
 
-//import AppHeader from '../Components/AppHeader.vue'
+import AppHeader from '../Components/AppHeader.vue'
 
 
 
@@ -74,7 +74,7 @@ export default defineComponent({
     IonCardTitle,
     IonThumbnail,
     CreatePdf,
-    //AppHeader
+    AppHeader
    
 },
   setup(){
