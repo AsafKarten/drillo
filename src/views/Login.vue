@@ -18,15 +18,15 @@
           <ion-label position="floating">Email</ion-label>
           <ion-input
             v-model="email"
-            type="text"
-            autocomplete="new-email"
+            type="email"
+            autocomplete="email"
           ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Password</ion-label>
           <ion-input
             v-model="password"
-            type="text"
+            type="password"
             autocomplete="new-password"
           ></ion-input>
         </ion-item>
