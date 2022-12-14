@@ -23,7 +23,7 @@
        </ion-item>
        <ion-item>
              <ion-select :compareWith="employeeTypes"
-        @ionChange="employeeType = JSON.stringify($event.detail.value)" placeholder="סוג עובד">
+        @ionChange="employeeType = $event.detail.value" placeholder="סוג עובד">
         <ion-select-option value="driller">קודח</ion-select-option>
         <ion-select-option value="manager">מנהל מערכת</ion-select-option>
       </ion-select>
@@ -73,7 +73,7 @@
       const last = ref("");
       const employeeType = ref("")
       const error = ref<any>({});
-      const employeeTypes = ref(['driller', 'manager']);
+      const employeeTypes = ref([{value:'driller'}, {value:'manager'}]);
 
       
 
