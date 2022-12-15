@@ -28,6 +28,7 @@ import ProjectMap from '../NewViews/ProjectMap.vue'
 import ProjectFiles from '../NewViews/ProjectFiles.vue'
 import ProjectTools from '../NewViews/ProjectTools.vue'
 import PitsList from '../NewViews/PitsList.vue'
+import ManagmentPitsList from '../NewViews/ManagmentPitsList.vue'
 import FieldProjectManagment from '../NewViews/FieldProjectManagment.vue'
 import MachineManagment from '../NewViews/MachineManagment.vue';
 import MachineCrew from '../NewViews/MachineCrew.vue'
@@ -68,7 +69,7 @@ const routes: Array<RouteRecordRaw> = [
     component: CreateProject
   }
   ,
-  {
+  {//need to add to safe routes
     path: '/add-machine-project/:id',
     name: 'AddDrillingMachineToProjectVue',
     component: AddDrillingMachineToProjectVue
@@ -185,6 +186,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pits-list/:id',
     name: 'PitsList',
     component: PitsList
+  },
+  {//need to add to safe routes
+    path: '/managment-pits-list/:id',
+    name: 'ManagmentPitsList',
+    component: ManagmentPitsList
   },
   {
     path: '/field-project-managment/',

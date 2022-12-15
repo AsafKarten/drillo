@@ -97,8 +97,8 @@
                   <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
                 </div>
                   <div>
-                    <GridButtons v-if="currentPit?.status === 'waiting'" :buttons="pendingButton" :options="{buttonHeight:110}"/>
-                    <GridButtons v-if="currentPit?.status === 'Pending'" :buttons="buttons" :options="{buttonHeight:110}"/>
+                    <!-- <GridButtons v-if="currentPit?.status === 'waiting'" :buttons="pendingButton" :options="{buttonHeight:110}"/> -->
+                    <!-- <GridButtons v-if="currentPit?.status === 'Pending'" :buttons="buttons" :options="{buttonHeight:110}"/> -->
                      <!-- <ion-button  @click="setPending" color="success">התחלת ביצוע</ion-button>
                      <ion-button v-if="currentPit?.status === 'Pending'" @click="unsetPending" color="danger">ביטול התחלת ביצוע</ion-button>
                      <ion-button v-if="currentPit?.status === 'Pending'" @click="setConfirm" color="success">סיום ביצוע</ion-button>
@@ -110,7 +110,7 @@
       
             <!--drilling notes modal-->
             
-            <ion-modal :is-open="isOpenNotes">
+            <!-- <ion-modal :is-open="isOpenNotes">
               <ion-header>
                 <ion-toolbar>
                   <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
@@ -133,10 +133,10 @@
           
                 </div>
               </ion-content>
-            </ion-modal>
+            </ion-modal> -->
           
             <!--note depth modal-->
-            <ion-modal :is-open="isOpenDepth" >
+            <!-- <ion-modal :is-open="isOpenDepth" >
            
               <ion-content class="ion-padding">
                 <ion-item>
@@ -148,7 +148,7 @@
                 </ion-item>
                 <ion-button color="success" @click="addNewNoteToPit" >אישור</ion-button>
               </ion-content>
-            </ion-modal>
+            </ion-modal> -->
       
            
       
@@ -189,7 +189,7 @@
   import { home } from 'ionicons/icons';
   
   export default defineComponent({
-    name: "PitsList",
+    name: "ManagmentPitsList",
     components: {
       IonButtons,
       IonModal,
@@ -205,11 +205,11 @@
       IonAccordion, 
       IonAccordionGroup,
       IonPopover,
-      IonIcon,
+      //IonIcon,
       IonInput,
       //MapBox,
       AppHeader,
-      GridButtons,
+      //GridButtons,
       
     },
     setup() {
@@ -259,17 +259,18 @@
         if(user?.value.customData.organizationID === undefined)
             router.push('Login')
 
+            console.log(project_id.value);
             
-          project.value = await getProjectByID(currentUser?.value.customData.project_id.$oid);
+          project.value = await getProjectByID(project_id.value);
             
           
           console.log(project.value);
             
             pits.value = project.value.pits
-            showMap.value = true
+            //showMap.value = true
             pits.value.forEach((pit:any) => pit.selected = false );
-            current_machine.value = await getDrillingMachineByID(currentUser?.value.customData.machine_id.$oid)
-            console.log(current_machine.value);
+            //current_machine.value = await getDrillingMachineByID(currentUser?.value.customData.machine_id.$oid)
+            //console.log(current_machine.value);
              
       });
   

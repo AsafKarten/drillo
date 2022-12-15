@@ -98,6 +98,13 @@
             router.push('Login')
 
       project.value = await getProjectByID(project_id.value.toString())
+
+      if(project.value.pits[0].coordinates === undefined)
+        {
+          router.back()
+          return
+        }
+        
       console.log(project.value);
       pitsToShow.value = project.value.pits 
       showMap.value = true;
@@ -107,7 +114,7 @@
 
   
          const pitClick = (clickData: { _id: any; }) => {
-          const pitClicked = pitsToShow.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
+          const pitClicked = pitsToShow.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id.toString());
           currentPit.value = pitClicked
           modalManager();
           if (pitClicked == undefined) return;

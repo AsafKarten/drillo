@@ -6,7 +6,7 @@
       <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 
-      <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/>
+      <!-- <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/> -->
 
     </ion-content>
   
@@ -35,7 +35,7 @@
     AppHeader,
     DescriptionCard,
 
-    FileUpload
+    //FileUpload
 },
     setup(){
       const router = useRouter();
@@ -59,7 +59,7 @@
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
           {text:"מסמכי אתר",             icon: home, click: ()=>goTo('/project-files/'+ project.value._id) },
           {text:"ציוד",                  icon: home, click: ()=>goTo('/project-tools/'+ project.value._id) },
-          {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/pits-list/'+ project.value._id) },
+          {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
           {text:"הזמנת הובלה",          icon: home, disabled:"true", click: ()=>goTo('/machine-transportation/'+ project.value._id)  },
         ]
       );

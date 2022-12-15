@@ -272,9 +272,11 @@
         await updateMachineDrillers(current_machine.value)
   
         employee.machine_id = current_machine.value._id
-        employee.project_id = project_id.value
+        employee.project_id = project.value._id
         await updateEmployeeMachine(employee)
         await updateEmployeeProject(employee)
+        let index = employees.value.indexOf(employee) 
+        employees.value.splice(index,1)
   
         //changeDrillerModalManager(null)
         

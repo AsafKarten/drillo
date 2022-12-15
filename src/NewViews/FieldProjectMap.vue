@@ -320,7 +320,7 @@ import { home } from 'ionicons/icons';
   
   //check error
       const pitClick = (clickData: { _id: any; }) => {
-          const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
+          const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id.toString());
           prevPit.value = currentPit.value
           currentPit.value = pitClicked
   
@@ -393,8 +393,8 @@ import { home } from 'ionicons/icons';
         }
         
         const savePitChanges= async()=>{
-          let index = currentPit.value.p  * 1  - 1
-            project.value.pits[index] = currentPit.value;
+          let index = pits.value.indexOf(currentPit.value)
+          project.value.pits[index] = currentPit.value;
             if(currentPit.value.status === 'Done')
             {
              await addToDailyReport();
@@ -479,8 +479,8 @@ import { home } from 'ionicons/icons';
       }
 
       const changePitDiameterOrDepth= async(type: string)=>{
-        
-        let index = currentPit.value.p  * 1  - 1
+
+        let index = pits.value.indexOf(currentPit.value)
         let tempPit = currentPit.value
         if(type === 'Depth'){
           tempPit.depth = tempDepth

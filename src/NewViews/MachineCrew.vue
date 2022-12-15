@@ -2,15 +2,16 @@
     <ion-page>
       <ion-content  :fullscreen="true" >
             <AppHeader :str="'צוות מכונת קידוח' +' '+ machine?.name"/>
-            <p>{{"מנהל צוות:"+ " "+ machine?.crew.manager.first + " " + machine?.crew.manager.last}}</p>
-            <p>{{"מפעיל מכונת קידוח:"+ " "+ machine?.crew.operaitor.first + " " + machine?.crew.operaitor.last}}</p>
+           <ion-item :key="driller._id" v-for="driller in machine?.drillers">
+              <p>{{driller.first}} {{driller.last}}</p>
+           </ion-item>
       </ion-content>
    
     </ion-page>
   </template>
   
   <script lang="ts">
-  import { IonContent, IonPage } from '@ionic/vue';
+  import { IonContent, IonPage,IonItem } from '@ionic/vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
@@ -26,6 +27,7 @@
     components: {
     IonContent,
     IonPage,
+    IonItem,
     AppHeader,
 },
     setup(){
