@@ -46,6 +46,8 @@ import hebrewFonts from './vfs_fonts.js';
 
 import Vue3Signature from "vue3-signature"
 
+
+//this component need to ne delete
 /* eslint-disable */
 export default defineComponent({
   name: 'CreatePDF',
@@ -54,7 +56,7 @@ export default defineComponent({
   setup(props){
     const router = useRouter();
     const currentUser = ref<any>()
-    const {user , logout,getAllEmployees, uploadFile} = useAppState();
+    const {user , logout,getAllEmployees} = useAppState();
 
     const reportDiv = ref();
 

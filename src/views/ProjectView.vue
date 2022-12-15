@@ -347,7 +347,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const route = useRoute();
-    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getDrillingMachinesByID, getAllProjects, updateMachineDriller, updateEmployeeMachine, getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
+    const {user , logout, getProjectByID,updateProjectExternalServices,updateProjectMachines,getDrillingMachinesByID, getAllProjects, updateMachineDrillers, updateEmployeeMachine, getAllEmployees, updateProjectDrillers, updateProjectSiteManagers} = useAppState();
     const project_id = ref<any>(route.params.id);
     const currentUser = ref<any>(user)
     const project = ref<any>();
@@ -653,7 +653,7 @@ const addMachine =async (machine:any)=>{
          await updateEmployeeMachine(current_employee.value)
         }
 
-    await updateMachineDriller(current_machine.value)
+    await updateMachineDrillers(current_machine.value)
     await updateEmployeeMachine(employee)
     current_employee.value = employee
   }

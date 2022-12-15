@@ -23,7 +23,7 @@
 
   
   
-  
+  //this component need to ne delete
   
   export default defineComponent({
     name: 'UploadFile',
@@ -33,7 +33,7 @@
     setup(){
       const router = useRouter();
       const currentUser = ref<any>()
-      const {user , logout,getAllEmployees, uploadFile} = useAppState();
+      const {user , logout,getAllEmployees} = useAppState();
       const employees = ref<any>()
       const organization = ref<any>()
    

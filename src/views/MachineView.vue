@@ -83,7 +83,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getDrillingMachinesByID, updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , logout,getDrillingMachinesByID, updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
@@ -137,7 +137,7 @@ export default defineComponent({
          await updateEmployeeMachine(current_employee.value)
         }
 
-    await updateMachineDriller(machine.value)
+    await updateMachineDrillers(machine.value)
     await updateEmployeeMachine(employee)
     current_employee.value = employee
   }
