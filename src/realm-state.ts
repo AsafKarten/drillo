@@ -176,6 +176,37 @@ const updateEmployeeMachine =async (employee : any) => {
   }
 }
 
+const updateEmployeeProject =async (employee : any) => {
+  try {
+            // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("users");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": employee._id };
+  
+    //const id = new  Realm.BSON.ObjectID(employee.project_id.id)
+  
+  const update = {
+    "$set": {
+     "project_id": employee.project_id
+        }
+    };
+    const options = { "upsert": false };
+    collection?.updateOne(query, update, options)
+    .then(result => {
+     const { matchedCount, modifiedCount } = result;
+     if(matchedCount && modifiedCount) {
+     console.log(`Successfully updated the item.`)
+}
+})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 
     const getProject =async () => {
       
@@ -237,12 +268,12 @@ const updateEmployeeMachine =async (employee : any) => {
         // 2. Get a database & collection
         const collection = mongodb?.db("drillo").collection("projects");
         // 3. Read and write data with MongoDB queries
-        collection?.insertOne({organizationID,name, address, client,contactPerson, pits, machines, reports,creationDate:new Date()});
-        return true;
+        const insertResponse = await collection?.insertOne({organizationID,name, address, client,contactPerson, pits, machines, reports,creationDate:new Date()});
+        return insertResponse?insertResponse.insertedId:false;
 
 
       } catch (error) {
-console.log(error);
+        console.log(error);
 
           }
     };
@@ -466,7 +497,7 @@ console.log(error);
 }
 
 
-const updateMachineDriller =async (machine : any) => {
+const updateMachineDrillers =async (machine : any) => {
     try {
               // 1. Get a data source client
     const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -476,7 +507,7 @@ const updateMachineDriller =async (machine : any) => {
     const query = { "_id": machine._id };
     const update = {
       "$set": {
-       "driller": machine.driller
+       "drillers": machine.drillers
           }
       };
       const options = { "upsert": false };
@@ -494,15 +525,35 @@ const updateMachineDriller =async (machine : any) => {
     }
 }
 
-const uploadFile = async (file:BinaryData)=>{
-  // 1. Get a data source client
+const updateMachineProjectID =async (machine : any) => {
+  try {
+            // 1. Get a data source client
   const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
   // 2. Get a database & collection
-const collection = mongodb?.db("drillo").collection("files");
-// 3. Read and write data with MongoDB queries
-collection?.insertOne({file});
-return true;
+  const collection = mongodb?.db("drillo").collection("drilling_machines");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": machine._id };
+  //const _id = new  Realm.BSON.ObjectID(machine.project_id)
+  const update = {
+    "$set": {
+     "project_id": machine.project_id
+        }
+    };
+    const options = { "upsert": false };
+    collection?.updateOne(query, update, options)
+    .then(result => {
+     const { matchedCount, modifiedCount } = result;
+     if(matchedCount && modifiedCount) {
+     console.log(`Successfully updated the item.`)
 }
+})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 
 const getReportByID =async (_id:string) => {
       
@@ -612,8 +663,9 @@ const updateReportSigByID =async (report : any) => {
         getOrganizationDrillers,
         getAllEmployees,
         getEmployeesByOrganizationID,
-        deleteEmployeeFromDB ,
+        deleteEmployeeFromDB ,//need to be fixed
         updateEmployeeMachine,
+        updateEmployeeProject,
         getProject,
         getProjectByID,
         getAllProjectByOrganizationID,
@@ -621,16 +673,16 @@ const updateReportSigByID =async (report : any) => {
         updateProjectPits,
         updateProjectMachines,
         updateProjectExternalServices,
-        updateProjectDrillers,
-        updateProjectSiteManagers,
-        getAllProjects,
+        updateProjectDrillers,//need to be removed
+        updateProjectSiteManagers,//need to be removed
+        getAllProjects,//need to be removed
         createNewDrillingMachine,
         getDrillingMachinesByID, 
         getDrillingMachineByID,
         getOrganizationDrillingMachines,
-        getAllOrganizations,
-        updateMachineDriller,
-        uploadFile,
+        getAllOrganizations,//need to be removed
+        updateMachineDrillers,
+        updateMachineProjectID,
         getReportByID,
         saveNewReport,
         updateReportByID,

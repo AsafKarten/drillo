@@ -5,8 +5,8 @@
     <ion-content :fullscreen="true" >
 
   
-    <div class="splitScreen">
-      <div class="screenTop">
+    <!-- <div class="splitScreen">
+      <div class="screenTop"> -->
 
 
     <h1>יצירת פרוייקט חדש</h1>
@@ -61,12 +61,6 @@
         accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       />
     </div>
-    <div :key="machine.id" v-for="machine in projectMachines">
-      <p>{{machine.name}}</p>
-      <p>{{machine.type}}</p>
-      <p>{{machine.driller.first}} {{machine.driller.last}}</p>
-      <ion-button @click="removeMachine(machine)">הסר</ion-button>
-    </div>
     <div>
       <p> מספר כלונסים:{{projectPits?.length}}</p>
     </div>
@@ -76,8 +70,16 @@
         
     <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
 
-      </div>
-      <div class="screenBottom">
+    <div>
+      <h3>מכונות קידוח</h3>
+      <IonItem :key="machine._id" v-for="machine in projectMachines">
+          <p>{{machine.name}}</p>
+          <ion-button @click="removeMachine(machine)">הסר</ion-button>
+      </IonItem>
+    </div>
+
+      <!-- </div> -->
+      <!-- <div class="screenBottom"> -->
 
 
      <MapBox v-show="showMap" id="map" 
@@ -86,8 +88,8 @@
        />
 
 
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
 
 
 
@@ -137,7 +139,8 @@
           <ion-item :key="machine._id" v-for="machine in drillingMachines">
             <p>{{machine?.name + ": "}} </p>
             <p> {{ machine?.type}}</p>
-            <p>קודח: {{machine?.driller.first}} {{machine?.driller.last}}</p>
+            <!-- <p v-show="machine?.crew">מנהל צוות: {{machine?.crew.manager.first}} {{machine?.crew.manager.last}}</p>
+            <p v-show="machine?.crew"> מפעיל: {{machine?.crew.operaitor.first}} {{machine?.crew.operaitor.last}}</p> -->
             <ion-button  @click="addMachine(machine)">בחירת מכונה</ion-button>
             <ion-button  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
             </ion-item>     
@@ -162,7 +165,7 @@
             <p>{{employee._id}}</p>
             <p>{{employee.first}} {{employee.last}}</p>
             <ion-button @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-            <ion-button @click="addEmployee(employee)">בחר</ion-button>
+            <ion-button @click="addDrillerToMachine(employee)">בחר</ion-button>
             </ion-item>      
         </div>
         
@@ -259,7 +262,7 @@ export default defineComponent({
   setup(){
     const router = useRouter();
     const currentUser = ref<any>();
-    const {user , logout, createNewProject, getDrillingMachinesByID,  updateMachineDriller, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , logout, createNewProject, getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -285,12 +288,15 @@ export default defineComponent({
     const employees = ref<any>()
     const current_employee = ref<any>() 
     const isOpenEmp= ref(false)
-    const projectMachines = ref<any>()
+    const projectMachines = ref<any>([])
     const columnStart = ref(0)
     const columnEnd = ref(0)
+
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
     drillingMachines.value = await getDrillingMachinesByID();
+    console.log(drillingMachines.value);
+    
     const allEmployees= await getAllEmployees();
     employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
     
@@ -335,7 +341,7 @@ export default defineComponent({
       var pits= []
         for(var i = 0; i < columnEnd.value - columnStart.value ; i++){
             let p = columnStart.value * 1 + i ;
-            pits[i]= {p:p ,depth:"", diameter:"", status:'waiting',concreteVolume:""}
+            pits[i]= {p:p ,depth:0, diameter:0, status:'waiting',concreteVolume:0}
         }
         projectPits.value = pits;
         columnsModalManager();
@@ -353,8 +359,8 @@ export default defineComponent({
 
     const saveProject =async ()=>{
       let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone.value, mail:contactPersonMail.value}
-      await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
-      router.replace('/projects')
+      let project_id = await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
+      router.push('/add-machine-project/'+ project_id)
     }
 
        //modal block
@@ -410,7 +416,9 @@ export default defineComponent({
             projectMachines.value = []
 
         projectMachines.value.push(machine)
+        machinesModalManager()
       }
+
       const removeMachine = (machine:any)=>{
         let i = projectMachines.value.indexOf(machine)
         projectMachines.value.splice(i,1)
@@ -429,9 +437,27 @@ export default defineComponent({
          await updateEmployeeMachine(current_employee.value)
         }
 
-    await updateMachineDriller(current_machine.value)
+    await updateMachineDrillers(current_machine.value)
     await updateEmployeeMachine(employee)
     current_employee.value = employee
+  }
+
+  const addDrillerToMachine = async (employee: any)=>{
+      if(current_machine.value.drillers === undefined){
+        current_machine.value.drillers = []
+      }
+      let driller = {first: employee.first, last: employee.last, _id: employee._id}
+      console.log(driller);
+      
+      current_machine.value.drillers.push(driller)
+      await updateMachineDrillers(current_machine.value)
+
+      employee.machine_id = current_machine.value._id
+      await updateEmployeeMachine(employee)
+
+      changeDrillerModalManager(null)
+      
+
   }
 
       
@@ -448,6 +474,7 @@ export default defineComponent({
         addMachine,
         removeMachine,
         addEmployee,
+        addDrillerToMachine,
         createColumnsManually,
        //properties
         currentUser : user,
