@@ -14,11 +14,11 @@
           <tbody>
             <tr :key="pit.p" v-for="pit in report?.pits">
               <td>{{pit.p}}</td>
-              <td>{{pit.status}}</td>
-              <td>{{pit.depth}}</td>
-              <td>{{pit.diameter}}</td>
-              <td>{{pit.itm.x}}</td>
-              <td>{{pit.itm.y}}</td>
+              <td v-if="pit.status">{{pit.status}}</td>
+              <td v-if="pit.depth">{{pit.depth}}</td>
+              <td v-if="pit.diameter">{{pit.diameter}}</td>
+              <td v-if="pit.itm">{{pit.itm.x}}</td>
+              <td v-if="pit.itm">{{pit.itm.y}}</td>
             </tr>
           </tbody>
         </table>
@@ -47,7 +47,7 @@ import hebrewFonts from './vfs_fonts.js';
 import Vue3Signature from "vue3-signature"
 
 
-//this component need to ne delete
+//this component is in use !!!important
 /* eslint-disable */
 export default defineComponent({
   name: 'CreatePDF',

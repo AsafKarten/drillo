@@ -66,17 +66,17 @@
     </div>
     <ion-button @click="columnsModalManager">הוספת כלונסים ללא קובץ</ion-button>
     
-    <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button>
+    <!-- <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button> -->
         
     <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
 
-    <div>
+    <!-- <div>
       <h3>מכונות קידוח</h3>
       <IonItem :key="machine._id" v-for="machine in projectMachines">
           <p>{{machine.name}}</p>
           <ion-button @click="removeMachine(machine)">הסר</ion-button>
       </IonItem>
-    </div>
+    </div> -->
 
       <!-- </div> -->
       <!-- <div class="screenBottom"> -->
