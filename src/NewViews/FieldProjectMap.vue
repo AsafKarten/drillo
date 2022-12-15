@@ -269,6 +269,12 @@ import { home } from 'ionicons/icons';
             router.push('Login')
             
         project.value = await getProjectByID(project_id.value);
+
+        if(project.value.pits[0].coordinates === undefined)
+        {
+          router.back()
+          return
+        }
        
             pits.value = project.value.pits
             showMap.value = true

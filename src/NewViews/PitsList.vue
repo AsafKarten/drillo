@@ -84,12 +84,14 @@
                   </ion-popover>
                   
                   <p>נפח בטון תיאורטי: <span class="coords">{{currentPit?.concreteVolume?.toFixed(3)}}</span></p>
+                  <div v-if="currentPit?.coordinates">
                   <h6>קואורדינטות</h6>
                   <p>Lon: <span class="coords">{{currentPit?.coordinates.long.toFixed(10)}}</span></p>
                   <p>Lat: <span class="coords">{{currentPit?.coordinates.lat.toFixed(10)}}</span></p>
                   <h6>רשת ישראל החדשה</h6>
                   <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
                   <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
+                  </div>
                   <p>סטטוס: {{currentPit?.status}}</p>
                   <div :key="note.depth" v-for="note in currentPit?.notes">
                   <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
@@ -257,8 +259,9 @@
         if(user?.value.customData.organizationID === undefined)
             router.push('Login')
             
-        project.value = await getProjectByID(project_id.value);
-       
+            project.value = await getProjectByID(currentUser?.value.customData.project_id.$oid);
+            console.log(project.value);
+            
             pits.value = project.value.pits
             showMap.value = true
             pits.value.forEach((pit:any) => pit.selected = false );
@@ -271,7 +274,7 @@
   
   //check error
       const pitClick = (clickData: { _id: any; }) => {
-          const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id);
+          const pitClicked = pits.value.find((pit: { p: { toString: () => any; }; }) => pit.p.toString() === clickData._id.toString());
           prevPit.value = currentPit.value
           currentPit.value = pitClicked
   

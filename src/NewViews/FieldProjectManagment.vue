@@ -45,21 +45,20 @@ import { home } from 'ionicons/icons';
       const machine_id = ref<any>()
       const machine = ref<any>()
 
-
      // const goTo = (route:any) => { router.push(route) }
       const buttons = reactive(
         [
           {text:"רשימת עובדים",          icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/machine-crew/'+ machine_id.value) },
           {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 1, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
            {text:"ניהול מכונת קידוח",          icon: home, click: ()=>goTo('/machine-managment/'+ machine_id.value) },
-          {text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
+          {text:"יומן עבודה",            icon: home, disabled:true, click: ()=>goTo('/work-diary/'+ project.value._id) },
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/field-map/'+ project.value._id) },
-          {text:"מסמכי אתר",             icon: home, click: ()=>goTo('/project-files/'+ project.value._id) },
-          {text:"ציוד",                  icon: home, click: ()=>goTo('/project-tools/'+ project.value._id) },
+          {text:"מסמכי אתר",             icon: home, disabled:true, click: ()=>goTo('/project-files/'+ project.value._id) },
+          {text:"ציוד",                  icon: home, disabled:true, click: ()=>goTo('/project-tools/'+ project.value._id) },
           {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/pits-list/'+ project.value._id) },
           {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
-          {text:'קבל"נים חיצוניים',  icon: home, disabled:"true", click: ()=>goTo('/constractor-list/'+ project.value._id) },
-          {text:"הזמנת הובלה",          icon: home, disabled:"true", click: ()=>goTo('/machine-transportation/'+ project.value._id) }, 
+          {text:'קבל"נים חיצוניים',  icon: home, disabled:true, click: ()=>goTo('/constractor-list/'+ project.value._id) },
+          {text:"הזמנת הובלה",          icon: home, disabled:true, click: ()=>goTo('/machine-transportation/'+ project.value._id) }, 
         ]
       );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },
@@ -71,7 +70,7 @@ import { home } from 'ionicons/icons';
               router.push('Login')
               
        
-        project_id.value = currentUser?.value.customData.current_project.$oid
+        project_id.value = currentUser?.value.customData.project_id.$oid
         project.value = await getProjectByID(project_id.value)
         machine_id.value = currentUser?.value.customData.machine_id.$oid
         machine.value = await getDrillingMachineByID(machine_id.value)
