@@ -51,7 +51,7 @@
         [
           {text:"רשימת עובדים",          icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/workers-view/'+ project.value._id) },
           {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 2, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
-          {text:"הוספת עבודה חיצונית",  icon: home, click: ()=>goTo('/add-job/'+ project.value._id) },
+          {text:"הוספת עבודה חיצונית",  icon: home, disabled:"true", click: ()=>goTo('/add-job/'+ project.value._id) },
           {text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
           {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
           {text:"הוספת מכונת קידוח",     icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
