@@ -454,7 +454,7 @@ console.log(error);
 };
 
 
-   
+   //this function is the same as the one under it
     const getDrillingMachinesByID = async()=>{
             // 1. Get a data source client
             const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
@@ -463,6 +463,17 @@ console.log(error);
             // 3. Read and write data with MongoDB queries
             const organizationID = user?.value.customData.organizationID
             return await collection?.find({organizationID:organizationID})
+    }   
+    
+    
+    const getOrganizationDrillingMachines = async()=>{
+      // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("drilling_machines");
+      // 3. Read and write data with MongoDB queries
+      
+      return await collection?.find({organizationID:user?.value.customData.organizationID})
     }
 
     const getDrillingMachineByID = async(id: string)=>{
@@ -476,15 +487,7 @@ console.log(error);
       return await collection?.findOne({_id:mID})
 }
 
-    const getOrganizationDrillingMachines = async()=>{
-      // 1. Get a data source client
-      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
-      // 2. Get a database & collection
-      const collection = mongodb?.db("drillo").collection("drilling_machines");
-      // 3. Read and write data with MongoDB queries
-      
-      return await collection?.find({organizationID:user?.value.customData.organizationID})
-}
+
 
     const getAllOrganizations= async()=>{
       // 1. Get a data source client

@@ -1,7 +1,7 @@
 <template>
     
             <div :key="machine._id" v-for="machine in machines">
-                <h3>{{machine.type +" "+ machine.model}}</h3>
+                <h3>{{machine.name +" "+ machine.licens_number}}</h3>
 
                 <ion-item :key="driller._id" v-for="driller in machine.drillers">
                     <ion-avatar slot="start">
@@ -40,12 +40,12 @@
     setup(projectProps){
       const router = useRouter();
       const route = useRoute();
-      const {user , getProjectByID} = useAppState();
+      const {user , getProjectByID, getDrillingMachineByID} = useAppState();
       const currentUser = ref<any>(user)
       const project_id = ref<any>();
       const project = ref<any>(projectProps.projectProps);
 
-      const machines = ref<any>()
+      const machines = ref<any>([])
       const currentWorker = ref<any>()
     
 
@@ -54,8 +54,16 @@
    
         //console.log(project.value);    
         //project.value = await getProjectByID(project_id.value)
-        machines.value = project?.value.machines
+        project?.value.machines
         console.log(project.value);
+        
+        for (let index = 0; index < project?.value.machines.length; index++) {
+          let id = project?.value.machines[index]._id
+          const machine = await getDrillingMachineByID(id)
+          machines.value.push(machine)
+          
+        }
+        console.log(machines.value);
     
       });
 

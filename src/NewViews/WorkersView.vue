@@ -41,6 +41,8 @@
         project.value = await getProjectByID(project_id.value)
         machines.value = project?.value.machines
         console.log(project.value);
+        console.log(machines.value);
+        
       });
 
       return {

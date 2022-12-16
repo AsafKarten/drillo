@@ -1,7 +1,7 @@
 <template>
-  <ion-page v-show="!report?.signature">
+  <ion-page >
     <ion-content :fullscreen="true" >
-   
+   <div v-if="!report?.signature">
       <ion-card v-show="report" >
         <ion-card-header>
           <ion-card-subtitle>{{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-subtitle>
@@ -51,7 +51,12 @@
       </ion-card>
 
       <CreatePdf ref="CreatePdfComponent" :report="report" :signatureImage="signatureImageString" :signatureName="signatureName"/>
-
+</div>
+<div v-else class="drilloCard">
+  <h1>Drillo</h1>
+  <h3>מומחים לקידוחים</h3>
+  <p>לא נמצא דוח זמין לחתימה</p>
+</div>
     </ion-content>
   </ion-page>
 </template>
@@ -173,6 +178,9 @@ export default defineComponent({
 <style scoped>
 .textMargin{
   margin-left: 1%;
+}
+.drilloCard{
+  text-align: center;
 }
 
 </style>

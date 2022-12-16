@@ -139,7 +139,7 @@
       const route = useRoute()
       const project_id = ref<any>(route.params)
       
-      const {user ,getProjectByID, updateProjectMachines, getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine,updateEmployeeProject, getEmployeesByOrganizationID, updateMachineProjectID} = useAppState();
+      const {user ,getProjectByID, getDrillingMachineByID , updateProjectMachines, getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine,updateEmployeeProject, getEmployeesByOrganizationID, updateMachineProjectID} = useAppState();
       const currentUser = ref<any>(user);
       //const file = ref<any>(File);
       //const arrayBuffer = ref<any>(null);
@@ -194,11 +194,20 @@
          //modal block
     
         
-        const changeDrillerModalManager = (machine: any)=>{
+        const changeDrillerModalManager = async (machine: any)=>{
           if(isOpenDriller.value)
           isOpenDriller.value=false;
           else{
             current_machine.value = machine
+
+            const allEmployees= await getEmployeesByOrganizationID();
+            employees.value = allEmployees?.filter(emp => emp.userType === 'driller')
+            for (let index = 0; index < current_machine.value.drillers.length; index++) {
+              let id = current_machine.value.drillers[index]._id
+              employees.value =  employees.value.filter((driller: { _id: any; })=> driller._id.toString() !== id.toString())
+            }
+            
+
             isOpenDriller.value = true;
             // if(machine?.value.drillers !== undefined){
             //     current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine?.value.driller.driller_id.toString())
@@ -237,8 +246,17 @@
           if(check !== undefined){
             return
           }
-            
+
           let tempMachine = {_id:machine._id, name:machine.name , licens_number:machine.licens_number }
+          //check if the current machine is in another project
+          if(machine.project_id !== "" && machine.project_id !== undefined){
+            let prevProject = await getProjectByID(machine.project_id )
+            let index = prevProject.machines.indexOf(tempMachine)
+            prevProject.machines.splice(index,1)
+            await updateProjectMachines(prevProject)
+          }
+            
+          
           project.value.machines.push(tempMachine)
           await updateProjectMachines(project.value)
           machine.project_id = project.value._id
@@ -265,8 +283,20 @@
         if(current_machine.value.drillers === undefined){
           current_machine.value.drillers = []
         }
+
         let driller = {first: employee.first, last: employee.last, _id: employee._id}
         console.log(driller);
+
+        //check if driller is assigned to another drilling machine
+        if(employee.machine_id !== "" &&  employee.machine_id !== undefined){
+          let prevMachine = await getDrillingMachineByID(employee.machine_id)
+          let index = prevMachine.drillers.indexOf(driller)
+          prevMachine.drillers.splice(index,1)
+          await updateMachineDrillers(prevMachine)
+        }
+
+        
+        
         
         current_machine.value.drillers.push(driller)
         await updateMachineDrillers(current_machine.value)

@@ -292,6 +292,14 @@ export default defineComponent({
       }
       let driller = {first: employee.first, last: employee.last, _id: employee._id}
       console.log(driller);
+
+       //check if driller is assigned to another drilling machine
+       if(employee.machine_id !== "" &&  employee.machine_id !== undefined){
+          let prevMachine = await getDrillingMachineByID(employee.machine_id)
+          let index = prevMachine.drillers.indexOf(driller)
+          prevMachine.drillers.splice(index,1)
+          await updateMachineDrillers(prevMachine)
+        }
       
       current_machine.value.drillers.push(driller)
       await updateMachineDrillers(current_machine.value)

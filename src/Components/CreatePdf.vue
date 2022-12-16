@@ -7,18 +7,16 @@
               <th>Status</th>
               <th>Depth</th>
               <th>Diameter</th>
-              <th>X</th>
-              <th>Y</th>
+              <th>Concrete Volume</th>
             </tr>
           </thead>
           <tbody>
             <tr :key="pit.p" v-for="pit in report?.pits">
               <td>{{pit.p}}</td>
-              <td v-if="pit.status">{{pit.status}}</td>
-              <td v-if="pit.depth">{{pit.depth}}</td>
-              <td v-if="pit.diameter">{{pit.diameter}}</td>
-              <td v-if="pit.itm">{{pit.itm.x}}</td>
-              <td v-if="pit.itm">{{pit.itm.y}}</td>
+              <td>{{pit.status}}</td>
+              <td>{{pit.depth}}</td>
+              <td>{{pit.diameter}}</td>
+              <td>{{pit.concreteVolume}}</td>
             </tr>
           </tbody>
         </table>
