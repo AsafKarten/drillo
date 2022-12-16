@@ -54,7 +54,7 @@
           {text:"הוספת עבודה חיצונית",  icon: home, click: ()=>goTo('/add-job/'+ project.value._id) },
           {text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
           {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
-          {text:"הוספת מכונת קידוח",     icon: home, disabled:"true", click: ()=>goTo('/add-machine-project/'+ project.value._id) },
+          {text:"הוספת מכונת קידוח",     icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
           {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
           {text:"מסמכי אתר",             icon: home, disabled:"true", click: ()=>goTo('/project-files/'+ project.value._id) },
