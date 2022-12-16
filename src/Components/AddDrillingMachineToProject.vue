@@ -335,9 +335,11 @@
         console.log('updateDrillersProjectID');
         
         console.log(machine);
+
+         let realMachine = await getDrillingMachineByID(machine._id)
         
-        for (let index = 0; index < machine.drillers.length; index++) {
-            let driller = machine.drillers[index]
+        for (let index = 0; index < realMachine.drillers.length; index++) {
+            let driller = realMachine.drillers[index]
             driller.project_id =  machine.project_id
             console.log(driller);
             

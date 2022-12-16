@@ -318,6 +318,13 @@ export default defineComponent({
 
   const removeDrillerFromMachine = async (employee: any)=>{
 
+    if(employee._id.toString() === currentUser.value.customData._id.toString() ){
+      console.log("is the same");
+      
+      alert("לא ניתן למחוק את עצמך מהמערכת");
+      return
+    }
+
         let i = current_machine.value.drillers.indexOf(employee)
         current_machine.value.drillers.splice(i,1)
         console.log(current_machine.value.drillers);

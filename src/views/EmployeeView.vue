@@ -11,13 +11,15 @@
         <ion-card-header>
           <ion-card-subtitle>{{employee?.userType}}</ion-card-subtitle>
           <ion-card-title>{{employee?.first}} {{employee?.last}}</ion-card-title>
+          <ion-item> <p>{{project?.name}}</p></ion-item>
+          <ion-item> <p>{{machine?.name}}</p></ion-item>
         </ion-card-header>
 
         <ion-card-content>
-          <IonButton color="danger"
+          <!-- <IonButton color="danger"
             @click="deleteEmoloyee" >מחיקת עובד
             <IonIcon slot="end" :icon="trash" />
-          </IonButton>
+          </IonButton> -->
         </ion-card-content>
       </ion-card>
 
@@ -26,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon } from '@ionic/vue';
+import { IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon ,IonItem } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { trash } from 'ionicons/icons';
 import { useRouter, useRoute } from 'vue-router';
@@ -42,25 +44,28 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonButton,
+    //IonButton,
     IonCard, 
     IonCardContent, 
     IonCardHeader, 
     IonCardSubtitle, 
     IonCardTitle,
-    IonIcon,
+    //IonIcon,
+    IonItem,
     AppHeader
   },
   setup(){
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getAllEmployees,deleteEmployeeFromDB } = useAppState();
+    const {user , logout,getAllEmployees,getProjectByID, getDrillingMachineByID } = useAppState();
     const employee_id = ref<any>(route.params);
     const employee = ref<any>();
     const {id} = route.params
     const organization = ref<any>()
     const employees = ref<any>()
+      const project = ref<any>()
+        const machine = ref<any>()
 
   onMounted(async()=>{
     if(user?.value.customData.organizationID === undefined)
@@ -69,20 +74,30 @@ export default defineComponent({
     const allEmployees= await getAllEmployees();
     employee.value = allEmployees?.find((emp: { _id: { toString: () => any; }; }) =>emp._id.toString() === employee_id.value.id)
     console.log(employee.value);
+    if(employee.value.project_id !== "" && employee.value.project_id !== undefined){
+        project.value = await getProjectByID(employee.value.project_id)
+      console.log(project.value);
+    }
+    if(employee.value.machine_id !== "" && employee.value.machine_id !== undefined){
+      machine.value = await getDrillingMachineByID(employee.value.machine_id)
+      console.log(machine.value);
+    }
+    
+    
    
    
   });
-  const deleteEmoloyee = ()=>{
-    console.log(employee_id.value);
-    deleteEmployeeFromDB() 
+  // const deleteEmoloyee = ()=>{
+  //   console.log(employee_id.value);
+  //   deleteEmployeeFromDB() 
     
-  }
+  // }
 
 
    
      return {
         //methoods
-        deleteEmoloyee,
+    
         //properties
         currentUser : user,
         employee:employee,
@@ -90,6 +105,8 @@ export default defineComponent({
         id:id,
         organization:organization,
         employees:employees,
+        project,
+        machine,
         //icons properties
         trash,
         
