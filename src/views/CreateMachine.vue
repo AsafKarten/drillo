@@ -6,7 +6,7 @@
       <div id="container">
      <ion-item>
           <ion-label position="floating">שם המכונה</ion-label>
-       <ion-input v-model="machineName" type="text" autocomplete="new-first"></ion-input>
+       <ion-input v-model="machineName" type="text" autocomplete="off"></ion-input>
        </ion-item>
        <!-- <ion-item>
            <ion-label position="floating">סוג מכונה</ion-label>
@@ -14,7 +14,7 @@
        </ion-item> -->
        <ion-item>
         <ion-label position="floating">מספר רישוי</ion-label>
-       <ion-input v-model="licensNumber" type="text" autocomplete="new"></ion-input>
+       <ion-input v-model="licensNumber" type="text" autocomplete="off"></ion-input>
        </ion-item>
        <!--מספר רישוי-->
 

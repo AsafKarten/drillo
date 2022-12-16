@@ -11,8 +11,8 @@
 
          <div>
         <ion-item :key="employee._id" v-for="employee in employees">
-        <p>{{employee._id}}</p>
-        <p>{{employee.first}} {{employee.last}}</p>
+        <p> {{employee.userType ===  'driller' ? ' קודח' : ' מנהל משרד' }} {{" "+ ','}}</p>
+        <p> {{" " + employee.first}} {{employee.last + " "}}</p>
         <ion-button @click="goToEmployee(employee)">פרופיל עובד</ion-button>
         </ion-item>       
       </div>

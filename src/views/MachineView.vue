@@ -7,55 +7,29 @@
       <h1> פרטי מכונת קידוח {{ machine?.name }} </h1>
      
       <div>
-        <p>name: {{ machine?.name }} </p>
-        <p>type: {{ machine?.type }} </p>
-        <p>id: {{ machine_id?.id }} </p>
-        
-      </div>
-
-      <span v-if="showEmp">
-          <h5> קודח שנבחר למכונה זו</h5>
-          <p>{{current_employee?.first}} {{current_employee?.last}}</p>
-          <p>{{current_employee?.userType}}</p>
-          <ion-button @click="addDrillerModalManager">שינוי קודח</ion-button>
-      </span>
-      <span v-else>
-          <p>לא נבחר קודח למכונה זו</p>
-          <ion-button @click="addDrillerModalManager">בחירת קודח</ion-button>
-      </span>
-      
+        <p>סוג מכונה: {{ machine?.name }} </p>
+        <p>מספר רישוי: {{ machine?.licens_number }} </p>
+        <p>פרוייקט נוכחי:{{project?.name}}</p>
+        <p>כתובת: {{project?.address}}</p>
+        <h3>צוות קידוח</h3>
+        <ion-item :key="driller._id" v-for="driller in machine?.drillers">
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+          <ion-label>
+               {{driller.first +" "+ driller.last}} 
+          </ion-label>
+        </ion-item>
+      </div>      
     
     </ion-content>
 
-    <ion-modal :is-open="isOpenAddDriller">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>שיוך קודח למכונת קידוח</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="addDrillerModalManager">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div class="hebrewText">
-          <div>
-            <ion-item :key="employee._id" v-for="employee in employees">
-            <p>{{employee._id}}</p>
-            <p>{{employee.first}} {{employee.last}}</p>
-            <ion-button @click="viewEmployee(employee)">פרטי עובד</ion-button>
-            <ion-button @click="addEmployee(employee)">בחר</ion-button>
-            </ion-item>       
-          </div>
-        
-      
-        </div>
-      </ion-content>
-    </ion-modal>
+ 
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, } from '@ionic/vue';
+import { IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, IonAvatar } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -70,12 +44,14 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    IonButton,
-    IonModal,
-    IonButtons,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
+    //IonButton,
+    //IonModal,
+    //IonButtons,
+    //IonHeader,
+    //IonToolbar,
+   // IonTitle,
+   IonAvatar,
+   IonLabel,
     IonItem,
     AppHeader
 },
@@ -83,7 +59,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , logout,getDrillingMachinesByID, updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , getProjectByID,getDrillingMachinesByID, updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
@@ -92,6 +68,7 @@ export default defineComponent({
     const current_employee = ref<any>()
     const showEmp = ref(false)
     const organization = ref<any>()
+    const project = ref<any>()
     
   onMounted(async()=>{
     if(user?.value.customData.organizationID === undefined)
@@ -107,6 +84,12 @@ export default defineComponent({
       current_employee.value = current_employee.value[0]
       showEmp.value = true
       console.log(current_employee.value);
+      
+    }
+
+    if(machine.value.project_id !== "" && machine.value.project_id !== undefined  ){
+      project.value = await getProjectByID(machine.value.project_id)
+      console.log(project.value);
       
     }
     
@@ -157,6 +140,7 @@ export default defineComponent({
         current_employee:current_employee,
         showEmp:showEmp,
         organization:organization,
+        project,
         
   }
   },

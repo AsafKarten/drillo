@@ -443,7 +443,7 @@ const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
 // 2. Get a database & collection
 const collection = mongodb?.db("drillo").collection("drilling_machines");
 // 3. Read and write data with MongoDB queries
-collection?.insertOne({name, licens_number, organizationID});
+collection?.insertOne({name, licens_number, organizationID, project_id:"", drillers:[]});
 return true;
 
 

@@ -7,7 +7,7 @@
             <ion-label>
                  {{machine.type +" "+ machine.name}} 
             </ion-label>
-            <ion-button>בחירה</ion-button>
+            <!-- <ion-button>בחירה</ion-button> -->
           </ion-item>
           
     </div>
@@ -26,7 +26,7 @@
     IonItem, 
     IonAvatar, 
     IonLabel,
-    IonButton,
+    //IonButton,
 
     },
     props:{projectProps:Object},

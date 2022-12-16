@@ -9,10 +9,10 @@
 
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>{{employee?.userType}}</ion-card-subtitle>
+          <ion-card-subtitle>{{employee?.userType === 'driller' ? 'קודח' : 'מנהל משרד'}}</ion-card-subtitle>
           <ion-card-title>{{employee?.first}} {{employee?.last}}</ion-card-title>
-          <ion-item> <p>{{project?.name}}</p></ion-item>
-          <ion-item> <p>{{machine?.name}}</p></ion-item>
+          <ion-item v-if="employee?.userType === 'driller'"> <p>{{project?.name + ", " + project?.address}}</p></ion-item>
+          <ion-item v-if="employee?.userType === 'driller'"> <p>{{machine?.name}}</p></ion-item>
         </ion-card-header>
 
         <ion-card-content>
