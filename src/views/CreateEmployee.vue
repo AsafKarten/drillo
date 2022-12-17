@@ -1,7 +1,8 @@
 <template>
   <ion-page>
+    
     <ion-content :fullscreen="true">
-     
+    
       <div id="container"> 
         <h3>יצירת עובד חדש</h3>
        
@@ -39,12 +40,27 @@
        
       </div>
       <p v-if="error">{{error.errorCode}}{{error.error}}</p>
+
+
+      <ion-modal :is-open="isOpen">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>{{'יוצר עובד חדש אנא המתן'}}</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <p>
+          {{'יוצר עובד חדש אנא המתן'}}
+          </p>
+          <ion-spinner name="circular"></ion-spinner>
+        </ion-content>
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-  import { IonContent, IonPage,IonInput, IonLabel ,IonItem,IonButton, IonSelect, IonSelectOption } from '@ionic/vue';
+  import { IonContent, IonPage,IonInput, IonLabel ,IonItem,IonButton, IonSelect, IonSelectOption,IonModal,IonHeader,IonToolbar,IonTitle, IonSpinner } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   
   import { useRouter } from 'vue-router';
@@ -60,7 +76,14 @@
       IonItem,
       IonButton, 
       IonSelect, 
-      IonSelectOption
+      IonSelectOption,
+      IonModal,
+      IonHeader,
+      IonToolbar,
+      IonTitle,
+      IonSpinner,
+     
+     
     },
     setup(){
       const {user, createEmployeeAccount} = useAppState();
@@ -74,6 +97,7 @@
       const employeeType = ref("")
       const error = ref<any>({});
       const employeeTypes = ref([{value:'driller'}, {value:'manager'}]);
+      const isOpen = ref(false)
 
       
 
@@ -85,10 +109,14 @@
      
       const createEmployeeAccountEmailPassword = async()=>{
         try {
+          isOpen.value = true
           //Create user
           console.log(employeeType.value , organizationID.value);
           
           await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value , organizationID.value)
+          
+          isOpen.value = false 
+          router.replace('/employees')
 
         } catch (err) {
           console.error("Failed to log in", err)
@@ -111,6 +139,7 @@
         last,
         employeeType,
         employeeTypes,
+        isOpen,
         error
       }
     }

@@ -76,7 +76,7 @@ export const useAppState = () => {
       //Create user
       await app.emailPasswordAuth.registerUser(email, password)
 
-      const employeeCredentials = Realm.Credentials.emailPassword(
+      const employeeCredentials = await Realm.Credentials.emailPassword(
         email,
         password
       );
@@ -99,7 +99,12 @@ export const useAppState = () => {
 
     // Remove the current user from the device
     await app.removeUser(employee); 
+
+    //Refresh a user's custom data to make sure we have the latest version
+    await app?.currentUser?.refreshCustomData();
+    user.value = app?.currentUser
     console.log(user.value);
+
     
     
       return true;
