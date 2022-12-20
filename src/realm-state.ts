@@ -72,8 +72,9 @@ export const useAppState = () => {
 
      //create account email & password function
      //fix forced logout problem
-     const createEmployeeAccount =async (email:string, password:string,first:string,last:string, userType:string, organizationID:string) => {
+     const createEmployeeAccount =async (email:string, password:string,first:string,last:string, userType:string) => {
       //Create user
+      const organizationID = app?.currentUser?.customData.organizationID
       await app.emailPasswordAuth.registerUser(email, password)
 
       const employeeCredentials = await Realm.Credentials.emailPassword(
@@ -89,7 +90,7 @@ export const useAppState = () => {
       const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
       const collection = mongodb?.db("drillo").collection("users");
       await collection?.insertOne(
-        {userID: app?.currentUser?.id, first, last,userType,organizationID}
+        {userID: app?.currentUser?.id, first, last,userType,organizationID:organizationID}
       );
 
     //Refresh a user's custom data to make sure we have the latest version

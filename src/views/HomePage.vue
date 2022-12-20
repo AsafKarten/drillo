@@ -9,47 +9,47 @@
 
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>יצירת פרויקט חדש</ion-card-subtitle>
-          <ion-card-title>פרויקט חדש</ion-card-title>
+          <ion-card-subtitle>{{'יצירת פרוייקט חדש'}}</ion-card-subtitle>
+          <ion-card-title>{{'יצירת פרוייקט חדש'}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button  router-link="/create-project" >פרויקט חדש</ion-button>
+          <ion-button  router-link="/create-project" >{{'למעבר למסך יצירת פרוייקט חדש'}}</ion-button>
         </ion-card-content>
       </ion-card>
 
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>הפרוייקטים שלי</ion-card-subtitle>
-          <ion-card-title>הפרוייקטים שלי</ion-card-title>
+          <ion-card-subtitle>{{'רשימת פרוייקטים פתוחים'}}</ion-card-subtitle>
+          <ion-card-title>{{'הפרוייקטים שלי'}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button router-link="/projects">הפרוייקטים שלי</ion-button>
+          <ion-button router-link="/projects">{{'למעבר למסך ניהול פרוייקטים'}}</ion-button>
         </ion-card-content>
       </ion-card>
 
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>העובדים שלי</ion-card-subtitle>
-          <ion-card-title>העובדים שלי</ion-card-title>
+          <ion-card-subtitle>{{'ניהול עובדים והוספת עובד חדש'}}</ion-card-subtitle>
+          <ion-card-title>{{'העובדים שלי'}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button router-link="/employees">העובדים שלי
+          <ion-button router-link="/employees">{{'למעבר למסך ניהול עובדים'}}
           </ion-button>
         </ion-card-content>
       </ion-card>
 
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>מכונות קידוח</ion-card-subtitle>
+          <ion-card-subtitle>{{'ניהול מכונות קידוח והוספת מכונה חדשה'}}</ion-card-subtitle>
           <ion-card-title>מכונות קידוח</ion-card-title>
         </ion-card-header>
        
         <ion-card-content>
           
-          <ion-button router-link="/machines">מכונות קידוח
+          <ion-button router-link="/machines">{{'למעבר למסך ניהול מכונות קידוח'}}
           </ion-button>
         </ion-card-content>
       </ion-card>

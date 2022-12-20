@@ -20,7 +20,7 @@
         <h3>מכונות קידוח</h3>
         <IonItem :key="machine?._id" v-for="machine in project?.machines">
             <p>{{machine?.name}}</p>
-            <ion-button @click="removeMachine(machine)">הסר</ion-button>
+            <ion-button slot="end" @click="removeMachine(machine)">הסר</ion-button>
         </IonItem>
       </div>
   
@@ -42,8 +42,8 @@
               <p> {{ machine?.type}}</p>
               <!-- <p v-show="machine?.crew">מנהל צוות: {{machine?.crew.manager.first}} {{machine?.crew.manager.last}}</p>
               <p v-show="machine?.crew"> מפעיל: {{machine?.crew.operaitor.first}} {{machine?.crew.operaitor.last}}</p> -->
-              <ion-button  @click="addMachine(machine)">בחירת מכונה</ion-button>
-              <ion-button  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
+              <ion-button slot="end"  @click="addMachine(machine)">בחירת מכונה</ion-button>
+              <ion-button slot="end"  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
               </ion-item>     
           </div>
           
@@ -66,8 +66,8 @@
                 <ion-item :key="employee?._id" v-for="employee in current_machine.drillers">
                   <!-- <p>{{employee?._id}}</p> -->
                   <p>{{employee?.first}} {{employee?.last}}</p>
-                  <ion-button @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-                  <ion-button @click="removeDrillerFromMachine(employee)">הסר</ion-button>
+                  <ion-button slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
+                  <ion-button slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
                   </ion-item>      
               </div>
 
@@ -75,8 +75,8 @@
             <ion-item :key="employee?._id" v-for="employee in employees">
               <!-- <p>{{employee?._id}}</p> -->
               <p>{{employee?.first}} {{employee?.last}}</p>
-              <ion-button @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-              <ion-button @click="addDrillerToMachine(employee)">בחר</ion-button>
+              <ion-button slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
+              <ion-button slot="end" @click="addDrillerToMachine(employee)">בחר</ion-button>
               </ion-item>      
           </div>
           

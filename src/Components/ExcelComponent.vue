@@ -68,7 +68,7 @@
     
     <!-- <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button> -->
         
-    <ion-button @click="saveProject">שמירת פרוייקט</ion-button>
+    <ion-button @click="saveProject">{{'שמירת פרוייקט ומעבר להוספת מכונת קידוח'}}</ion-button>
 
     <!-- <div>
       <h3>מכונות קידוח</h3>

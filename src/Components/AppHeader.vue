@@ -9,7 +9,7 @@
       </ion-buttons> 
       <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
-        <ion-back-button text="" :icon="exit" default-href="/" @click="userLogout"> </ion-back-button> 
+        <ion-back-button text="יציאה" :icon="exit" default-href="/" @click="userLogout">{{'יציאה'}} </ion-back-button> 
         <!-- <ion-menu-button @click="userLogout" auto-hide="false"></ion-menu-button> -->
       </ion-buttons>
     </ion-toolbar>

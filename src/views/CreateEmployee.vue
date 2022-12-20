@@ -113,7 +113,7 @@
           //Create user
           console.log(employeeType.value , organizationID.value);
           
-          await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value , organizationID.value)
+          await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value)
           
           isOpen.value = false 
           router.replace('/employees')
