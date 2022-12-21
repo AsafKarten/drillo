@@ -73,7 +73,7 @@
       const router = useRouter();
       const route = useRoute();
      
-      const {user , getProjectByID, getReportByID, getAllProjects, updateProjectPits} = useAppState();
+      const {user , getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
       const currentUser = ref<any>(user)
       const project = ref<any>();
       const reports = ref<any>();
@@ -92,8 +92,9 @@
       console.log(project_id.value);
       
         project.value = await getProjectByID(id.toString()) 
+        reports.value = await getProjectReports(project_id.value)
         console.log(project);
-        await getAllReports()
+        // await getAllReports()
         console.log(reports.value);
         
   

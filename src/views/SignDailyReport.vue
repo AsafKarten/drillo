@@ -1,11 +1,14 @@
 <template>
   <ion-page >
+    
     <ion-content :fullscreen="true" >
+    <AppHeader v-show="currentUser?.customData.first" :str="'חתימה על דוח יומי'"/>
    <div v-if="!report?.signature">
       <ion-card v-show="report" >
         <ion-card-header>
           <ion-card-subtitle>{{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-subtitle>
-          <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
+          <ion-card-title>דו"ח ביצוע עבודה יומי </ion-card-title>
+          <ion-card-title>{{report?.project_name + " " + report?.project_address}}</ion-card-title>
         </ion-card-header>
     
         <ion-card-content>
@@ -43,7 +46,7 @@
 
           <ion-item>
             <ion-button color="" @click="clearSignature()">ניקוי</ion-button>
-            <ion-button color="" @click="saveAsPDF()">שמירה כ-PDF</ion-button>
+            <!-- <ion-button color="" @click="saveAsPDF()">שמירה כ-PDF</ion-button> -->
             <ion-button color="success" @click="confirmReport()">שמירה ואישור הדו"ח</ion-button>
           </ion-item>
 
@@ -71,7 +74,7 @@ import CreatePdf from '@/Components/CreatePdf.vue';
 import SignaturePad from '@/Components/SignaturePad.vue';
 import { userInfo } from 'os';
 
-//import AppHeader from '../Components/AppHeader.vue'
+import AppHeader from '../Components/AppHeader.vue'
 
 export default defineComponent({
   name: 'SignDailyReport',
@@ -90,7 +93,7 @@ export default defineComponent({
     IonCardTitle,
     CreatePdf,
     SignaturePad,
-    //AppHeader
+    AppHeader
    
 },
   setup(){

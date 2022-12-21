@@ -12,7 +12,7 @@
         <ion-item :key="machine._id" v-for="machine in drillingMachines">
         <p>{{machine?.name + ": "}} </p>
         <p> {{ machine?.type}}</p>
-        <ion-button  @click="goToMachine(machine)">צפייה במכונה</ion-button>
+        <ion-button  slot="end" @click="goToMachine(machine)">צפייה במכונה</ion-button>
         </ion-item>       
       </div>
       </div>

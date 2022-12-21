@@ -97,7 +97,9 @@ export const useAppState = () => {
     await app?.currentUser?.refreshCustomData();
     user.value = app?.currentUser
     console.log(user.value);
-
+    const empID = user.value.customData._id
+    console.log(empID);
+    
     // Remove the current user from the device
     await app.removeUser(employee); 
 
@@ -108,7 +110,7 @@ export const useAppState = () => {
 
     
     
-      return true;
+      return empID;
 };
 
 
@@ -266,15 +268,16 @@ const updateEmployeeProject =async (employee : any) => {
 
 
      //create new project
-    const createNewProject =async (organizationID: object , name: string, address:string, client:string,contactPerson:object, pits:[], machines:[], reports:[]) => {
+    const createNewProject =async ( name: string, address:string, client:string,contactPerson:object, pits:[], machines:[], reports:[]) => {
    
       try {
+        const organizationID = app?.currentUser?.customData.organizationID
         // 1. Get a data source client
         const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
         // 2. Get a database & collection
         const collection = mongodb?.db("drillo").collection("projects");
         // 3. Read and write data with MongoDB queries
-        const insertResponse = await collection?.insertOne({organizationID,name, address, client,contactPerson, pits, machines, reports,creationDate:new Date()});
+        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson, pits, machines, reports,creationDate:new Date()});
         return insertResponse?insertResponse.insertedId:false;
 
 
@@ -441,16 +444,18 @@ const updateProjectExternalServices =async (project : any) => {
             return await collection?.find({})
     }
      //create new project
-     const createNewDrillingMachine =async (name: string, licens_number:string, organizationID:string) => {
+     const createNewDrillingMachine =async (name: string, licens_number:string) => {
    
       try {
+        const organizationID = app?.currentUser?.customData.organizationID
         // 1. Get a data source client
 const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
 // 2. Get a database & collection
 const collection = mongodb?.db("drillo").collection("drilling_machines");
 // 3. Read and write data with MongoDB queries
-collection?.insertOne({name, licens_number, organizationID, project_id:"", drillers:[]});
-return true;
+
+    const insertResponse = await collection?.insertOne({name, licens_number, organizationID:organizationID, project_id:"", drillers:[]});
+  return insertResponse?insertResponse.insertedId:false;
 
 
 } catch (error) {
@@ -581,6 +586,23 @@ const getReportByID =async (_id:string) => {
  
 }
 
+const getProjectReports=async (project_id:string) => {
+      
+  //import mongodb = require("mongodb");
+  //const ObjectID = mongodb.ObjectID;
+  
+
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("daily_reports");
+  // 3. Read and write data with MongoDB queries
+  const id = new  Realm.BSON.ObjectID(project_id)
+  const query  =  {'project_id':id};
+  return await collection?.find(query)
+ 
+}
+
 const saveNewReport =async (report:object) => {
       
   //import mongodb = require("mongodb");
@@ -693,6 +715,7 @@ const updateReportSigByID =async (report : any) => {
         updateMachineDrillers,
         updateMachineProjectID,
         getReportByID,
+        getProjectReports,
         saveNewReport,
         updateReportByID,
         updateReportSigByID,

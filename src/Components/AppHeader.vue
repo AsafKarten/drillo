@@ -89,11 +89,14 @@ export default defineComponent({
     }
 
     const goToHome = ()=>{
-      if(currentUser?.value.customData.userType === 'driller')
-              router.replace("/field-project-managment");
-
-      else if(currentUser?.value.customData.userType === 'manager')
-             router.replace("/");
+      if(currentUser?.value.customData.userType === 'driller'){
+              router.push("/field-project-managment");
+              return
+      }
+      if(currentUser?.value.customData.userType === 'manager'){
+             router.push("/home");
+             return
+            }
     }
     
     return {

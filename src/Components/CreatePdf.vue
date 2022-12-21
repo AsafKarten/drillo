@@ -1,5 +1,8 @@
 <template>
   <div ref="reportDiv" style="display:none;">
+    <div direction="rtl">
+      <p>{{report?.project_name.split(' ').reverse().join('  ') + " " + report?.project_address.split(' ').reverse().join('  ')}}</p>
+    </div>
         <table style="direction:ltr; border-spacing: 10px; border-collapse: separate;">
           <thead>
             <tr>

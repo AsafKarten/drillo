@@ -36,11 +36,11 @@
             >Login
           </ion-button>
         </div>
-        <div style="padding-top: 6px">
+        <!-- <div style="padding-top: 6px">
           <ion-button router-link="/create-account" expand="full"
             >Create Account
           </ion-button>
-        </div>
+        </div> -->
       </div>
       <p v-if="error">{{ error.errorCode }}{{ error.error }}</p>
     </ion-content>

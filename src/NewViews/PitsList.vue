@@ -370,7 +370,7 @@
           //if its a new project and this is the first report
           if(reports.length === 0){
             let pits = [currentPit.value]
-            let report = {date: today, pits }
+            let report = {date: today, pits , project_id:project.value._id, project_name: project.value.name, project_address: project.value.address }
             let resp = await saveNewReport(report)
             reports.push({date:today,report_id:resp })
             project.value.reports = reports
@@ -392,7 +392,7 @@
           //else- its a new report for today
           else{
             let pits = [currentPit.value]
-            let report = {date: today, pits }
+            let report = {date: today, pits , project_id:project.value._id, project_name: project.value.name, project_address: project.value.address  }
             let resp = await saveNewReport(report)
             reports.push({date:today,report_id:resp })
             project.value.reports = reports

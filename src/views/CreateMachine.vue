@@ -80,8 +80,9 @@ import AppHeader from '@/Components/AppHeader.vue';
       const createMachine = async()=>{
         try {
          
-          await createNewDrillingMachine(machineName.value,licensNumber.value, organizationID.value)
-          router.replace('/machines')
+          let machine_id = await createNewDrillingMachine(machineName.value,licensNumber.value)
+          router.push('/machine/' + machine_id)
+          
         } catch (err) {
           console.error("Failed to add new drilling machine", err)
           error.value = err;

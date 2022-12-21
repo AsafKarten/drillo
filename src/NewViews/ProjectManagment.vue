@@ -49,17 +49,18 @@
      // const goTo = (route:any) => { router.push(route) }
       const buttons = reactive(
         [
-          {text:"רשימת עובדים",          icon: home, badge:{count: 3, color:"warning"} ,click: ()=>goTo('/workers-view/'+ project.value._id) },
-          {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 2, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
-          {text:"הוספת עבודה חיצונית",  icon: home, disabled:"true", click: ()=>goTo('/add-job/'+ project.value._id) },
-          {text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
+          {text:"רשימת עובדים",          icon: home,click: ()=>goTo('/workers-view/'+ project.value._id) },
           {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
-          {text:"הוספת מכונת קידוח",     icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
+          {text:"הוספת מכונת קידוח ושינוי עובדים", icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
           {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
+          {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
+          
+          // {text:"הוספת עובד",            icon: home,click: ()=>goTo('/add-worker/'+ project.value._id) },
+          {text:"הוספת עבודה חיצונית",  icon: home, disabled:"true", click: ()=>goTo('/add-job/'+ project.value._id) },
+          {text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
           {text:"מסמכי אתר",             icon: home, disabled:"true", click: ()=>goTo('/project-files/'+ project.value._id) },
           {text:"ציוד",                  icon: home, disabled:"true", click: ()=>goTo('/project-tools/'+ project.value._id) },
-          {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
           {text:"הזמנת הובלה",          icon: home, disabled:"true", click: ()=>goTo('/machine-transportation/'+ project.value._id)  },
         ]
       );

@@ -13,7 +13,7 @@
         <ion-item :key="employee._id" v-for="employee in employees">
         <p> {{employee.userType ===  'driller' ? ' קודח' : ' מנהל משרד' }} {{" "+ ','}}</p>
         <p> {{" " + employee.first}} {{employee.last + " "}}</p>
-        <ion-button @click="goToEmployee(employee)">פרופיל עובד</ion-button>
+        <ion-button slot="end" @click="goToEmployee(employee)">פרופיל עובד</ion-button>
         </ion-item>       
       </div>
       

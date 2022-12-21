@@ -5,7 +5,7 @@
     <ion-content :fullscreen="true" >
   
    <create-pdf :report="report" :signature="false"/>
-      <h5>פרוייקט: {{project?.name}}</h5>
+      <h5>פרוייקט: {{report?.project_name + " " + report?.project_address}}</h5>
 
        <ion-card >
     <ion-card-header>

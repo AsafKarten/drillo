@@ -11,8 +11,9 @@
         <p>מספר רישוי: {{ machine?.licens_number }} </p>
         <p>פרוייקט נוכחי:{{project?.name}}</p>
         <p>כתובת: {{project?.address}}</p>
+        
         <h3>צוות קידוח</h3>
-        <ion-item :key="driller._id" v-for="driller in machine?.drillers">
+        <ion-item v-show="driller._id" :key="driller._id" v-for="driller in machine?.drillers">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
           </ion-avatar>

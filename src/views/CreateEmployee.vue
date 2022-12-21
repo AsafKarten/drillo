@@ -113,10 +113,10 @@
           //Create user
           console.log(employeeType.value , organizationID.value);
           
-          await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value)
+          let empID = await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value)
           
           isOpen.value = false 
-          router.replace('/employees')
+          router.push('/employee/'+empID)
 
         } catch (err) {
           console.error("Failed to log in", err)

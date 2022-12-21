@@ -63,7 +63,7 @@
         <ion-content class="ion-padding">
 
             <div class="hebrewText">
-                <ion-item :key="employee?._id" v-for="employee in current_machine.drillers">
+                <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
                   <!-- <p>{{employee?._id}}</p> -->
                   <p>{{employee?.first}} {{employee?.last}}</p>
                   <ion-button slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
@@ -202,9 +202,9 @@
 
             const allEmployees= await getEmployeesByOrganizationID();
             employees.value = allEmployees?.filter(emp => emp.userType === 'driller')
-            for (let index = 0; index < current_machine.value.drillers.length; index++) {
+            for (let index = 0; index < current_machine?.value.drillers.length; index++) {
               let id = current_machine.value.drillers[index]._id
-              employees.value =  employees.value.filter((driller: { _id: any; })=> driller._id.toString() !== id.toString())
+              employees.value =  employees.value.filter((driller: { _id: any; })=> driller?._id.toString() !== id?.toString())
             }
             
 

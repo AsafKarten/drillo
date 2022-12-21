@@ -339,7 +339,7 @@ export default defineComponent({
       console.log("called");
       
       var pits= []
-        for(var i = 0; i < columnEnd.value - columnStart.value ; i++){
+        for(var i = 0; i <= columnEnd.value - columnStart.value ; i++){
             let p = columnStart.value * 1 + i ;
             pits[i]= {p:p ,depth:0, diameter:0, status:'waiting',concreteVolume:0}
         }
@@ -359,7 +359,7 @@ export default defineComponent({
 
     const saveProject =async ()=>{
       let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone.value, mail:contactPersonMail.value}
-      let project_id = await createNewProject(organizationID.value,projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
+      let project_id = await createNewProject(projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
       router.push('/add-machine-project/'+ project_id)
     }
 
