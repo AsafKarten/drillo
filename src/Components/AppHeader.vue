@@ -20,7 +20,7 @@
           <p class="headerText">{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
         
 
-          <PWAbutton/>
+          
       </div>
     </ion-toolbar>
   </ion-header>
@@ -33,7 +33,7 @@ import { arrowRedo, home, exit } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useAppState } from '../realm-state';
 
-import PWAbutton from './PWAbutton.vue';
+//import PWAbutton from './PWAbutton.vue';
 
 export default defineComponent({
   name: 'AppHeader',
@@ -43,7 +43,7 @@ export default defineComponent({
     IonButtons, 
     //IonMenuButton, 
     IonBackButton,
-    PWAbutton
+    //PWAbutton
   },
   props: {str:String },
   setup(){

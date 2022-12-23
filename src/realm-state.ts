@@ -137,6 +137,23 @@ const getAllEmployees = async()=>{
   return await collection?.find({})
 }
 
+const getEmployeeByID =async (_id:string) => {
+      
+  //import mongodb = require("mongodb");
+  //const ObjectID = mongodb.ObjectID;
+  
+
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("users");
+  // 3. Read and write data with MongoDB queries
+  const id = new  Realm.BSON.ObjectID(_id)
+  const query  =  {'_id':id};
+  return await collection?.findOne(query)
+ 
+}
+
 const deleteEmployeeFromDB = async() =>{
   //await app.deleteUser();
   console.log(app.currentUser);
@@ -694,6 +711,7 @@ const updateReportSigByID =async (report : any) => {
         getOrganizationDrillers,
         getAllEmployees,
         getEmployeesByOrganizationID,
+        getEmployeeByID,
         deleteEmployeeFromDB ,//need to be fixed
         updateEmployeeMachine,
         updateEmployeeProject,

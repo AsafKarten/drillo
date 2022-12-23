@@ -54,7 +54,7 @@
                 <div class="hebrewText">
                   <h5>{{currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
-                  <p>עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
+                  <p @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
 
                   <ion-popover :is-open="popoverOpen" @didDismiss="popoverOpen = false">
                     <ion-content class="ion-padding">
@@ -69,7 +69,7 @@
                     </ion-content>
                   </ion-popover>
 
-                  <p>קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
+                  <p @click="openPopover('Diameter')" >קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
                   <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
                     <ion-content class="ion-padding">
                       <ion-item>
@@ -330,10 +330,16 @@
       
     }
 
-      const setConfirm = ()=>{     
+      const setConfirm = ()=>{    
+        if(currentPit.value.diameter == 0 || currentPit.value.depth == 0 ){
+          alert('יש לוודא עומק וקוטר פיר קידוח תקינים!')
+          return
+        } 
+        else{
              currentPit.value.status = 'Done';
              currentPit.value.finishDate = new Date()
-             savePitChanges();           
+             savePitChanges(); 
+            }          
       }
 
       const setPending = ()=>{  

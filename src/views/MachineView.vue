@@ -13,15 +13,47 @@
         <p>כתובת: {{project?.address}}</p>
         
         <h3>צוות קידוח</h3>
-        <ion-item v-show="driller._id" :key="driller._id" v-for="driller in machine?.drillers">
+        <ion-button slot="end"  @click="changeDrillerModalManager()">{{'הוספת קודח'}}</ion-button>
+      </div>   
+      
+      <!--new drilling team list-->
+      <div class="hebrewText">
+        <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in machine?.drillers">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
           </ion-avatar>
           <ion-label>
-               {{driller.first +" "+ driller.last}} 
-          </ion-label>
-        </ion-item>
-      </div>      
+            {{employee.first +" "+ employee.last}} 
+       </ion-label>
+          <ion-button slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
+          <ion-button slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
+          </ion-item>      
+      </div>
+
+
+
+             <!--change driller in machine modal-->
+             <ion-modal :is-open="isOpenDriller">
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title>עריכת צוות קודחים</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button @click="changeDrillerModalManager()">Close</ion-button>
+                  </ion-buttons>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content class="ion-padding">
+                <div class="hebrewText">
+                  <ion-item :key="employee?._id" v-for="employee in employees">
+                    <!-- <p>{{employee?._id}}</p> -->
+                    <p>{{employee?.first}} {{employee?.last}}</p>
+                    <ion-button slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
+                    <ion-button slot="end" @click="addDrillerToMachine(employee)">בחר</ion-button>
+                    </ion-item>      
+                </div>
+                
+              </ion-content>
+            </ion-modal>
     
     </ion-content>
 
@@ -45,12 +77,12 @@ export default defineComponent({
   components: {
     IonContent,
     IonPage,
-    //IonButton,
-    //IonModal,
-    //IonButtons,
-    //IonHeader,
-    //IonToolbar,
-   // IonTitle,
+    IonButton,
+    IonModal,
+    IonButtons,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
    IonAvatar,
    IonLabel,
     IonItem,
@@ -60,33 +92,24 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , getProjectByID,getDrillingMachinesByID, updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , getProjectByID, getDrillingMachineByID,getEmployeesByOrganizationID, updateEmployeeProject, updateMachineDrillers, updateEmployeeMachine,} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
-    const isOpenAddDriller = ref(false)
+    //const isOpenAddDriller = ref(false)
     const employees = ref<any>()
     const current_employee = ref<any>()
     const showEmp = ref(false)
     const organization = ref<any>()
     const project = ref<any>()
+    const isOpenDriller = ref(false)
     
   onMounted(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
-    const drillingMachines = await getDrillingMachinesByID()
-    machine.value = drillingMachines?.find(proj =>proj._id.toString() === machine_id.value.id)
 
-    const allEmployees= await getAllEmployees();
-    employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
+     machine.value = await getDrillingMachineByID(machine_id.value)
 
-    if(machine.value.driller !== undefined){
-      current_employee.value = employees?.value.filter((emp: { _id: any; }) => emp._id.toString() === machine.value.driller.driller_id.toString())
-      current_employee.value = current_employee.value[0]
-      showEmp.value = true
-      console.log(current_employee.value);
-      
-    }
 
     if(machine.value.project_id !== "" && machine.value.project_id !== undefined  ){
       project.value = await getProjectByID(machine.value.project_id)
@@ -97,51 +120,105 @@ export default defineComponent({
    
   });
 
-  const addDrillerModalManager = ()=>{
+  const removeDrillerFromMachine = async (employee: any)=>{
 
-    if (isOpenAddDriller.value)
-        isOpenAddDriller.value = false
+    let i = machine.value.drillers.indexOf(employee)
+    machine.value.drillers.splice(i,1)
+    console.log(machine.value.drillers);
+    await updateMachineDrillers(machine.value)
 
-    else
-        isOpenAddDriller.value = true
+
+    employee.machine_id = ""
+    employee.project_id = ""
+    //remove current machine id from user data
+    await updateEmployeeMachine(employee)
+    //remove project id from user data
+    await updateEmployeeProject(employee)
+
   }
 
-  const viewEmployee = (employee: any)=>{
-    console.log(employee);
-    
-  }
+  const goToEmployee =(employee:any)=>{
+        router.push('/employee/'+ employee._id)
+        isOpenDriller.value=false;
+    }
 
-  const addEmployee = async (employee: any)=>{
-    machine.value.driller = {driller_id : employee._id, first: employee.first, last: employee.last}
-    console.log(machine.value);
-    employee.machine_id = machine.value._id
-      
-    if(current_employee.value !== undefined){
-         current_employee.value.machine_id = ""
-         await updateEmployeeMachine(current_employee.value)
+
+    const changeDrillerModalManager = async ()=>{
+          if(isOpenDriller.value)
+          isOpenDriller.value=false;
+          else{
+        
+            const allEmployees= await getEmployeesByOrganizationID();
+            employees.value = allEmployees?.filter(emp => emp.userType === 'driller')
+            //filter employees that already assign to this machine
+            for (let index = 0; index < machine?.value.drillers.length; index++) {
+              let id = machine.value.drillers[index]._id
+              employees.value =  employees.value.filter((driller: { _id: any; })=> driller?._id.toString() !== id?.toString())
+            }
+            
+
+            isOpenDriller.value = true;
+          
+          }
+          
         }
 
-    await updateMachineDrillers(machine.value)
-    await updateEmployeeMachine(employee)
-    current_employee.value = employee
-  }
+        const addDrillerToMachine = async (employee: any)=>{
+        if(machine.value.drillers === undefined){
+          machine.value.drillers = []
+        }
+
+        let driller = {first: employee.first, last: employee.last, _id: employee._id}
+        console.log(driller);
+
+        //check if driller is assigned to another drilling machine
+        if(employee.machine_id !== "" &&  employee.machine_id !== undefined){
+          let prevMachine = await getDrillingMachineByID(employee.machine_id)
+          let index = prevMachine.drillers.indexOf(driller)
+          prevMachine.drillers.splice(index,1)
+          await updateMachineDrillers(prevMachine)
+        }
+
+        
+        
+        
+        machine.value.drillers.push(driller)
+        await updateMachineDrillers(machine.value)
+  
+        employee.machine_id = machine.value._id
+        employee.project_id = machine.value.project_id
+        await updateEmployeeMachine(employee)
+        await updateEmployeeProject(employee)
+        let index = employees.value.indexOf(employee) 
+        employees.value.splice(index,1)
+  
+        isOpenDriller.value = false
+        
+  
+    }
+
+
+
 
      return {
       //methoods
-      addDrillerModalManager,
-      viewEmployee,
-      addEmployee,
+      removeDrillerFromMachine,
+      goToEmployee,
+      changeDrillerModalManager,
+      addDrillerToMachine,
+      
       //properties
         currentUser : user,
         machine:machine,
         machine_id:machine_id,
         id:id,
-        isOpenAddDriller:isOpenAddDriller,
+        //isOpenAddDriller:isOpenAddDriller,
         employees:employees,
         current_employee:current_employee,
         showEmp:showEmp,
         organization:organization,
         project,
+        isOpenDriller,
         
   }
   },

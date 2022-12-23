@@ -51,7 +51,7 @@
         [
           {text:"רשימת עובדים",          icon: home,click: ()=>goTo('/workers-view/'+ project.value._id) },
           {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
-          {text:"הוספת מכונת קידוח ושינוי עובדים", icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
+          {text:"הוספת מכונת קידוח ושינוי עובדים",  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
           {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
           {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },

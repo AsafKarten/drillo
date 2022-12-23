@@ -19,7 +19,8 @@
       <div>
         <h3>מכונות קידוח</h3>
         <IonItem :key="machine?._id" v-for="machine in project?.machines">
-            <p>{{machine?.name}}</p>
+            <p @click="goToMachine(machine)">{{machine?.name}}</p>
+            <ion-button slot="end"  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
             <ion-button slot="end" @click="removeMachine(machine)">הסר</ion-button>
         </IonItem>
       </div>
@@ -37,9 +38,9 @@
         </ion-header>
         <ion-content class="ion-padding">
           <div class="hebrewText">
-            <ion-item :key="machine._id" v-for="machine in drillingMachines">
-              <p>{{machine?.name + ": "}} </p>
-              <p> {{ machine?.type}}</p>
+            <ion-item :key="machine._id" v-for="machine in avilableDrillingMachines">
+              <p @click="goToMachine(machine)">{{machine?.name}} </p>
+             
               <!-- <p v-show="machine?.crew">מנהל צוות: {{machine?.crew.manager.first}} {{machine?.crew.manager.last}}</p>
               <p v-show="machine?.crew"> מפעיל: {{machine?.crew.operaitor.first}} {{machine?.crew.operaitor.last}}</p> -->
               <ion-button slot="end"  @click="addMachine(machine)">בחירת מכונה</ion-button>
@@ -95,9 +96,12 @@
           </ion-header>
           <ion-content class="ion-padding">
             <div class="hebrewText">
-              <p>שם: {{current_employee?.first}} {{current_employee?.last}}</p>
+              <h3>{{'שם:' + " " +  current_employee?.first + " " + current_employee?.last}}</h3>
+              <h3>{{'פרוייקט נוכחי:'+ " " + employee_project?.name + " " + employee_project?.address}}</h3>
+              <h3>{{'מכונת קידוח:' + " " + employee_machine?.name + " " + employee_machine?.licens_number}}</h3>
+                 <ion-button slot="end" @click="addDrillerToMachine(current_employee)">בחר</ion-button>
             </div>
-            
+               
           </ion-content>
         </ion-modal>
         
@@ -139,36 +143,20 @@
       const route = useRoute()
       const project_id = ref<any>(route.params)
       
-      const {user ,getProjectByID, getDrillingMachineByID , updateProjectMachines, getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine,updateEmployeeProject, getEmployeesByOrganizationID, updateMachineProjectID} = useAppState();
+      const {user ,getProjectByID, getDrillingMachineByID ,getEmployeeByID, updateProjectMachines, getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine,updateEmployeeProject, getEmployeesByOrganizationID, updateMachineProjectID} = useAppState();
       const currentUser = ref<any>(user);
-      //const file = ref<any>(File);
-      //const arrayBuffer = ref<any>(null);
-      //const filelist = ref<any>(null);
-      //const arraylist = ref<any>();
-      //const pitsToShow = ref<any>([]);
-      //const showMap = ref(false);
-      //const isOpen = ref(false);
       const isOpenDriller = ref(false);
       const isOpenMachine = ref(false);
-      const isOpeColumn = ref(false);
-      //const currentPit = ref<any>();
       const project = ref<any>();
-      //const projectAddress = ref("");
-      //const projectClient = ref("");
-      //const projectContactPerson = ref("");
-      //const contactPersonPhone = ref("");
-      //const contactPersonMail = ref("");
-      //const projectPits = ref<any>();
-      //const reports = ref<any>([])
-      //const organizationID = ref<any>();
       const drillingMachines = ref<any>()
       const current_machine = ref<any>()
       const employees = ref<any>()
       const current_employee = ref<any>() 
+      const employee_machine = ref<any>()
+      const employee_project = ref<any>()
       const isOpenEmp= ref(false)
       const projectMachines = ref<any>([])
-      //const columnStart = ref(0)
-      //const columnEnd = ref(0)
+      const avilableDrillingMachines = ref<any>()
   
     onMounted(async()=>{
      // organizationID.value = user.value.customData.organizationID
@@ -198,7 +186,7 @@
           if(isOpenDriller.value)
           isOpenDriller.value=false;
           else{
-            current_machine.value = machine
+            current_machine.value = await getDrillingMachineByID(machine._id) 
 
             const allEmployees= await getEmployeesByOrganizationID();
             employees.value = allEmployees?.filter(emp => emp.userType === 'driller')
@@ -218,20 +206,31 @@
           
         }
   
-        const machinesModalManager = ()=>{
+        const machinesModalManager = async ()=>{
           if(isOpenMachine.value)
           isOpenMachine.value=false;
-          else
-          isOpenMachine.value = true;
+          else{
+            avilableDrillingMachines.value = await getDrillingMachinesByID();
+            avilableDrillingMachines.value = avilableDrillingMachines.value.filter((machine: { project_id: any; })=> machine.project_id.toString() !== project.value._id.toString())
+            console.log(avilableDrillingMachines.value);
+            isOpenMachine.value = true;
+          }
+          
         }
   
      
   
-        const viewEmployeeModalManager = (employee: any)=>{
+        const viewEmployeeModalManager = async (employee: any)=>{
           if(isOpenEmp.value)
           isOpenEmp.value=false;
           else{
-            current_employee.value = employee
+            current_employee.value = await getEmployeeByID(employee._id.toString())
+            if(current_employee.value.project_id !== "" && current_employee.value.project_id !== undefined )
+                employee_project.value = await getProjectByID(current_employee.value.project_id)
+            
+            if(current_employee.value.machine_id !== "" && current_employee.value.machine_id !== undefined )
+                employee_machine.value = await getDrillingMachineByID(current_employee.value.machine_id)
+
             isOpenEmp.value = true;
            
           }
@@ -323,11 +322,10 @@
 
         employee.machine_id = ""
         employee.project_id = ""
+        //remove current machine id from user data
         await updateEmployeeMachine(employee)
+        //remove project id from user data
         await updateEmployeeProject(employee)
-  
-        //changeDrillerModalManager(null)
-        
   
     }
 
@@ -347,6 +345,11 @@
             
         }
     }
+
+    const goToMachine =(machine:any)=>{
+        router.push('/machine/'+ machine._id.toString())
+        isOpenMachine.value = false
+    }
   
         
        return {
@@ -362,38 +365,27 @@
           addDrillerToMachine,
           removeDrillerFromMachine,
           updateDrillersProjectID,
+
+          goToMachine,
       
          //properties
           currentUser,
           project,
-          //file : file,
-          //arrayBuffer :arrayBuffer,
-          //filelist:filelist,
-          //arraylist :arraylist,
-          //pitsToShow :pitsToShow,
-          //showMap:showMap,
-          //isOpen:isOpen,
-          isOpenDriller:isOpenDriller,
-          isOpeColumn:isOpeColumn,
-          isOpenMachine:isOpenMachine,
-          //currentPit:currentPit,
-          //projectName: projectName,
-          //projectAddress: projectAddress,
-          //projectClient:projectClient,
-          //projectContactPerson:projectContactPerson,
-          //contactPersonPhone:contactPersonPhone,
-          //contactPersonMail:contactPersonMail,
-          //projectPits:projectPits,
-          //reports:reports,
-          //organizationID:organizationID,
-          drillingMachines:drillingMachines,
-          current_machine:current_machine,
-          employees:employees,
-          current_employee:current_employee,
-          isOpenEmp:isOpenEmp,
-          projectMachines:projectMachines,
-          //columnStart:columnStart,
-          //columnEnd: columnEnd,
+
+          isOpenDriller,
+    
+          isOpenMachine,
+  
+          drillingMachines,
+          current_machine,
+          employees,
+          current_employee,
+          employee_machine,
+          employee_project,
+          isOpenEmp,
+          projectMachines,
+          
+          avilableDrillingMachines,
         
     }
     },
