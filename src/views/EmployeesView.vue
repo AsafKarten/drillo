@@ -11,6 +11,9 @@
 
          <div>
         <ion-item :key="employee._id" v-for="employee in employees">
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
         <p> {{employee.userType ===  'driller' ? ' קודח' : ' מנהל משרד' }} {{" "+ ','}}</p>
         <p> {{" " + employee.first}} {{employee.last + " "}}</p>
         <ion-button slot="end" @click="goToEmployee(employee)">פרופיל עובד</ion-button>
@@ -23,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem } from '@ionic/vue';
+import { IonContent, IonPage,IonButton, IonItem, IonAvatar } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -40,6 +43,7 @@ export default defineComponent({
     IonPage,
     IonButton,
     IonItem,
+    IonAvatar,
     AppHeader
 },
   setup(){

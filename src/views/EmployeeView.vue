@@ -10,16 +10,12 @@
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>{{employee?.userType === 'driller' ? 'קודח' : 'מנהל משרד'}}</ion-card-subtitle>
-          <ion-card-title>{{employee?.first}} {{employee?.last}}</ion-card-title>
-          <ion-item v-if="employee?.userType === 'driller'"> <p>{{project?.name + ", " + project?.address}}</p></ion-item>
-          <ion-item v-if="employee?.userType === 'driller'"> <p>{{machine?.name}}</p></ion-item>
+          <ion-card-title>{{employee?.first}} {{employee?.last}}</ion-card-title>   
         </ion-card-header>
 
         <ion-card-content>
-          <!-- <IonButton color="danger"
-            @click="deleteEmoloyee" >מחיקת עובד
-            <IonIcon slot="end" :icon="trash" />
-          </IonButton> -->
+          <ion-item v-if="employee?.userType === 'driller'"> <p>{{'פרוייקט:'+' '+project?.name + ", " + project?.address}}</p></ion-item>
+          <ion-item v-if="employee?.userType === 'driller'"> <p>{{'מכונת קידוח:'+' '+ machine?.name}}</p></ion-item>
         </ion-card-content>
       </ion-card>
 

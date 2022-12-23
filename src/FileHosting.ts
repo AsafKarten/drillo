@@ -2,8 +2,8 @@ import * as Realm from "realm-web";
 import { readAndCompressImage } from 'browser-image-resizer';
 
 import * as pdfjsLib from 'pdfjs-dist';
-import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+// import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+// pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 const app = Realm.getApp("application-0-sliwo");
 
@@ -34,10 +34,12 @@ export const fileHosting = () => {
             const canvas = document.createElement("canvas");
             canvas.width = canvas.height = 256;
             const scale = Math.min(canvas.width / vp.width, canvas.height / vp.height);
-            return await page.render({canvasContext: canvas.getContext("2d")||"", viewport: page.getViewport({scale:scale})}).promise.then(()=>{return canvas});
+            // return await page.render({canvasContext: canvas.getContext("2d")||"", viewport: page.getViewport({scale:scale})}).promise.then(()=>{return canvas});
+            return ""
         }
-        const getPageThumbnail = async (doc:any, num:number) => (await makeThumbnail(await doc.getPage(num))).toDataURL();
-        return pdfjsLib.getDocument(file).promise.then( doc => getPageThumbnail(doc, 1) ).catch(console.error);
+        // const getPageThumbnail = async (doc:any, num:number) => (await makeThumbnail(await doc.getPage(num))).toDataURL();
+        // return pdfjsLib.getDocument(file).promise.then( doc => getPageThumbnail(doc, 1) ).catch(console.error);
+        return ""
     }
 
 

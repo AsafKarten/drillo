@@ -19,6 +19,9 @@
       <div>
         <h3>מכונות קידוח</h3>
         <IonItem :key="machine?._id" v-for="machine in project?.machines">
+          <ion-avatar slot="start">
+            <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
+          </ion-avatar>
             <p @click="goToMachine(machine)">{{machine?.name}}</p>
             <ion-button slot="end"  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
             <ion-button slot="end" @click="removeMachine(machine)">הסר</ion-button>
@@ -39,6 +42,9 @@
         <ion-content class="ion-padding">
           <div class="hebrewText">
             <ion-item :key="machine._id" v-for="machine in avilableDrillingMachines">
+              <ion-avatar slot="start">
+                <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
+              </ion-avatar>
               <p @click="goToMachine(machine)">{{machine?.name}} </p>
              
               <!-- <p v-show="machine?.crew">מנהל צוות: {{machine?.crew.manager.first}} {{machine?.crew.manager.last}}</p>
@@ -66,6 +72,9 @@
             <div class="hebrewText">
                 <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
                   <!-- <p>{{employee?._id}}</p> -->
+                  <ion-avatar slot="start">
+                    <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                  </ion-avatar>
                   <p>{{employee?.first}} {{employee?.last}}</p>
                   <ion-button slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
                   <ion-button slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
@@ -75,6 +84,9 @@
           <div class="hebrewText">
             <ion-item :key="employee?._id" v-for="employee in employees">
               <!-- <p>{{employee?._id}}</p> -->
+              <ion-avatar slot="start">
+                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              </ion-avatar>
               <p>{{employee?.first}} {{employee?.last}}</p>
               <ion-button slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
               <ion-button slot="end" @click="addDrillerToMachine(employee)">בחר</ion-button>
@@ -110,7 +122,7 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem, } from '@ionic/vue';
+  import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from "vue-router";
   import {useAppState} from '../realm-state';
@@ -136,6 +148,7 @@
       //IonInput,
       //IonLabel,
       IonItem,
+      IonAvatar,
       AppHeader
   },
     setup(){
