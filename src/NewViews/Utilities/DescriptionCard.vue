@@ -1,6 +1,6 @@
 <template>
     <div v-if="header||subtitle" class="card-container" :style="bgImage?'--bgImageUrl: url('+bgImage+');':''">
-        <ion-card class="card">
+        <ion-card color="dark" class="card">
             <ion-card-header>
               <ion-card-title>{{header}}</ion-card-title>
               <ion-card-subtitle>{{subtitle}}</ion-card-subtitle>
@@ -10,7 +10,7 @@
     </div>
 
     <div v-else class="card-container">
-        <ion-card class="card">
+        <ion-card color="dark" class="card">
             <ion-card-header class="center">
               <ion-card-title> <ion-skeleton-text :animated="true" style="width: 80px"></ion-skeleton-text> </ion-card-title>
               <ion-card-subtitle> <ion-skeleton-text :animated="true" style="width: 160px"></ion-skeleton-text> </ion-card-subtitle>

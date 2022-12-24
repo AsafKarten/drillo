@@ -3,7 +3,7 @@
             <div :key="machine._id" v-for="machine in machines">
                 <h3>{{machine.name +" "+ machine.licens_number}}</h3>
 
-                <ion-item :key="driller._id" v-for="driller in machine.drillers">
+                <ion-item color="dark" :key="driller._id" v-for="driller in machine.drillers">
                     <ion-avatar slot="start">
                       <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
                     </ion-avatar>

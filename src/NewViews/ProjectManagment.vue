@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" >
+    <ion-content color="dark" :fullscreen="true" >
 
       <AppHeader :str="'ניהול פרוייקט'"/>
       <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
@@ -49,9 +49,9 @@
      // const goTo = (route:any) => { router.push(route) }
       const buttons = reactive(
         [
-          {text:"רשימת עובדים",          icon: home,click: ()=>goTo('/workers-view/'+ project.value._id) },
+          {text:"רשימת עובדים",      icon: home,click: ()=>goTo('/workers-view/'+ project.value._id) },
           {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
-          {text:"הוספת מכונת קידוח ושינוי עובדים",  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
+          {text:" עריכת צוותי קידוח", icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
           {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
           {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
           {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },

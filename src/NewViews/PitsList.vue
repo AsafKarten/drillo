@@ -1,21 +1,21 @@
 <template>
     <ion-page>
-      <ion-content>
+      <ion-content color="dark">
         <AppHeader :str="'רשימת כלונסאות'"/>
      
   
-            <ion-accordion-group :multiple="true" :value="['Waiting', 'Done']">
+            <ion-accordion-group color="dark" :multiple="true" :value="['Waiting', 'Done']">
   
               <ion-accordion value="Waiting">
   
-                <ion-item slot="header">
+                <ion-item color="dark" slot="header">
                   <ion-label>לא הושלמו</ion-label>
                   <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status!='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
-                    {{ pit.p }}
+                  <ion-item color="dark" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
+                    {{ pit.p[0] === 'P'? pit.p : 'P'+' '+ pit.p}}
                     <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
                   </ion-item>
                 </div>
@@ -23,16 +23,16 @@
               </ion-accordion>
   
   
-              <ion-accordion value="Done">
+              <ion-accordion color="dark" value="Done">
   
-                <ion-item slot="header">
+                <ion-item color="dark" slot="header">
                   <ion-label>הסתיימו</ion-label>
                   <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status=='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
-                    {{ pit.p }}
+                  <ion-item color="dark" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
+                    {{ pit.p[0] === 'P'? pit.p : 'P'+' '+ pit.p}}
                     <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
                   </ion-item>
                 </div>
@@ -43,22 +43,22 @@
          
             <ion-modal :is-open="isOpen" >
               <ion-header>
-                <ion-toolbar>
+                <ion-toolbar color="dark">
                   <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
                   <ion-buttons slot="end">
                     <ion-button @click="modalManager('close')">Close</ion-button>
                   </ion-buttons>
                 </ion-toolbar>
               </ion-header>
-              <ion-content class="ion-padding">
+              <ion-content color="dark" class="ion-padding">
                 <div class="hebrewText">
                   <h5>{{currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
                   <p @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
 
-                  <ion-popover :is-open="popoverOpen" @didDismiss="popoverOpen = false">
-                    <ion-content class="ion-padding">
-                      <ion-item>
+                  <ion-popover  :is-open="popoverOpen" @didDismiss="popoverOpen = false">
+                    <ion-content color="dark" class="ion-padding">
+                      <ion-item color="dark">
                         <ion-label position="floating">שינוי עומק</ion-label>
                         <ion-input
                           v-model="tempDepth"
@@ -71,8 +71,8 @@
 
                   <p @click="openPopover('Diameter')" >קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
                   <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
-                    <ion-content class="ion-padding">
-                      <ion-item>
+                    <ion-content color="dark" class="ion-padding">
+                      <ion-item color="dark">
                         <ion-label position="floating">שינוי קוטר</ion-label>
                         <ion-input
                           v-model="tempDiameter"
@@ -112,14 +112,14 @@
             
             <ion-modal :is-open="isOpenNotes">
               <ion-header>
-                <ion-toolbar>
+                <ion-toolbar color="dark">
                   <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
                   <ion-buttons slot="end">
                     <ion-button @click="modalManagerNotes">Close</ion-button>
                   </ion-buttons>
                 </ion-toolbar>
               </ion-header>
-              <ion-content class="ion-padding">
+              <ion-content color="dark" class="ion-padding">
                 <div class="grid-container">
                   <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים
                     <IonIcon slot="start" :icon="flashOutline" />
@@ -138,8 +138,8 @@
             <!--note depth modal-->
             <ion-modal :is-open="isOpenDepth" >
            
-              <ion-content class="ion-padding">
-                <ion-item>
+              <ion-content color="dark" class="ion-padding">
+                <ion-item color="dark">
                   <ion-label position="floating">עומק</ion-label>
                   <ion-input
                     v-model="noteDepth"

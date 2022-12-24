@@ -2,7 +2,7 @@
   <ion-page>
     <AppHeader :showButtons="true"/>
     
-    <ion-content :fullscreen="true" >
+    <ion-content color="dark" :fullscreen="true" >
  
       <h1> פרטי מכונת קידוח {{ machine?.name }} </h1>
      
@@ -18,7 +18,7 @@
       
       <!--new drilling team list-->
       <div class="hebrewText">
-        <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in machine?.drillers">
+        <ion-item color="dark" v-show="employee?._id" :key="employee?._id" v-for="employee in machine?.drillers">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
           </ion-avatar>
@@ -26,7 +26,7 @@
             {{employee.first +" "+ employee.last}} 
        </ion-label>
           <ion-button slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
-          <ion-button slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
+          <ion-button color="danger" slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
           </ion-item>      
       </div>
 
@@ -35,16 +35,16 @@
              <!--change driller in machine modal-->
              <ion-modal :is-open="isOpenDriller">
               <ion-header>
-                <ion-toolbar>
+                <ion-toolbar color="dark">
                   <ion-title>עריכת צוות קודחים</ion-title>
                   <ion-buttons slot="end">
-                    <ion-button @click="changeDrillerModalManager()">Close</ion-button>
+                    <ion-button @click="changeDrillerModalManager()">סגירה</ion-button>
                   </ion-buttons>
                 </ion-toolbar>
               </ion-header>
-              <ion-content class="ion-padding">
+              <ion-content color="dark" class="ion-padding">
                 <div class="hebrewText">
-                  <ion-item :key="employee?._id" v-for="employee in employees">
+                  <ion-item color="dark" :key="employee?._id" v-for="employee in employees">
                     <!-- <p>{{employee?._id}}</p> -->
                     <p>{{employee?.first}} {{employee?.last}}</p>
                     <ion-button slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>

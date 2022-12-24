@@ -1,7 +1,7 @@
 <template>
-    <ion-page>
-      <ion-content  :fullscreen="true" >
-            <AppHeader :str="'ניהול מכונת קידוח'"/>
+    <ion-page> 
+      <AppHeader :str="'ניהול מכונת קידוח'"/>
+      <ion-content color="dark"   :fullscreen="true" >
             <DescriptionCard :header="machine?.name" :subtitle="machine?.licens_number"/>
             <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
       </ion-content>

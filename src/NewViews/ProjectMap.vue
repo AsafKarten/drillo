@@ -2,7 +2,7 @@
     <ion-page>
       <AppHeader :str="'מפת אתר קידוח'"/>
       
-      <ion-content :fullscreen="true" :scroll-y="false" >
+      <ion-content color="dark" :fullscreen="true" :scroll-y="false" >
     
     
   
@@ -18,14 +18,14 @@
         <!--Show pit modal-->
           <ion-modal :is-open="isOpen">
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color="dark">
             <ion-title>בור קידוח מספר {{currentPit.p}}</ion-title>
             <ion-buttons slot="end">
               <ion-button @click="modalManager">Close</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
+        <ion-content color="dark" class="ion-padding">
           <div class="hebrewText">
             <h5>{{currentPit?.p}}</h5>
             <h6>נתוני קידוח</h6>

@@ -2,7 +2,7 @@
     <ion-page>
        <AppHeader :showButtons="true"/>
       
-      <ion-content :fullscreen="true" >
+      <ion-content color="dark" :fullscreen="true" >
   
     
       <!-- <div class="splitScreen">
@@ -18,13 +18,13 @@
   
       <div>
         <h3>מכונות קידוח</h3>
-        <IonItem :key="machine?._id" v-for="machine in project?.machines">
+        <IonItem color="dark" :key="machine?._id" v-for="machine in project?.machines">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
           </ion-avatar>
             <p @click="goToMachine(machine)">{{machine?.name}}</p>
-            <ion-button slot="end"  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
-            <ion-button slot="end" @click="removeMachine(machine)">הסר</ion-button>
+            <ion-button slot="end"  @click="changeDrillerModalManager(machine)">עריכת צוות</ion-button>
+            <ion-button slot="end" color="danger" @click="removeMachine(machine)">הסר</ion-button>
         </IonItem>
       </div>
   
@@ -32,16 +32,16 @@
       <!--Add machine to project modal-->
       <ion-modal :is-open="isOpenMachine">
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color="dark">
             <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="machinesModalManager">Close</ion-button>
+              <ion-button @click="machinesModalManager">סגירה</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
+        <ion-content color="dark" class="ion-padding">
           <div class="hebrewText">
-            <ion-item :key="machine._id" v-for="machine in avilableDrillingMachines">
+            <ion-item color="dark" :key="machine._id" v-for="machine in avilableDrillingMachines">
               <ion-avatar slot="start">
                 <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
               </ion-avatar>
@@ -50,7 +50,7 @@
               <!-- <p v-show="machine?.crew">מנהל צוות: {{machine?.crew.manager.first}} {{machine?.crew.manager.last}}</p>
               <p v-show="machine?.crew"> מפעיל: {{machine?.crew.operaitor.first}} {{machine?.crew.operaitor.last}}</p> -->
               <ion-button slot="end"  @click="addMachine(machine)">בחירת מכונה</ion-button>
-              <ion-button slot="end"  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
+              <ion-button slot="end"  @click="changeDrillerModalManager(machine)">עריכת צוות</ion-button>
               </ion-item>     
           </div>
           
@@ -60,29 +60,29 @@
        <!--change driller in machine modal-->
        <ion-modal :is-open="isOpenDriller">
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color="dark">
             <ion-title>עריכת צוות קודחים</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="changeDrillerModalManager(null)">Close</ion-button>
+              <ion-button @click="changeDrillerModalManager(null)">סגירה</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
+        <ion-content color="dark" class="ion-padding">
 
             <div class="hebrewText">
-                <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
+                <ion-item color="dark" v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
                   <!-- <p>{{employee?._id}}</p> -->
                   <ion-avatar slot="start">
                     <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
                   </ion-avatar>
                   <p>{{employee?.first}} {{employee?.last}}</p>
                   <ion-button slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-                  <ion-button slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
+                  <ion-button slot="end" color="danger" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
                   </ion-item>      
               </div>
 
           <div class="hebrewText">
-            <ion-item :key="employee?._id" v-for="employee in employees">
+            <ion-item color="dark" :key="employee?._id" v-for="employee in employees">
               <!-- <p>{{employee?._id}}</p> -->
               <ion-avatar slot="start">
                 <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -99,18 +99,18 @@
          <!--view driller-->
          <ion-modal :is-open="isOpenEmp">
           <ion-header>
-            <ion-toolbar>
+            <ion-toolbar color="dark">
               <ion-title>{{current_employee?.first}} {{current_employee?.last}}</ion-title>
               <ion-buttons slot="end">
                 <ion-button @click="viewEmployeeModalManager(null)">Close</ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-          <ion-content class="ion-padding">
+          <ion-content color="dark" class="ion-padding">
             <div class="hebrewText">
               <h3>{{'שם:' + " " +  current_employee?.first + " " + current_employee?.last}}</h3>
-              <h3>{{'פרוייקט נוכחי:'+ " " + employee_project?.name + " " + employee_project?.address}}</h3>
-              <h3>{{'מכונת קידוח:' + " " + employee_machine?.name + " " + employee_machine?.licens_number}}</h3>
+              <h3 v-show="employee_project">{{'פרוייקט נוכחי:'+ " " + employee_project?.name + " " + employee_project?.address}}</h3>
+              <h3 v-show="employee_machine">{{'מכונת קידוח:' + " " + employee_machine?.name + " " + employee_machine?.licens_number}}</h3>
                  <ion-button slot="end" @click="addDrillerToMachine(current_employee)">בחר</ion-button>
             </div>
                
@@ -438,5 +438,25 @@
     font-family: monospace;
     font-size: 150%;
     letter-spacing: 1px;
+  }
+
+  ion-button {
+    --background: #4DBA87;
+    --background-hover: #9ce0be;
+    --background-activated: #88f4be;
+    --background-focused: #88f4be;
+    
+  
+    --color: #fff;
+  
+ 
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  
   }
   </style>

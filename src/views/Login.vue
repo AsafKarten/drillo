@@ -1,39 +1,41 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <!-- <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>התחברות</ion-title>
       </ion-toolbar>
-    </ion-header>
+    </ion-header> -->
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">התחברות</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
+    <ion-content color="dark" :fullscreen="true">
+     
+      
       <div id="container">
-        <ion-item>
+        <h1 id="title" >Drillo</h1>
+        <h3>{{'מערכת לניהול קידוחים'}}</h3>
+        <ion-item color="dark">
           <ion-label position="floating">Email</ion-label>
           <ion-input
+            
             v-model="email"
             type="email"
             autocomplete="email"
+            placeholder="Email"
           ></ion-input>
-        </ion-item>
-        <ion-item>
+        </ion-item >
+        <ion-item color="dark" >
           <ion-label position="floating">Password</ion-label>
           <ion-input
+            
             v-model="password"
             type="password"
             autocomplete="new-password"
+            placeholder="Password"
           ></ion-input>
         </ion-item>
 
         <div style="padding-top: 6px">
-          <ion-button @click="loginEmailPassword" expand="full"
-            >Login
+          <ion-button shape="round"  @click="loginEmailPassword" expand="full"
+            >{{'התחברות' }}
           </ion-button>
         </div>
         <!-- <div style="padding-top: 6px">
@@ -67,10 +69,10 @@ export default defineComponent({
   name: "LoginPage",
   components: {
     IonContent,
-    IonHeader,
+    //IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
+    //IonTitle,
+    //IonToolbar,
     IonInput,
     IonLabel,
     IonItem,
@@ -110,14 +112,22 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
+#title{
+  color: #4DBA87;
+  font-size: 60px;
+  font-weight: bolder;
+}
 
+#container {
+  border: #4DBA87 2px solid;
+  border-radius: 10px;
+  text-align: center;
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 4%;
+  right: 4%;
   top: 50%;
   transform: translateY(-50%);
+  padding: 2%;
 }
 
 #container strong {
@@ -136,5 +146,27 @@ export default defineComponent({
 
 #container a {
   text-decoration: none;
+}
+ion-button {
+  --background: #4DBA87;
+  --background-hover: #9ce0be;
+  --background-activated: #88f4be;
+  --background-focused: #88f4be;
+  
+
+  --color: #fff;
+
+  --border-radius: 10px;
+  --border-color: #4DBA87;
+  --border-style: solid;
+  --border-width: 2px;
+
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+  --ripple-color: deeppink;
+
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+
 }
 </style>

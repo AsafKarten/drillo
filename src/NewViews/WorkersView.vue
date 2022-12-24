@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content  :fullscreen="true" >
+    <ion-content color="dark"  :fullscreen="true" >
       <AppHeader :str="'רשימת עובדים'"/>
       <MachinesDrillersList v-if="project" :projectProps="project"/>
     </ion-content>

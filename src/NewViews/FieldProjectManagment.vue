@@ -1,8 +1,9 @@
 <template>
     <ion-page>
-      <ion-content :fullscreen="true" >
+      <AppHeader :str="'ניהול פרוייקט שטח'"/>
+      <ion-content color="dark"  :fullscreen="true" >
 
-        <AppHeader :str="'ניהול פרוייקט שטח'"/>
+        
         <DescriptionCard :header="project?.name" :subtitle="project?.address" :text="machine?.name"/>
         <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 

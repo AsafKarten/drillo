@@ -2,29 +2,31 @@
     <ion-page>
       <AppHeader :str="'דוחות עבודה'"/>
       
-      <ion-content :fullscreen="true" >
-    
+      <ion-content color="dark" :fullscreen="true" >
+    <div class="homeContainer">
      
         <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
        <!-- <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>-->
   
-         <ion-card :key="repo.date" v-for="repo in reports">
+         <ion-card color="dark" :key="repo.date" v-for="repo in reports">
       <ion-card-header>
         <ion-card-subtitle>{{ "תאריך" + ":"+ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-subtitle>
         <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
       </ion-card-header>
   
       <ion-card-content>
-         <ion-item :key="pit._id" v-for="pit in repo.pits">
+         <ion-item color="dark" :key="pit._id" v-for="pit in repo.pits">
           
-          <p class="textMargin">{{pit.p}}</p>
+          <!-- <p class="textMargin">{{' ' + pit.p + ' '+}}</p> -->
           
-          <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p>
+          <!-- <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p> -->
+
+          <p class="textMargin">{{pit.p + '-בוצע, ' + ' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
           </ion-item>
 
       </ion-card-content>
-      <ion-item v-show="repo.signature" >
+      <ion-item color="dark" v-show="repo.signature" >
         <p class="textMargin">{{"שם החותם:"}}</p>
         <p class="textMargin">{{repo.signatureName}}</p>
         <ion-thumbnail slot="end"> 
@@ -37,7 +39,7 @@
       <ion-button @click="goTo('/daily-report/'+repo._id)">מעבר לדו"ח יומי</ion-button>
     </ion-card>
   
-    
+    </div>
       </ion-content>
     </ion-page>
   </template>
@@ -148,12 +150,40 @@
   </script>
   
   <style scoped>
+  .homeContainer{
+    display: block;
+    background-color: black;
+    padding-top: 2%;
+    padding-bottom: 2%;
+  }
   .textMargin{
     margin-left: 1%;
     
   }
   .sig {
     width: 20%;
+  }
+  ion-button {
+    --background: #4DBA87;
+    --background-hover: #9ce0be;
+    --background-activated: #88f4be;
+    --background-focused: #88f4be;
+    
+  
+    --color: #fff;
+  
+    --border-radius: 10px;
+    --border-color: #4DBA87;
+    --border-style: solid;
+    --border-width: 2px;
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  
   }
   
   </style>

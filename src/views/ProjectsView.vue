@@ -2,13 +2,13 @@
   <ion-page>
     <AppHeader :showButtons="true"/>
     
-    <ion-content :fullscreen="true" >
+    <ion-content color="dark" :fullscreen="true" >
     <div class="mainContainer">
       <h1>הפרוייקטים שלי</h1>
         <div>
-          <ion-item :key="project._id" v-for="project in projects">
+          <ion-item color="dark" :key="project._id" v-for="project in projects">
           <p>{{project.name + ", " + project.address }}</p>
-          <ion-button @click="goToProject(project)">צפייה בפרוייקט</ion-button>
+          <ion-button shape="round" @click="goToProject(project)">צפייה בפרוייקט</ion-button>
           </ion-item>
           
         </div>
@@ -77,6 +77,28 @@ export default defineComponent({
   display: block;
   direction: rtl;
   
+}
+ion-button {
+  --background: #4DBA87;
+  --background-hover: #9ce0be;
+  --background-activated: #88f4be;
+  --background-focused: #88f4be;
+  
+
+  --color: #fff;
+
+  --border-radius: 10px;
+  --border-color: #4DBA87;
+  --border-style: solid;
+  --border-width: 2px;
+
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+  --ripple-color: deeppink;
+
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+
 }
 
 </style>

@@ -1,10 +1,11 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
     <AppHeader :str="'יצירת מכונת קידוח'"/>
+    <ion-content color="dark" :fullscreen="true">
+    
 
       <div id="container">
-     <ion-item>
+     <ion-item color="dark">
           <ion-label position="floating">שם המכונה</ion-label>
        <ion-input v-model="machineName" type="text" autocomplete="off"></ion-input>
        </ion-item>
@@ -12,7 +13,7 @@
            <ion-label position="floating">סוג מכונה</ion-label>
        <ion-input v-model="machineType" type="text" autocomplete="new-last"></ion-input>
        </ion-item> -->
-       <ion-item>
+       <ion-item color="dark">
         <ion-label position="floating">מספר רישוי</ion-label>
        <ion-input v-model="licensNumber" type="text" autocomplete="off"></ion-input>
        </ion-item>
@@ -22,10 +23,10 @@
 
        
         <div style="padding-top: 6px">
-            <ion-button @click="createMachine" expand="full">צור מכונה</ion-button>
+            <ion-button shape="round" @click="createMachine" expand="full">צור מכונה</ion-button>
         </div>
            <div style="padding-top: 6px">
-            <ion-button @click="$router.back()" expand="full">Cancel </ion-button>
+            <ion-button  shape="round" color="danger" @click="$router.back()" expand="full">ביטול </ion-button>
         </div>
        
       </div>
@@ -134,5 +135,27 @@ import AppHeader from '@/Components/AppHeader.vue';
 
   #container a {
     text-decoration: none;
+  }
+
+  ion-button {
+    --background: #4DBA87;
+    --background-hover: #9ce0be;
+    --background-activated: #88f4be;
+    --background-focused: #88f4be;
+    
+  
+    --color: #fff;
+  
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  
+  }
+  ion-spinner {
+    --color: #54dc98;
   }
 </style>

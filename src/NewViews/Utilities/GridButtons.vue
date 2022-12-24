@@ -81,6 +81,8 @@
     flex-direction: column;
     align-items: center;
 
+    
+
     --ion-margin: 6px;
     font-weight: bold;
   }
@@ -91,4 +93,27 @@
     right: -10px;
     top: 5px;
   }
+  ion-button {
+    
+  
+    --background-hover: #9ce0be;
+    --background-activated: #88f4be;
+    --background-focused: #88f4be;
+  
+    --color: #4DBA87;
+  
+    --border-radius: 10px;
+    --border-color: #4DBA87;
+    --border-style: solid;
+    --border-width: 2px;
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  
+  }
+  
 </style>

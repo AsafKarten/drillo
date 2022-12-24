@@ -1,7 +1,7 @@
 <template>
-  <ion-header :translucent="true">
+  <ion-header  :translucent="true">
     <ion-toolbar color="dark">
-      <ion-buttons slot="start">
+      <ion-buttons  slot="start">
         <ion-back-button text="" default-href="/" @click="$router.back()"> </ion-back-button> 
       </ion-buttons> 
       <ion-buttons class="home" slot="start">
@@ -14,7 +14,7 @@
       </ion-buttons>
     </ion-toolbar>
 
-    <ion-toolbar>
+    <ion-toolbar color="dark">
       <div v-if="currentUser" class="header">
          
           <p class="headerText">{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>

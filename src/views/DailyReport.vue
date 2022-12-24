@@ -2,23 +2,24 @@
   <ion-page>
     <AppHeader :str="'דוח עבודה יומי'"/>
     
-    <ion-content :fullscreen="true" >
-  
+    <ion-content color="dark" :fullscreen="true" >
+      <div class="homeContainer">
    <create-pdf :report="report" :signature="false"/>
       <h5>פרוייקט: {{report?.project_name + " " + report?.project_address}}</h5>
 
-       <ion-card >
+       <ion-card color="dark" >
     <ion-card-header>
       <ion-card-subtitle>{{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-subtitle>
       <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-       <div :key="pit._id" v-for="pit in pits">
+       <div class="pitBorder" :key="pit._id" v-for="pit in pits">
         <p class="textMargin">{{"כלונס מספר: " + pit.p  }}</p>
         
         <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
-        <ion-item :key="n.depth" v-for="n in pit.notes">
+        <p class="textMargin">{{' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
+        <ion-item color="dark" :key="n.depth" v-for="n in pit.notes">
           
           <p class="textMargin">{{n.note}}</p>
           
@@ -28,7 +29,7 @@
         <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
         <span v-else>אושר</span> -->
     </ion-card-content>
-    <ion-item v-show="report?.signature" >
+    <ion-item color="dark" v-show="report?.signature" >
       <p class="textMargin">{{"שם החותם:"}}</p>
       <p class="textMargin">{{report?.signatureName}}</p>
       <ion-thumbnail slot="end"> 
@@ -38,10 +39,10 @@
   </ion-card>
 
     <div style="padding-top: 6px">
-        <ion-button @click="$router.push('/sign-daily-report/' + $route.params.id)" expand="full">לחתימה על הדו"ח</ion-button>
-        <ion-button @click="shareReport" expand="full">שיתוף קישור לחתימה</ion-button>
+        <ion-button shape="round" @click="$router.push('/sign-daily-report/' + $route.params.id)" expand="full">לחתימה על הדו"ח</ion-button>
+        <ion-button shape="round" @click="shareReport" expand="full">שיתוף קישור לחתימה</ion-button>
     </div>
-
+</div>
     </ion-content>
   </ion-page>
 </template>
@@ -171,8 +172,41 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.homeContainer{
+  display: block;
+  background-color: black;
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
 .textMargin{
   margin-left: 1%;
+}
+.pitBorder{
+  border-bottom: 1px black solid;
+  margin-bottom: 2%;
+}
+
+ion-button {
+  --background: #4DBA87;
+  --background-hover: #9ce0be;
+  --background-activated: #88f4be;
+  --background-focused: #88f4be;
+  
+
+  --color: #fff;
+
+  --border-radius: 10px;
+  --border-color: #4DBA87;
+  --border-style: solid;
+  --border-width: 2px;
+
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+  --ripple-color: deeppink;
+
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+
 }
 
 </style>

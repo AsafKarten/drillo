@@ -12,10 +12,12 @@
         </ion-card-header>
     
         <ion-card-content>
-           <div :key="pit._id" v-for="pit in pits">
+           <div class="pitBorder" :key="pit._id" v-for="pit in pits">
             <p class="textMargin">{{"כלונס מספר: " + pit.p  }}</p>
             
             <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
+
+            <p class="textMargin">{{' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
             <ion-item :key="n.depth" v-for="n in pit.notes">
               
               <p class="textMargin">{{n.note}}</p>
@@ -184,6 +186,10 @@ export default defineComponent({
 }
 .drilloCard{
   text-align: center;
+}
+.pitBorder{
+  border-bottom: 1px black solid;
+  margin-bottom: 2%;
 }
 
 </style>

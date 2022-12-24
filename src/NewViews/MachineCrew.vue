@@ -1,8 +1,8 @@
 <template>
     <ion-page>
-      <ion-content  :fullscreen="true" >
+      <ion-content color="dark"  :fullscreen="true" >
             <AppHeader :str="'צוות מכונת קידוח' +' '+ machine?.name"/>
-           <ion-item :key="driller._id" v-for="driller in machine?.drillers">
+           <ion-item color="dark" :key="driller._id" v-for="driller in machine?.drillers">
             <ion-avatar slot="start">
               <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
             </ion-avatar>

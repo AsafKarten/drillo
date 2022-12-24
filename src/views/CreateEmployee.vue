@@ -1,29 +1,29 @@
 <template>
   <ion-page>
-    
-    <ion-content :fullscreen="true">
+    <AppHeader :str="'יצירת עובד חדש'"/>
+    <ion-content color="dark" :fullscreen="true">
     
       <div id="container"> 
-        <h3>יצירת עובד חדש</h3>
        
-     <ion-item>
+       
+     <ion-item  color="dark" >
           <ion-label position="floating">שם פרטי</ion-label>
        <ion-input v-model="first" type="text" autocomplete="new-first"></ion-input>
        </ion-item>
-       <ion-item>
+       <ion-item  color="dark" >
            <ion-label position="floating">שם משפחה</ion-label>
        <ion-input v-model="last" type="text" autocomplete="new-last"></ion-input>
        </ion-item>
-       <ion-item>
+       <ion-item  color="dark" >
         <ion-label position="floating">כתובת מייל</ion-label>
        <ion-input v-model="email" type="text" autocomplete="new-email"></ion-input>
        </ion-item>
-        <ion-item>
+        <ion-item color="dark" >
         <ion-label position="floating">סיסמה</ion-label>
        <ion-input v-model="password" type="text" autocomplete="new-password"></ion-input>
        </ion-item>
-       <ion-item>
-             <ion-select :compareWith="employeeTypes"
+       <ion-item color="dark" >
+             <ion-select  color="dark"  :compareWith="employeeTypes"
         @ionChange="employeeType = $event.detail.value" placeholder="סוג עובד">
         <ion-select-option value="driller">קודח</ion-select-option>
         <ion-select-option value="manager">מנהל מערכת</ion-select-option>
@@ -32,10 +32,10 @@
        </ion-item>
        
         <div style="padding-top: 6px">
-            <ion-button @click="createEmployeeAccountEmailPassword" expand="full">צור עובד</ion-button>
+            <ion-button shape="round" @click="createEmployeeAccountEmailPassword" expand="full">צור עובד</ion-button>
         </div>
            <div style="padding-top: 6px">
-            <ion-button @click="$router.back()" expand="full">Cancel </ion-button>
+            <ion-button shape="round" color="danger" @click="$router.back()" expand="full">ביטול </ion-button>
         </div>
        
       </div>
@@ -44,15 +44,17 @@
 
       <ion-modal :is-open="isOpen">
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color="dark">
             <ion-title>{{'יוצר עובד חדש אנא המתן'}}</ion-title>
           </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding">
+        <ion-content color="dark" class="ion-padding">
+          <div class="center">
           <p>
           {{'יוצר עובד חדש אנא המתן'}}
           </p>
           <ion-spinner name="circular"></ion-spinner>
+        </div>
         </ion-content>
       </ion-modal>
     </ion-content>
@@ -66,6 +68,8 @@
   import { useRouter } from 'vue-router';
 
   import { useAppState } from '@/realm-state';
+
+  import AppHeader from '../Components/AppHeader.vue'
   export default defineComponent({
     name: 'CreateEmployee',
     components: {
@@ -82,6 +86,7 @@
       IonToolbar,
       IonTitle,
       IonSpinner,
+      AppHeader,
      
      
     },
@@ -173,5 +178,30 @@
 
   #container a {
     text-decoration: none;
+  }
+  .center{
+    text-align: center;
+  }
+
+  ion-button {
+    --background: #4DBA87;
+    --background-hover: #9ce0be;
+    --background-activated: #88f4be;
+    --background-focused: #88f4be;
+    
+  
+    --color: #fff;
+  
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+  
+  }
+  ion-spinner {
+    --color: #54dc98;
   }
 </style>

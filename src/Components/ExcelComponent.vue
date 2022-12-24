@@ -2,85 +2,85 @@
   <ion-page>
      <AppHeader :showButtons="true"/>
     
-    <ion-content :fullscreen="true" >
+    <ion-content color="dark"  :fullscreen="true" >
 
   
     <!-- <div class="splitScreen">
       <div class="screenTop"> -->
 
 
-    <h1>יצירת פרוייקט חדש</h1>
-     <ion-item>
+    <h1 id="title">יצירת פרוייקט חדש</h1>
+    <div class="container">
+      <h1 id="title">פרטים</h1>
+     <ion-item color="dark" >
           <ion-label position="floating">שם הפרוייקט</ion-label>
           <ion-input
             v-model="projectName"
             type="text"
           ></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item color="dark" >
           <ion-label position="floating">כתובת</ion-label>
           <ion-input
             v-model="projectAddress"
             type="text"
           ></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item color="dark" >
         <ion-label position="floating">שם המזמין</ion-label>
         <ion-input
           v-model="projectClient"
           type="text"
         ></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item color="dark" >
       <ion-label position="floating">שם איש קשר/מנהל עבודה</ion-label>
       <ion-input
         v-model="projectContactPerson"
         type="text"
       ></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item color="dark" >
     <ion-label position="floating">טלפון איש קשר</ion-label>
     <ion-input
       v-model="contactPersonPhone"
-      type="text"
+      type="tel"
     ></ion-input>
 </ion-item>
-<ion-item>
+<ion-item color="dark" >
   <ion-label position="floating">מייל איש קשר</ion-label>
   <ion-input
     v-model="contactPersonMail"
     type="text"
   ></ion-input>
 </ion-item>
-    <div>
+</div>
+<div class="container">
+  <h1 id="title">הוספת כלונסים</h1>
+  <p> מספר כלונסים:{{projectPits?.length}}</p>
+<div class="containerPits">
+
+    <div >
       <p>קובץ כלונסים</p>
       <input
         type="file"
         v-on:change="addfile($event)"
-        placeholder="Upload file"
         accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       />
     </div>
-    <div>
-      <p> מספר כלונסים:{{projectPits?.length}}</p>
+      
+    <div> 
+      <ion-button @click="columnsModalManager">הוספת כלונסים ידנית </ion-button>
+      
     </div>
-    <ion-button @click="columnsModalManager">הוספת כלונסים ללא קובץ</ion-button>
-    
-    <!-- <ion-button @click="machinesModalManager">הוספת מכונת קידוח</ion-button> -->
-        
+
+   
+    </div>
+  </div>
+  <div class="center">
     <ion-button @click="saveProject">{{'שמירת פרוייקט ומעבר להוספת מכונת קידוח'}}</ion-button>
-
-    <!-- <div>
-      <h3>מכונות קידוח</h3>
-      <IonItem :key="machine._id" v-for="machine in projectMachines">
-          <p>{{machine.name}}</p>
-          <ion-button @click="removeMachine(machine)">הסר</ion-button>
-      </IonItem>
-    </div> -->
-
-      <!-- </div> -->
-      <!-- <div class="screenBottom"> -->
-
+  </div>
+    
 
      <MapBox v-show="showMap" id="map" 
       :pitsToShow="pitsToShow" 
@@ -93,16 +93,16 @@
 
 
 
-       <ion-modal :is-open="isOpen">
+       <ion-modal  :is-open="isOpen">
       <ion-header>
-        <ion-toolbar>
+        <ion-toolbar color="dark">
           <ion-title>בור קידוח מספר {{currentPit.p}}</ion-title>
           <ion-buttons slot="end">
-            <ion-button @click="modalManager">Close</ion-button>
+            <ion-button @click="modalManager">סגירה</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding">
+      <ion-content color="dark" class="ion-padding">
         <div class="hebrewText">
           <h5>{{currentPit?.p}}</h5>
           <h6>נתוני קידוח</h6>
@@ -124,99 +124,33 @@
       </ion-content>
     </ion-modal>
 
-    <!--Add machine to project modal-->
-    <ion-modal :is-open="isOpenMachine">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="machinesModalManager">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div class="hebrewText">
-          <ion-item :key="machine._id" v-for="machine in drillingMachines">
-            <p>{{machine?.name + ": "}} </p>
-            <p> {{ machine?.type}}</p>
-            <!-- <p v-show="machine?.crew">מנהל צוות: {{machine?.crew.manager.first}} {{machine?.crew.manager.last}}</p>
-            <p v-show="machine?.crew"> מפעיל: {{machine?.crew.operaitor.first}} {{machine?.crew.operaitor.last}}</p> -->
-            <ion-button  @click="addMachine(machine)">בחירת מכונה</ion-button>
-            <ion-button  @click="changeDrillerModalManager(machine)">החלפת קודח</ion-button>
-            </ion-item>     
-        </div>
-        
-      </ion-content>
-    </ion-modal>
-
-     <!--change driller in machine modal-->
-     <ion-modal :is-open="isOpenDriller">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
-          <ion-buttons slot="end">
-            <ion-button @click="changeDrillerModalManager(null)">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div class="hebrewText">
-          <ion-item :key="employee._id" v-for="employee in employees">
-            <p>{{employee._id}}</p>
-            <p>{{employee.first}} {{employee.last}}</p>
-            <ion-button @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-            <ion-button @click="addDrillerToMachine(employee)">בחר</ion-button>
-            </ion-item>      
-        </div>
-        
-      </ion-content>
-    </ion-modal>
-
-       <!--view driller-->
-       <ion-modal :is-open="isOpenEmp">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>{{current_employee?.first}} {{current_employee?.last}}</ion-title>
-            <ion-buttons slot="end">
-              <ion-button @click="viewEmployeeModalManager(null)">Close</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="ion-padding">
-          <div class="hebrewText">
-            <p>שם: {{current_employee?.first}} {{current_employee?.last}}</p>
-          </div>
-          
-        </ion-content>
-      </ion-modal>
-
          <!--add columns manualy modal-->
          <ion-modal :is-open="isOpeColumn">
           <ion-header>
-            <ion-toolbar>
+            <ion-toolbar color="dark">
               <ion-title>הוספת כלונסים ידנית</ion-title>
               <ion-buttons slot="end">
-                <ion-button @click="columnsModalManager">Close</ion-button>
+                <ion-button @click="columnsModalManager">סגירה</ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-          <ion-content class="ion-padding">
+          <ion-content color="dark" class="ion-padding">
             <div class="hebrewText">
-              <ion-item>
+              <ion-item color="dark">
                 <ion-label position="floating">כלונס התחלה</ion-label>
                 <ion-input
                   v-model="columnStart"
                   type="number"
                 ></ion-input>
             </ion-item>
-            <ion-item>
+            <ion-item color="dark">
               <ion-label position="floating">כלונס סיום</ion-label>
               <ion-input
                 v-model="columnEnd"
                 type="number"
               ></ion-input>
             </ion-item>
-            <ion-button @click="createColumnsManually()">צור</ion-button>
+            <ion-button @click="createColumnsManually()">אישור</ion-button>
             </div>
             
           </ion-content>
@@ -514,7 +448,31 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#title{
+  text-align: center;
+  color: #4DBA87;
+  font-size: 30px;
+  font-weight: bolder;
+}
+.container {
+  border: #4DBA87 2px solid;
+  border-radius: 10px;
+  text-align: center;
+  padding: 2%;
+  margin: 2%;
+}
+.containerPits{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+ 
+}
+.center{
+  text-align: center;
+padding-bottom: 2%;
 
+}
 .hebrewText{
   direction: rtl;
   line-height: 80%;
@@ -545,5 +503,28 @@ h5,h6{
   font-family: monospace;
   font-size: 150%;
   letter-spacing: 1px;
+}
+
+ion-button {
+  --background: #4DBA87;
+  --background-hover: #9ce0be;
+  --background-activated: #88f4be;
+  --background-focused: #88f4be;
+  
+
+  --color: #fff;
+
+  --border-radius: 10px;
+  --border-color: #4DBA87;
+  --border-style: solid;
+  --border-width: 2px;
+
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+
+  --ripple-color: deeppink;
+
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+
 }
 </style>
