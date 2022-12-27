@@ -17,7 +17,7 @@
     <ion-toolbar color="dark">
       <div v-if="currentUser" class="header">
          
-          <p class="headerText">{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+          <p>{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
         
 
           
@@ -120,16 +120,12 @@ export default defineComponent({
 
 <style scoped>
 .header{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
+ 
   font-size: 16px;
+  text-align: center;
  
 }
-.headerText {
-  padding-left: 2%;
-}
+
 .headerButtons{
   margin-top: 1%;
   margin-left: 2px;

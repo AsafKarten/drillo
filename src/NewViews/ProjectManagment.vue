@@ -3,7 +3,7 @@
     <ion-content color="dark" :fullscreen="true" >
 
       <AppHeader :str="'ניהול פרוייקט'"/>
-      <DescriptionCard :header="project?.name" :subtitle="project?.address"/>
+      <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address"/> -->
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 
       <!-- <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/> -->
@@ -24,7 +24,8 @@
   
   import FileUpload from './Utilities/FileUpload.vue'
   
-  import { home } from 'ionicons/icons';
+  import { home ,receiptOutline, constructOutline, peopleOutline, personAddOutline} from 'ionicons/icons';
+
   
   export default defineComponent({
     name: 'ProjectManagment',
@@ -33,7 +34,7 @@
     IonPage,
     GridButtons,
     AppHeader,
-    DescriptionCard,
+    //DescriptionCard,
 
     //FileUpload
 },
@@ -46,22 +47,22 @@
       const project = ref<any>();
 
 
-     // const goTo = (route:any) => { router.push(route) }
+    
       const buttons = reactive(
         [
-          {text:"רשימת עובדים",      icon: home,click: ()=>goTo('/workers-view/'+ project.value._id) },
-          {text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
-          {text:" עריכת צוותי קידוח", icon: home,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
-          {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
-          {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
-          {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
+          {text:"צוות קידוח",      icon: peopleOutline,click: ()=>goTo('/workers-view/'+ project.value._id) },
+          //{text:"מכונות קידוח",          icon: home, click: ()=>goTo('/project-machines/'+ project.value._id) },
+          {text:" עריכת צוות קידוח", icon: personAddOutline,  click: ()=>goTo('/add-machine-project/'+ project.value._id) },
+          {text:"דוחות עבודה",           icon: receiptOutline, click: ()=>goTo('/project-reports/'+ project.value._id) },
+          //{text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
+          {text:"בורות קידוח",      icon: constructOutline, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
           
           // {text:"הוספת עובד",            icon: home,click: ()=>goTo('/add-worker/'+ project.value._id) },
-          {text:"הוספת עבודה חיצונית",  icon: home, disabled:"true", click: ()=>goTo('/add-job/'+ project.value._id) },
-          {text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
-          {text:"מסמכי אתר",             icon: home, disabled:"true", click: ()=>goTo('/project-files/'+ project.value._id) },
-          {text:"ציוד",                  icon: home, disabled:"true", click: ()=>goTo('/project-tools/'+ project.value._id) },
-          {text:"הזמנת הובלה",          icon: home, disabled:"true", click: ()=>goTo('/machine-transportation/'+ project.value._id)  },
+          //{text:"הוספת עבודה חיצונית",  icon: home, disabled:"true", click: ()=>goTo('/add-job/'+ project.value._id) },
+          //{text:"יומן עבודה",            icon: home, disabled:"true", click: ()=>goTo('/work-diary/'+ project.value._id) },
+          //{text:"מסמכי אתר",             icon: home, disabled:"true", click: ()=>goTo('/project-files/'+ project.value._id) },
+          //{text:"ציוד",                  icon: home, disabled:"true", click: ()=>goTo('/project-tools/'+ project.value._id) },
+          //{text:"הזמנת הובלה",          icon: home, disabled:"true", click: ()=>goTo('/machine-transportation/'+ project.value._id)  },
         ]
       );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },

@@ -39,8 +39,12 @@
   </ion-card>
 
     <div style="padding-top: 6px">
-        <ion-button shape="round" @click="$router.push('/sign-daily-report/' + $route.params.id)" expand="full">לחתימה על הדו"ח</ion-button>
-        <ion-button shape="round" @click="shareReport" expand="full">שיתוף קישור לחתימה</ion-button>
+        <ion-button shape="round" @click="$router.push('/sign-daily-report/' + $route.params.id)" expand="full">{{'חתימה'}}
+          <ion-icon :icon="pencilOutline"></ion-icon>
+        </ion-button>
+        <ion-button shape="round" @click="shareReport" expand="full">{{'שיתוף' }}
+          <ion-icon :icon="shareSocialOutline"></ion-icon>
+        </ion-button>
     </div>
 </div>
     </ion-content>
@@ -48,10 +52,12 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail } from '@ionic/vue';
+import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
+
+import { home ,receiptOutline, constructOutline, shareSocialOutline ,pencilOutline} from 'ionicons/icons';
 
 import CreatePdf from '@/Components/CreatePdf.vue';
 import { userInfo } from 'os';
@@ -74,6 +80,7 @@ export default defineComponent({
     IonCardSubtitle, 
     IonCardTitle,
     IonThumbnail,
+    IonIcon,
     CreatePdf,
     AppHeader
    
@@ -164,6 +171,9 @@ export default defineComponent({
         repoDate:repoDate,
         projects:projects,
         id:id,
+
+        shareSocialOutline,
+        pencilOutline,
         
   }
   },

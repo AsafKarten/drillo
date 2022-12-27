@@ -2,54 +2,51 @@
   <ion-page class="back" v-show="showComponent">
     <ion-content  :fullscreen="true" >
     <AppHeader :str="'מסך בית'"/>
-    <DescriptionCard :header="organization?.name" :subtitle="'ח.פ' + ' '+organization?.businessID"/>
+    <!-- <DescriptionCard :header="organization?.name" :subtitle="'ח.פ' + ' '+organization?.businessID"/> -->
     
   
     <div class="homeContainer">
 
       <ion-card color="dark">
         <ion-card-header>
-          <ion-card-subtitle>{{'יצירת פרוייקט חדש'}}</ion-card-subtitle>
           <ion-card-title>{{'יצירת פרוייקט חדש'}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button shape="round"  router-link="/create-project" >{{'למעבר למסך יצירת פרוייקט חדש'}}</ion-button>
+          <ion-button shape="round"  router-link="/create-project" >{{'ליצירת פקרוייט חדש לחץ כאן'}}</ion-button>
         </ion-card-content>
       </ion-card>
 
       <ion-card color="dark">
         <ion-card-header>
-          <ion-card-subtitle>{{'רשימת פרוייקטים פתוחים'}}</ion-card-subtitle>
-          <ion-card-title>{{'הפרוייקטים שלי'}}</ion-card-title>
+         
+          <ion-card-title>{{'רשימת פרוייקטים פתוחים'}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button shape="round" router-link="/projects">{{'למעבר למסך ניהול פרוייקטים'}}</ion-button>
+          <ion-button shape="round" router-link="/projects">{{' ניהול פרוייקטים לחץ כאן'}}</ion-button>
         </ion-card-content>
       </ion-card>
 
       <ion-card color="dark">
         <ion-card-header>
-          <ion-card-subtitle>{{'ניהול עובדים והוספת עובד חדש'}}</ion-card-subtitle>
-          <ion-card-title>{{'העובדים שלי'}}</ion-card-title>
+          <ion-card-title>{{'ניהול עובדים והוספת עובד חדש'}}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
-          <ion-button shape="round" router-link="/employees">{{'למעבר למסך ניהול עובדים'}}
+          <ion-button shape="round" router-link="/employees">{{'ניהול עובדים לחץ כאן'}}
           </ion-button>
         </ion-card-content>
       </ion-card>
 
       <ion-card color="dark">
         <ion-card-header>
-          <ion-card-subtitle>{{'ניהול מכונות קידוח והוספת מכונה חדשה'}}</ion-card-subtitle>
-          <ion-card-title>מכונות קידוח</ion-card-title>
+          <ion-card-title>{{'ניהול מכונות קידוח והוספת מכונה חדשה'}}</ion-card-title>
         </ion-card-header>
        
         <ion-card-content>
           
-          <ion-button shape="round" router-link="/machines">{{'למעבר למסך ניהול מכונות קידוח'}}
+          <ion-button shape="round" router-link="/machines">{{' ניהול מכונות קידוח לחץ כאן'}}
           </ion-button>
         </ion-card-content>
       </ion-card>
@@ -81,10 +78,10 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonCardHeader,
-    IonCardSubtitle,
+    //IonCardSubtitle,
     IonCardTitle,
     AppHeader,
-    DescriptionCard
+   // DescriptionCard
 },
   setup(){
     const router = useRouter();

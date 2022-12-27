@@ -8,7 +8,7 @@
         <div>
           <ion-item color="dark" :key="project._id" v-for="project in projects">
           <p>{{project.name + ", " + project.address }}</p>
-          <ion-button shape="round" @click="goToProject(project)">צפייה בפרוייקט</ion-button>
+          <ion-button slot="end" shape="round" @click="goToProject(project)">{{'בחר'}}</ion-button>
           </ion-item>
           
         </div>

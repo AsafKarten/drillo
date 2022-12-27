@@ -15,7 +15,7 @@
   
                 <div slot="content">
                   <ion-item color="dark" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
-                    {{ pit.p[0] === 'P'? pit.p : 'P'+' '+ pit.p}}
+                    {{ pit.p}}
                     <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
                   </ion-item>
                 </div>
@@ -32,7 +32,7 @@
   
                 <div slot="content">
                   <ion-item color="dark" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
-                    {{ pit.p[0] === 'P'? pit.p : 'P'+' '+ pit.p}}
+                    {{pit.p}}
                     <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
                   </ion-item>
                 </div>
@@ -54,7 +54,10 @@
                 <div class="hebrewText">
                   <h5>{{currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
-                  <p>עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
+                  <ion-item color="dark">
+                    <ion-button @click="openPopover('Depth')">עומק</ion-button>
+                  <p @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
+                  </ion-item>
 
                   <ion-popover  :is-open="popoverOpen" @didDismiss="popoverOpen = false">
                     <ion-content color="dark" class="ion-padding">
@@ -69,7 +72,10 @@
                     </ion-content>
                   </ion-popover>
 
-                  <p>קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
+                  <ion-item color="dark">
+                    <ion-button @click="openPopover('Diameter')">קוטר</ion-button>
+                    <p @click="openPopover('Diameter')" >קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
+                    </ion-item>
                   <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
                     <ion-content color="dark" class="ion-padding">
                       <ion-item color="dark">
@@ -92,7 +98,7 @@
                   <p>צפון: <span class="coords">{{currentPit?.itm.y}}</span></p>
                   <p>מערב: <span class="coords">{{currentPit?.itm.x}}</span></p>
                   </div>
-                  <p>סטטוס: {{currentPit?.status}}</p>
+                  <p>סטטוס: {{currentPit?.status === 'Done' ? 'בוצע' : 'לא בוצע' }}</p>
                   <div :key="note.depth" v-for="note in currentPit?.notes">
                   <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
                 </div>
@@ -428,11 +434,11 @@
           }
           
         if(type === 'Diameter'){
-          tempDiameter.value = currentPit.value.diameter
+          tempDiameter.value = null
           popoverOpenDiameter.value = true
         }
         if(type === 'Depth'){
-          tempDepth.value = currentPit.value.depth
+          tempDepth.value = null
           popoverOpen.value = true
         }
         
@@ -445,12 +451,12 @@
         let index = pits.value.indexOf(currentPit.value)
         let tempPit = currentPit.value
         if(type === 'Depth'){
-          tempPit.depth = tempDepth
+          tempPit.depth = tempDepth.value * 1
           tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
           popoverOpen.value = false
         }
         if(type === 'Diameter'){
-          tempPit.diameter = tempDiameter
+          tempPit.diameter = tempDiameter.value * 1
           tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
           popoverOpenDiameter.value = false
         }

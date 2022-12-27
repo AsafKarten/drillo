@@ -4,7 +4,7 @@
       <ion-content color="dark"  :fullscreen="true" >
 
         
-        <DescriptionCard :header="project?.name" :subtitle="project?.address" :text="machine?.name"/>
+        <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address" :text="machine?.name"/> -->
         <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
 
       </ion-content>
@@ -22,7 +22,7 @@
   import AppHeader from '../Components/AppHeader.vue'
   
   
-import { home } from 'ionicons/icons';
+import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
 
 
   
@@ -34,7 +34,7 @@ import { home } from 'ionicons/icons';
     IonPage,
     GridButtons,
     AppHeader,
-    DescriptionCard
+    //DescriptionCard
 },
     setup(){
       const router = useRouter();
@@ -47,23 +47,32 @@ import { home } from 'ionicons/icons';
       const machine = ref<any>()
 
      // const goTo = (route:any) => { router.push(route) }
-      const buttons = reactive(
+     const buttons = reactive(
         [
-          {text:"רשימת עובדים",          icon: home ,click: ()=>goTo('/machine-crew/'+ machine_id.value) },
-          {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/pits-list/'+ project.value._id) },
-          {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
-          {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/field-map/'+ project.value._id) },
-          {text:"ניהול מכונת קידוח",          icon: home, click: ()=>goTo('/machine-managment/'+ machine_id.value) },
-          
-          // {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 1, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
-          
-          {text:"יומן עבודה",            icon: home, disabled:true, click: ()=>goTo('/work-diary/'+ project.value._id) },
-          {text:"מסמכי אתר",             icon: home, disabled:true, click: ()=>goTo('/project-files/'+ project.value._id) },
-          {text:"ציוד",                  icon: home, disabled:true, click: ()=>goTo('/project-tools/'+ project.value._id) },
-          {text:'קבל"נים חיצוניים',     icon: home, disabled:true, click: ()=>goTo('/constractor-list/'+ project.value._id) },
-          {text:"הזמנת הובלה",          icon: home, disabled:true, click: ()=>goTo('/machine-transportation/'+ project.value._id) }, 
+        
+          {text:"בורות קידוח",      icon: constructOutline, click: ()=>goTo('/pits-list/'+ project.value._id) },
+          {text:"דוחות עבודה",           icon: receiptOutline, click: ()=>goTo('/project-reports/'+ project.value._id) },
+  
         ]
       );
+      //<ion-icon name="construct-outline"></ion-icon>
+      // const buttons = reactive(
+      //   [
+      //     {text:"רשימת עובדים",          icon: home ,click: ()=>goTo('/machine-crew/'+ machine_id.value) },
+      //     {text:"כלונסאות לקידוח",      icon: home, click: ()=>goTo('/pits-list/'+ project.value._id) },
+      //     {text:"דוחות עבודה",           icon: home, click: ()=>goTo('/project-reports/'+ project.value._id) },
+      //     {text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/field-map/'+ project.value._id) },
+      //     {text:"ניהול מכונת קידוח",          icon: home, click: ()=>goTo('/machine-managment/'+ machine_id.value) },
+          
+      //     // {text:"הוספת עובד",            icon: home, fill:"solid", color: "success", badge:{count: 1, color:"danger"} ,click: ()=>goTo('/add-worker/'+ project.value._id) },
+          
+      //     {text:"יומן עבודה",            icon: home, disabled:true, click: ()=>goTo('/work-diary/'+ project.value._id) },
+      //     {text:"מסמכי אתר",             icon: home, disabled:true, click: ()=>goTo('/project-files/'+ project.value._id) },
+      //     {text:"ציוד",                  icon: home, disabled:true, click: ()=>goTo('/project-tools/'+ project.value._id) },
+      //     {text:'קבל"נים חיצוניים',     icon: home, disabled:true, click: ()=>goTo('/constractor-list/'+ project.value._id) },
+      //     {text:"הזמנת הובלה",          icon: home, disabled:true, click: ()=>goTo('/machine-transportation/'+ project.value._id) }, 
+      //   ]
+      // );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },
       //IONIC COLORS: primary, secondary, tertiary, success, warning, danger, light, medium, dark
 

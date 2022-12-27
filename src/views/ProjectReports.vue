@@ -49,6 +49,8 @@
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {useAppState} from '../realm-state';
+
+  import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
   
   import AppHeader from '../Components/AppHeader.vue'
   
