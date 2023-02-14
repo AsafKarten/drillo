@@ -4,6 +4,7 @@ import HomePage from '../views/HomePage.vue'
 import LoginPage from '../views/Login.vue'
 import CreateAccount from '../views/CreateAccount.vue'
 import CreateProject from '../views/CreateProject.vue'
+import ExcelComponent from '../Components/ExcelComponent.vue'
 import AddDrillingMachineToProjectVue from '@/Components/AddDrillingMachineToProject.vue';
 //import DrillerView from '../views/DrillerView.vue'
 import ProjectsView from '../views/ProjectsView.vue'
@@ -67,6 +68,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/create-project',
     name: 'createProject',
     component: CreateProject
+  }
+  ,
+  {
+    path: '/add-columns/:id',
+    name: 'ExcelComponent',
+    component: ExcelComponent
   }
   ,
   {//need to add to safe routes

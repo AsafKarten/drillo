@@ -1,7 +1,7 @@
 <template>
     <ion-page>
       <AppHeader :str=" 'מכונת קידוח:' + ' ' + current_machine?.name "/>
-      <ion-content color="dark" :scroll-y='false'>
+      <ion-content :scroll-y='false'>
      
           <MapBox id="map" 
           v-show="showMap"
@@ -13,22 +13,22 @@
   
         <ion-modal :is-open="isOpen" >
           <ion-header>
-            <ion-toolbar color="dark">
+            <ion-toolbar>
               <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
               <ion-buttons slot="end">
                 <ion-button @click="modalManager('close')">Close</ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-          <ion-content color="dark" class="ion-padding">
+          <ion-content class="ion-padding">
             <div class="hebrewText">
               <h5>{{currentPit?.p}}</h5>
               <h6>נתוני קידוח</h6>
               <p>עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
 
               <ion-popover :is-open="popoverOpen" @didDismiss="popoverOpen = false">
-                <ion-content color="dark" class="ion-padding">
-                  <ion-item color="dark">
+                <ion-content class="ion-padding">
+                  <ion-item>
                     <ion-label position="floating">שינוי עומק</ion-label>
                     <ion-input
                       v-model="tempDepth"
@@ -41,8 +41,8 @@
 
               <p>קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
               <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
-                <ion-content color="dark" class="ion-padding">
-                  <ion-item color="dark">
+                <ion-content class="ion-padding">
+                  <ion-item>
                     <ion-label position="floating">שינוי קוטר</ion-label>
                     <ion-input
                       v-model="tempDiameter"
@@ -79,14 +79,14 @@
         
         <ion-modal :is-open="isOpenNotes">
           <ion-header>
-            <ion-toolbar color="dark">
+            <ion-toolbar>
               <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
               <ion-buttons slot="end">
                 <ion-button @click="modalManagerNotes">Close</ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-          <ion-content color="dark" class="ion-padding">
+          <ion-content class="ion-padding">
             <div class="grid-container">
               <ion-button color="success" @click="modalManagerDepth('כבלים')">כבלים
                 <IonIcon slot="start" :icon="flashOutline" />
@@ -105,8 +105,8 @@
         <!--note depth modal-->
         <ion-modal :is-open="isOpenDepth" >
        
-          <ion-content color="dark" class="ion-padding">
-            <ion-item color="dark">
+          <ion-content class="ion-padding">
+            <ion-item>
               <ion-label position="floating">עומק</ion-label>
               <ion-input
                 v-model="noteDepth"

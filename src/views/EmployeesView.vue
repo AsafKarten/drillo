@@ -2,7 +2,7 @@
   <ion-page>
     <AppHeader :showButtons="true"/>
     
-    <ion-content color="dark" :fullscreen="true" >
+    <ion-content  :fullscreen="true" >
   
    <div class="homeContainer">
       <!-- <h1>העובדים שלי</h1> -->
@@ -10,7 +10,7 @@
       <ion-button router-link="/create-employee">יצירת עובד חדש</ion-button>
 
         
-        <ion-item color="dark" :key="employee._id" v-for="employee in employees">
+        <ion-item  :key="employee._id" v-for="employee in employees">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
           </ion-avatar>
@@ -91,7 +91,7 @@ export default defineComponent({
 
 .homeContainer{
   display: block;
-  background-color: black;
+  
   padding-top: 2%;
   padding-bottom: 2%;
   height: 100%;

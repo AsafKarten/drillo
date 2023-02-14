@@ -1,60 +1,23 @@
 <template>
   <ion-page>
+
+    <ion-loading
+    :is-open="isOpenLoading"
+    cssClass="my-custom-class"
+    message="יוצר כלונסים"
+    
+  >
+  </ion-loading>
      <AppHeader :showButtons="true"/>
     
-    <ion-content color="dark"  :fullscreen="true" >
+    <ion-content  :fullscreen="true" >
 
   
     <!-- <div class="splitScreen">
       <div class="screenTop"> -->
 
 
-    <h1 id="title">יצירת פרוייקט חדש</h1>
-    <div class="container">
-      <h1 id="title">פרטים</h1>
-     <ion-item color="dark" >
-          <ion-label position="floating">שם הפרוייקט</ion-label>
-          <ion-input
-            v-model="projectName"
-            type="text"
-          ></ion-input>
-      </ion-item>
-      <ion-item color="dark" >
-          <ion-label position="floating">כתובת</ion-label>
-          <ion-input
-            v-model="projectAddress"
-            type="text"
-          ></ion-input>
-      </ion-item>
-      <ion-item color="dark" >
-        <ion-label position="floating">שם המזמין</ion-label>
-        <ion-input
-          v-model="projectClient"
-          type="text"
-        ></ion-input>
-    </ion-item>
-    <ion-item color="dark" >
-      <ion-label position="floating">שם איש קשר/מנהל עבודה</ion-label>
-      <ion-input
-        v-model="projectContactPerson"
-        type="text"
-      ></ion-input>
-  </ion-item>
-  <ion-item color="dark" >
-    <ion-label position="floating">טלפון איש קשר</ion-label>
-    <ion-input
-      v-model="contactPersonPhone"
-      type="tel"
-    ></ion-input>
-</ion-item>
-<ion-item color="dark" >
-  <ion-label position="floating">מייל איש קשר</ion-label>
-  <ion-input
-    v-model="contactPersonMail"
-    type="text"
-  ></ion-input>
-</ion-item>
-</div>
+   
 <div class="container">
   <h1 id="title">הוספת כלונסים</h1>
   <p> מספר כלונסים:{{projectPits?.length}}</p>
@@ -78,7 +41,7 @@
     </div>
   </div>
   <div class="center">
-    <ion-button @click="saveProject">{{'שמירת פרוייקט ומעבר להוספת מכונת קידוח'}}</ion-button>
+    <ion-button @click="updateProject">{{'שמירת פרוייקט ומעבר להוספת מכונת קידוח'}}</ion-button>
   </div>
     
 
@@ -95,14 +58,14 @@
 
        <ion-modal  :is-open="isOpen">
       <ion-header>
-        <ion-toolbar color="dark">
+        <ion-toolbar>
           <ion-title>בור קידוח מספר {{currentPit.p}}</ion-title>
           <ion-buttons slot="end">
             <ion-button @click="modalManager">סגירה</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content color="dark" class="ion-padding">
+      <ion-content class="ion-padding">
         <div class="hebrewText">
           <h5>{{currentPit?.p}}</h5>
           <h6>נתוני קידוח</h6>
@@ -127,23 +90,23 @@
          <!--add columns manualy modal-->
          <ion-modal :is-open="isOpeColumn">
           <ion-header>
-            <ion-toolbar color="dark">
+            <ion-toolbar>
               <ion-title>הוספת כלונסים ידנית</ion-title>
               <ion-buttons slot="end">
                 <ion-button @click="columnsModalManager">סגירה</ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-          <ion-content color="dark" class="ion-padding">
+          <ion-content class="ion-padding">
             <div class="hebrewText">
-              <ion-item color="dark">
+              <ion-item>
                 <ion-label position="floating">כלונס התחלה</ion-label>
                 <ion-input
                   v-model="columnStart"
                   type="number"
                 ></ion-input>
             </ion-item>
-            <ion-item color="dark">
+            <ion-item>
               <ion-label position="floating">כלונס סיום</ion-label>
               <ion-input
                 v-model="columnEnd"
@@ -161,9 +124,9 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem, } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonLoading } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
 import MapBox from'../views/MapBox.vue';
 //imports 
@@ -190,13 +153,15 @@ export default defineComponent({
     IonInput,
     IonLabel,
     IonItem,
+    IonLoading,
     MapBox,
     AppHeader
 },
   setup(){
     const router = useRouter();
+    const route = useRoute();
     const currentUser = ref<any>();
-    const {user , logout, createNewProject, getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , saveNewPit,getProjectByID,getProjectPits,updateProjectPits,  getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -225,21 +190,22 @@ export default defineComponent({
     const projectMachines = ref<any>([])
     const columnStart = ref(0)
     const columnEnd = ref(0)
+    const project_id = ref<any>(route.params.id)
+    const project = ref<any>()
+    const isOpenLoading = ref(false)
 
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
-    drillingMachines.value = await getDrillingMachinesByID();
-    console.log(drillingMachines.value);
-    
-    const allEmployees= await getAllEmployees();
-    employees.value = allEmployees?.filter(emp => emp.organizationID === user.value.customData.organizationID)
+    project.value = await getProjectByID(project_id.value)
     
   });
- const addfile = (event:any) =>{
+ const addfile = async (event:any) =>{
+  
       file.value = event.target.files[0];
       let fileReader = new FileReader();
       fileReader.readAsArrayBuffer(file.value);
-      fileReader.onload = (e) => {
+      fileReader.onload = async (e) => {
+        isOpenLoading.value = true
         arrayBuffer.value = fileReader.result;
         var data = new Uint8Array(arrayBuffer.value);
         var arr = [];
@@ -260,25 +226,35 @@ export default defineComponent({
             let itm = {x : arraylist.value[i].x , y : arraylist.value[i].y }
             let concreteVolume = (3.14 * ((diameter/2) * (diameter/2)) * depth)/10000
             const [long, lat] = proj4('+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs', '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees', [itm.x, itm.y]);
-            pits[i]= {p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting',concreteVolume:concreteVolume}
+            let pit = {project_id: project_id.value, p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting',concreteVolume:concreteVolume}
+            let pit_id = await saveNewPit(pit)
+            pits[i]= pit_id
+            
         }
-        projectPits.value = pits
-        pitsToShow.value = pits;
+        project.value.pits = pits
+        pitsToShow.value = await getProjectPits(project_id.value);
         showMap.value = true;
+        console.log(project.value);
         console.log(pitsToShow.value);
+        isOpenLoading.value = false
       };
     }
 
-    const createColumnsManually = ()=>{
+    const createColumnsManually = async ()=>{
       console.log("called");
-      
+      isOpenLoading.value = true
       var pits= []
         for(var i = 0; i <= columnEnd.value - columnStart.value ; i++){
             let p = columnStart.value * 1 + i ;
-            pits[i]= {p:p ,depth:0, diameter:0, status:'waiting',concreteVolume:0}
+            let pit = {project_id: project_id.value, p:p ,depth:0, diameter:0, status:'waiting',concreteVolume:0}
+            let pit_id = await saveNewPit(pit)
+            pits[i]= pit_id
         }
-        projectPits.value = pits;
+        project.value.pits = pits;
+        console.log(project.value);
+        
         columnsModalManager();
+        isOpenLoading.value = false
     }
 
      const pitClick = (clickData: { _id: any; }) => {
@@ -291,10 +267,9 @@ export default defineComponent({
         
     }
 
-    const saveProject =async ()=>{
-      let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone.value, mail:contactPersonMail.value}
-      let project_id = await createNewProject(projectName.value, projectAddress.value, projectClient.value ,contactPerson, projectPits.value, projectMachines.value, reports.value)
-      router.push('/add-machine-project/'+ project_id)
+    const updateProject =async ()=>{
+      await updateProjectPits(project.value)
+      router.push('/add-machine-project/'+ project_id.value)
     }
 
        //modal block
@@ -404,7 +379,7 @@ export default defineComponent({
         machinesModalManager,
         viewEmployeeModalManager,
         columnsModalManager,
-        saveProject,
+        updateProject,
         addMachine,
         removeMachine,
         addEmployee,
@@ -440,6 +415,9 @@ export default defineComponent({
         projectMachines:projectMachines,
         columnStart:columnStart,
         columnEnd: columnEnd,
+        project_id,
+        project,
+        isOpenLoading,
       
   }
   },

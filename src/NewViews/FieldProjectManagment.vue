@@ -1,11 +1,11 @@
 <template>
     <ion-page>
       <AppHeader :str="'ניהול פרוייקט שטח'"/>
-      <ion-content color="dark"  :fullscreen="true" >
+      <ion-content  :fullscreen="true" >
 
         
         <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address" :text="machine?.name"/> -->
-        <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
+        <GridButtons :buttons="buttons" :options="{buttonHeight:180}"/>
 
       </ion-content>
    
@@ -13,7 +13,7 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonPage } from '@ionic/vue';
+  import { IonContent, IonPage, IonButton, IonIcon } from '@ionic/vue';
   import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
@@ -32,6 +32,8 @@ import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
     components: {
     IonContent,
     IonPage,
+    //IonButton,
+    //IonIcon,
     GridButtons,
     AppHeader,
     //DescriptionCard
@@ -116,5 +118,18 @@ import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
   </script>
   
   <style scoped>
+  .Bigbutton {
+    box-sizing: border-box;
 
+position: absolute;
+width: 275px;
+height: 255px;
+left: 25%;
+top: 25%;
+
+--background: #FFFFFF;
+border: 0.5px solid #E2E2E2;
+box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+border-radius: 10px;
+  }
   </style>

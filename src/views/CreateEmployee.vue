@@ -1,29 +1,29 @@
 <template>
   <ion-page>
     <AppHeader :str="'יצירת עובד חדש'"/>
-    <ion-content color="dark" :fullscreen="true">
+    <ion-content :fullscreen="true">
     
       <div id="container"> 
        
        
-     <ion-item  color="dark" >
+     <ion-item  >
           <ion-label position="floating">שם פרטי</ion-label>
        <ion-input v-model="first" type="text" autocomplete="new-first"></ion-input>
        </ion-item>
-       <ion-item  color="dark" >
+       <ion-item  >
            <ion-label position="floating">שם משפחה</ion-label>
        <ion-input v-model="last" type="text" autocomplete="new-last"></ion-input>
        </ion-item>
-       <ion-item  color="dark" >
+       <ion-item  >
         <ion-label position="floating">כתובת מייל</ion-label>
        <ion-input v-model="email" type="text" autocomplete="new-email"></ion-input>
        </ion-item>
-        <ion-item color="dark" >
+        <ion-item >
         <ion-label position="floating">סיסמה</ion-label>
        <ion-input v-model="password" type="text" autocomplete="new-password"></ion-input>
        </ion-item>
-       <ion-item color="dark" >
-             <ion-select  color="dark"  :compareWith="employeeTypes"
+       <ion-item >
+             <ion-select   :compareWith="employeeTypes"
         @ionChange="employeeType = $event.detail.value" placeholder="סוג עובד">
         <ion-select-option value="driller">קודח</ion-select-option>
         <ion-select-option value="manager">מנהל מערכת</ion-select-option>
@@ -44,11 +44,11 @@
 
       <ion-modal :is-open="isOpen">
         <ion-header>
-          <ion-toolbar color="dark">
+          <ion-toolbar>
             <ion-title>{{'יוצר עובד חדש אנא המתן'}}</ion-title>
           </ion-toolbar>
         </ion-header>
-        <ion-content color="dark" class="ion-padding">
+        <ion-content class="ion-padding">
           <div class="center">
           <p>
           {{'יוצר עובד חדש אנא המתן'}}

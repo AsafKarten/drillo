@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content color="dark" :fullscreen="true" >
+    <ion-content  :fullscreen="true" >
 
       <AppHeader :str="'ניהול פרוייקט'"/>
       <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address"/> -->

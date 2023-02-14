@@ -6,13 +6,13 @@
       </ion-toolbar>
     </ion-header> -->
 
-    <ion-content color="dark" :fullscreen="true">
+    <ion-content :fullscreen="true">
      
       
       <div id="container">
         <h1 id="title" >Drillo</h1>
         <h3>{{'מערכת לניהול קידוחים'}}</h3>
-        <ion-item color="dark">
+        <ion-item>
           <ion-label position="floating">Email</ion-label>
           <ion-input
             
@@ -22,7 +22,7 @@
             placeholder="Email"
           ></ion-input>
         </ion-item >
-        <ion-item color="dark" >
+        <ion-item >
           <ion-label position="floating">Password</ion-label>
           <ion-input
             

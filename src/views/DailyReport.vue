@@ -2,12 +2,12 @@
   <ion-page>
     <AppHeader :str="'דוח עבודה יומי'"/>
     
-    <ion-content color="dark" :fullscreen="true" >
+    <ion-content :fullscreen="true" >
       <div class="homeContainer">
    <create-pdf :report="report" :signature="false"/>
       <h5>פרוייקט: {{report?.project_name + " " + report?.project_address}}</h5>
 
-       <ion-card color="dark" >
+       <ion-card >
     <ion-card-header>
       <ion-card-subtitle>{{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-subtitle>
       <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
@@ -19,7 +19,7 @@
         
         <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
         <p class="textMargin">{{' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
-        <ion-item color="dark" :key="n.depth" v-for="n in pit.notes">
+        <ion-item :key="n.depth" v-for="n in pit.notes">
           
           <p class="textMargin">{{n.note}}</p>
           
@@ -29,7 +29,7 @@
         <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
         <span v-else>אושר</span> -->
     </ion-card-content>
-    <ion-item color="dark" v-show="report?.signature" >
+    <ion-item v-show="report?.signature" >
       <p class="textMargin">{{"שם החותם:"}}</p>
       <p class="textMargin">{{report?.signatureName}}</p>
       <ion-thumbnail slot="end"> 
@@ -184,7 +184,7 @@ export default defineComponent({
 <style scoped>
 .homeContainer{
   display: block;
-  background-color: black;
+  
   padding-top: 2%;
   padding-bottom: 2%;
 }

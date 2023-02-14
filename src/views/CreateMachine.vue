@@ -1,11 +1,11 @@
 <template>
   <ion-page>
     <AppHeader :str="'יצירת מכונת קידוח'"/>
-    <ion-content color="dark" :fullscreen="true">
+    <ion-content  :fullscreen="true">
     
 
       <div id="container">
-     <ion-item color="dark">
+     <ion-item >
           <ion-label position="floating">שם המכונה</ion-label>
        <ion-input v-model="machineName" type="text" autocomplete="off"></ion-input>
        </ion-item>
@@ -13,7 +13,7 @@
            <ion-label position="floating">סוג מכונה</ion-label>
        <ion-input v-model="machineType" type="text" autocomplete="new-last"></ion-input>
        </ion-item> -->
-       <ion-item color="dark">
+       <ion-item >
         <ion-label position="floating">מספר רישוי</ion-label>
        <ion-input v-model="licensNumber" type="text" autocomplete="off"></ion-input>
        </ion-item>

@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-      <ion-content color="dark">
+      <ion-content>
         <AppHeader :str="'רשימת כלונסאות'"/>
      
   
@@ -8,32 +8,34 @@
   
               <ion-accordion  value="Waiting">
   
-                <ion-item color="dark" slot="header">
+                <ion-item slot="header">
                   <ion-label>לא הושלמו</ion-label>
                   <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status!='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item color="dark" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
-                    {{ pit.p}}
-                    <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
+                  <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
+                    
+                    <ion-button :color="pit.status=='Done'?'success':'danger'" size="large"  @click="pitClick({_id:pit.p})">לפירוט</ion-button>
+                    <p slot="end" class="pitText">{{ pit.p}}</p> 
                   </ion-item>
                 </div>
   
               </ion-accordion>
   
   
-              <ion-accordion color="dark" value="Done">
+              <ion-accordion value="Done">
   
-                <ion-item color="dark" slot="header">
+                <ion-item slot="header">
                   <ion-label>הסתיימו</ion-label>
                   <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status=='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item color="dark" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
-                    {{pit.p}}
-                    <ion-button :color="pit.status=='Done'?'success':'danger'" slot="end" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
+                  <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
+                    
+                    <ion-button :color="pit.status=='Done'?'success':'danger'" size="large" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
+                    <p slot="end" class="pitText">{{ pit.p}}</p> 
                   </ion-item>
                 </div>
                 
@@ -43,25 +45,25 @@
          
             <ion-modal  :is-open="isOpen" >
               <ion-header>
-                <ion-toolbar color="dark">
+                <ion-toolbar>
                   <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
                   <ion-buttons slot="end">
                     <ion-button @click="modalManager('close')">סגירה</ion-button>
                   </ion-buttons>
                 </ion-toolbar>
               </ion-header>
-              <ion-content color="dark" class="ion-padding">
+              <ion-content class="ion-padding">
                 <div class="hebrewText">
                   <h5>{{currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
-                  <ion-item color="dark">
-                    <ion-button @click="openPopover('Depth')">עומק</ion-button>
-                  <p @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
+                  <ion-item>
+                    <ion-button size="large" @click="openPopover('Depth')">עומק</ion-button>
+                  <p  @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
                   </ion-item>
 
                   <ion-popover  :is-open="popoverOpen" @didDismiss="popoverOpen = false">
-                    <ion-content color="dark" class="ion-padding">
-                      <ion-item color="dark">
+                    <ion-content class="ion-padding">
+                      <ion-item>
                         <ion-label position="floating">שינוי עומק</ion-label>
                         <ion-input
                           v-model="tempDepth"
@@ -72,13 +74,13 @@
                     </ion-content>
                   </ion-popover>
 
-                  <ion-item color="dark">
-                    <ion-button @click="openPopover('Diameter')">קוטר</ion-button>
+                  <ion-item>
+                    <ion-button size="large" @click="openPopover('Diameter')">קוטר</ion-button>
                     <p @click="openPopover('Diameter')" >קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
                     </ion-item>
                   <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
-                    <ion-content color="dark" class="ion-padding">
-                      <ion-item color="dark">
+                    <ion-content class="ion-padding">
+                      <ion-item>
                         <ion-label position="floating">שינוי קוטר</ion-label>
                         <ion-input
                           v-model="tempDiameter"
@@ -222,7 +224,7 @@
       const currentDate = ref(new Date())
       const router = useRouter();
       const route = useRoute()
-      const { user, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
+      const { user,getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
       const currentUser = ref<any>(user);
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
@@ -268,11 +270,11 @@
             console.log(project_id.value);
             
           project.value = await getProjectByID(project_id.value);
-            
+          
           
           console.log(project.value);
             
-            pits.value = project.value.pits
+            pits.value = await getProjectPits(project_id.value)
             //showMap.value = true
             pits.value.forEach((pit:any) => pit.selected = false );
             //current_machine.value = await getDrillingMachineByID(currentUser?.value.customData.machine_id.$oid)
@@ -587,6 +589,9 @@
     display: grid;
     justify-content: space-evenly;
     align-content: center;
+  }
+  .pitText{
+    font-size: 150%;
   }
   </style>
   

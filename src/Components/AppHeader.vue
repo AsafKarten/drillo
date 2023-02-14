@@ -1,23 +1,23 @@
 <template>
   <ion-header  :translucent="true">
-    <ion-toolbar color="dark">
-      <ion-buttons  slot="start">
-        <ion-back-button text="" default-href="/" @click="$router.back()"> </ion-back-button> 
+    <ion-toolbar class="toolBar">
+      <ion-buttons slot="start" >
+        <ion-back-button color="light" text=""  default-href="/" @click="$router.back()"> </ion-back-button> 
       </ion-buttons> 
       <ion-buttons class="home" slot="start">
-        <ion-back-button text="" :icon="home" default-href="/" @click="goToHome"> </ion-back-button> 
+        <ion-back-button color="light" text="" :icon="home" default-href="/" @click="goToHome"> </ion-back-button> 
       </ion-buttons> 
       <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
-        <ion-back-button text="יציאה" :icon="exit" default-href="/" @click="userLogout">{{'יציאה'}} </ion-back-button> 
+        <ion-back-button color="light" text="יציאה" :icon="exit" default-href="/" @click="userLogout">{{'יציאה'}} </ion-back-button> 
         <!-- <ion-menu-button @click="userLogout" auto-hide="false"></ion-menu-button> -->
       </ion-buttons>
     </ion-toolbar>
 
-    <ion-toolbar color="dark">
+    <ion-toolbar class="toolBar">
       <div v-if="currentUser" class="header">
          
-          <p>{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
+          <p class="greeting">{{greeting}} {{currentUser.customData.first}} {{currentUser.customData.last}}</p>
         
 
           
@@ -33,6 +33,7 @@ import { arrowRedo, home, exit } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { useAppState } from '../realm-state';
 
+
 //import PWAbutton from './PWAbutton.vue';
 
 export default defineComponent({
@@ -41,6 +42,8 @@ export default defineComponent({
     IonHeader,
     IonToolbar,
     IonButtons, 
+    //IonButton, 
+    //IonIcon,
     //IonMenuButton, 
     IonBackButton,
     //PWAbutton
@@ -119,6 +122,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.toolBar{
+  --background:  #59AD86;
+}
 .header{
  
   font-size: 16px;
@@ -136,6 +142,17 @@ export default defineComponent({
   
 }
 .pageName{
+  
   margin-right: 10%;
+  color: white;
+}
+.greeting{
+  
+ 
+  color: white;
+}
+
+ion-icon {
+  color: white;
 }
 </style>

@@ -2,11 +2,11 @@
   <ion-page>
     <AppHeader :showButtons="true"/>
     
-    <ion-content color="dark" :fullscreen="true" >
+    <ion-content  :fullscreen="true" >
     <div class="mainContainer">
       <h1>הפרוייקטים שלי</h1>
         <div>
-          <ion-item color="dark" :key="project._id" v-for="project in projects">
+          <ion-item  :key="project._id" v-for="project in projects">
           <p>{{project.name + ", " + project.address }}</p>
           <ion-button slot="end" shape="round" @click="goToProject(project)">{{'בחר'}}</ion-button>
           </ion-item>

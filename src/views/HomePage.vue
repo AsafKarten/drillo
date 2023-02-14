@@ -7,7 +7,7 @@
   
     <div class="homeContainer">
 
-      <ion-card color="dark">
+      <ion-card >
         <ion-card-header>
           <ion-card-title>{{'יצירת פרוייקט חדש'}}</ion-card-title>
         </ion-card-header>
@@ -17,7 +17,7 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card color="dark">
+      <ion-card >
         <ion-card-header>
          
           <ion-card-title>{{'רשימת פרוייקטים פתוחים'}}</ion-card-title>
@@ -28,7 +28,7 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card color="dark">
+      <ion-card >
         <ion-card-header>
           <ion-card-title>{{'ניהול עובדים והוספת עובד חדש'}}</ion-card-title>
         </ion-card-header>
@@ -39,7 +39,7 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card color="dark">
+      <ion-card >
         <ion-card-header>
           <ion-card-title>{{'ניהול מכונות קידוח והוספת מכונה חדשה'}}</ion-card-title>
         </ion-card-header>
@@ -120,7 +120,6 @@ export default defineComponent({
 
 .homeContainer{
   display: block;
-  background-color: black;
   padding-top: 2%;
   padding-bottom: 2%;
 }

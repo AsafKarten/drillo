@@ -2,7 +2,7 @@
     <ion-page>
        <AppHeader :showButtons="true"/>
       
-      <ion-content color="dark" :fullscreen="true" >
+      <ion-content :fullscreen="true" >
   
     
       <!-- <div class="splitScreen">
@@ -18,7 +18,7 @@
   
       <div>
         <h3>מכונות קידוח</h3>
-        <IonItem color="dark" :key="machine?._id" v-for="machine in project?.machines">
+        <IonItem :key="machine?._id" v-for="machine in project?.machines">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
           </ion-avatar>
@@ -32,16 +32,16 @@
       <!--Add machine to project modal-->
       <ion-modal :is-open="isOpenMachine">
         <ion-header>
-          <ion-toolbar color="dark">
+          <ion-toolbar>
             <ion-title>הוספת מכונת קידוח לפרוייקט</ion-title>
             <ion-buttons slot="end">
               <ion-button @click="machinesModalManager">סגירה</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content color="dark" class="ion-padding">
+        <ion-content class="ion-padding">
           <div class="hebrewText">
-            <ion-item color="dark" :key="machine._id" v-for="machine in avilableDrillingMachines">
+            <ion-item :key="machine._id" v-for="machine in avilableDrillingMachines">
               <ion-avatar slot="start">
                 <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
               </ion-avatar>
@@ -60,17 +60,17 @@
        <!--change driller in machine modal-->
        <ion-modal :is-open="isOpenDriller">
         <ion-header>
-          <ion-toolbar color="dark">
+          <ion-toolbar>
             <ion-title>עריכת צוות קודחים</ion-title>
             <ion-buttons slot="end">
               <ion-button @click="changeDrillerModalManager(null)">סגירה</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
-        <ion-content color="dark" class="ion-padding">
+        <ion-content class="ion-padding">
 
             <div class="hebrewText">
-                <ion-item color="dark" v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
+                <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
                   <!-- <p>{{employee?._id}}</p> -->
                   <ion-avatar slot="start">
                     <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -82,7 +82,7 @@
               </div>
 
           <div class="hebrewText">
-            <ion-item color="dark" :key="employee?._id" v-for="employee in employees">
+            <ion-item :key="employee?._id" v-for="employee in employees">
               <!-- <p>{{employee?._id}}</p> -->
               <ion-avatar slot="start">
                 <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -99,14 +99,14 @@
          <!--view driller-->
          <ion-modal :is-open="isOpenEmp">
           <ion-header>
-            <ion-toolbar color="dark">
+            <ion-toolbar>
               <ion-title>{{current_employee?.first}} {{current_employee?.last}}</ion-title>
               <ion-buttons slot="end">
                 <ion-button @click="viewEmployeeModalManager(null)">Close</ion-button>
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
-          <ion-content color="dark" class="ion-padding">
+          <ion-content class="ion-padding">
             <div class="hebrewText">
               <h3>{{'שם:' + " " +  current_employee?.first + " " + current_employee?.last}}</h3>
               <h3 v-show="employee_project">{{'פרוייקט נוכחי:'+ " " + employee_project?.name + " " + employee_project?.address}}</h3>

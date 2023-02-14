@@ -2,14 +2,14 @@
   <ion-page>
     <AppHeader :showButtons="true"/>
     
-    <ion-content color="dark" :fullscreen="true" >
+    <ion-content :fullscreen="true" >
   <div class="mainContainer">
    
       <h1>מכונות הקידוח שלי</h1>
 
          <div>
           <ion-button router-link="/create-machine">הוסף מכונה חדשה</ion-button>
-        <ion-item color="dark" :key="machine._id" v-for="machine in drillingMachines">
+        <ion-item :key="machine._id" v-for="machine in drillingMachines">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
           </ion-avatar>

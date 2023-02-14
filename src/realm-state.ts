@@ -285,7 +285,7 @@ const updateEmployeeProject =async (employee : any) => {
 
 
      //create new project
-    const createNewProject =async ( name: string, address:string, client:string,contactPerson:object, pits:[], machines:[], reports:[]) => {
+    const createNewProject =async ( name: string, address:string, client:string,contactPerson:object) => {
    
       try {
         const organizationID = app?.currentUser?.customData.organizationID
@@ -294,7 +294,7 @@ const updateEmployeeProject =async (employee : any) => {
         // 2. Get a database & collection
         const collection = mongodb?.db("drillo").collection("projects");
         // 3. Read and write data with MongoDB queries
-        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson, pits, machines, reports,creationDate:new Date()});
+        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson, creationDate:new Date()});
         return insertResponse?insertResponse.insertedId:false;
 
 
@@ -303,7 +303,7 @@ const updateEmployeeProject =async (employee : any) => {
 
           }
     };
-   
+
     const updateProjectPits =async (project : any) => {
         try {
                   // 1. Get a data source client
@@ -726,6 +726,91 @@ const updateReportSigByID =async (report : any) => {
   }
 }
 
+const saveNewPit =async (pit:any) => {
+  try {
+
+  const id = new  Realm.BSON.ObjectID(pit.project_id)
+  pit.project_id = id
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("pits");
+  // 3. Read and write data with MongoDB queries
+ 
+  const insertResponse = await collection?.insertOne(pit);
+  return insertResponse?insertResponse.insertedId:false;
+
+  } catch (error) {
+    console.log(error);
+    
+  }
+ 
+}
+
+const updatePitStatusAndReport =async (pit:any) => {
+  try {
+    // 1. Get a data source client
+const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+// 2. Get a database & collection
+const collection = mongodb?.db("drillo").collection("pits");
+// 3. Read and write data with MongoDB queries
+const query = { "_id": pit._id };
+const update = {
+"$set": {
+"status": pit.status,
+"report_id": pit.report_id
+}
+};
+const options = { "upsert": false };
+collection?.updateOne(query, update, options)
+.then(result => {
+const { matchedCount, modifiedCount } = result;
+if(matchedCount && modifiedCount) {
+console.log(`Successfully updated the item.`)
+}
+})
+
+} catch (error) {
+console.log(error);
+
+}
+ 
+}
+
+const getReportPits=async (report_id:string) => {
+      
+  //import mongodb = require("mongodb");
+  //const ObjectID = mongodb.ObjectID;
+  
+
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("pits");
+  // 3. Read and write data with MongoDB queries
+  const id = new  Realm.BSON.ObjectID(report_id)
+  const query  =  {'report_id':id};
+  return await collection?.find(query)
+ 
+}
+
+const getProjectPits=async (project_id:string) => {
+      
+  //import mongodb = require("mongodb");
+  //const ObjectID = mongodb.ObjectID;
+  
+
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("pits");
+  // 3. Read and write data with MongoDB queries
+  const id = new  Realm.BSON.ObjectID(project_id)
+  const query  =  {'project_id':id};
+  return await collection?.find(query)
+ 
+}
+
     return{
         isLoggedIn,
         user,
@@ -735,6 +820,7 @@ const updateReportSigByID =async (report : any) => {
         loginAnon,
         logout,
         createAccount,
+        //employees
         createEmployeeAccount,
         getOrganizationDrillers,
         getAllEmployees,
@@ -743,6 +829,8 @@ const updateReportSigByID =async (report : any) => {
         deleteEmployeeFromDB ,//need to be fixed
         updateEmployeeMachine,
         updateEmployeeProject,
+
+        //project
         getProject,
         getProjectByID,
         getAllProjectByOrganizationID,
@@ -751,21 +839,32 @@ const updateReportSigByID =async (report : any) => {
         updateProjectLastPit,
         updateProjectMachines,
         updateProjectExternalServices,
+
         updateProjectDrillers,//need to be removed
         updateProjectSiteManagers,//need to be removed
         getAllProjects,//need to be removed
+
+        //drilling machines
         createNewDrillingMachine,
         getDrillingMachinesByID, 
         getDrillingMachineByID,
         getOrganizationDrillingMachines,
-        getAllOrganizations,//need to be removed
+          //getAllOrganizations,//need to be removed
         updateMachineDrillers,
         updateMachineProjectID,
+
+        //reports
         getReportByID,
         getProjectReports,
         saveNewReport,
         updateReportByID,
         updateReportSigByID,
+
+        //pits
+        saveNewPit,
+        updatePitStatusAndReport,
+        getReportPits,
+        getProjectPits,
         
     };
 };

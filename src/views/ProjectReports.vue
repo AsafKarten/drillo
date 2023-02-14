@@ -2,21 +2,21 @@
     <ion-page>
       <AppHeader :str="'דוחות עבודה'"/>
       
-      <ion-content color="dark" :fullscreen="true" >
+      <ion-content :fullscreen="true" >
     <div class="homeContainer">
      
         <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
        <!-- <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>-->
   
-         <ion-card color="dark" :key="repo.date" v-for="repo in reports">
+         <ion-card :key="repo.date" v-for="repo in reports">
       <ion-card-header>
         <ion-card-subtitle>{{ "תאריך" + ":"+ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-subtitle>
         <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
       </ion-card-header>
   
       <ion-card-content>
-         <ion-item color="dark" :key="pit._id" v-for="pit in repo.pits">
+         <ion-item :key="pit._id" v-for="pit in repo.pits">
           
           <!-- <p class="textMargin">{{' ' + pit.p + ' '+}}</p> -->
           
@@ -26,7 +26,7 @@
           </ion-item>
 
       </ion-card-content>
-      <ion-item color="dark" v-show="repo.signature" >
+      <ion-item v-show="repo.signature" >
         <p class="textMargin">{{"שם החותם:"}}</p>
         <p class="textMargin">{{repo.signatureName}}</p>
         <ion-thumbnail slot="end"> 
@@ -154,7 +154,6 @@
   <style scoped>
   .homeContainer{
     display: block;
-    background-color: black;
     padding-top: 2%;
     padding-bottom: 2%;
   }

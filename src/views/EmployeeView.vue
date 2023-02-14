@@ -2,20 +2,20 @@
   <ion-page>
     <AppHeader :showButtons="true"/>
     
-    <ion-content color="dark" :fullscreen="true" >
+    <ion-content  :fullscreen="true" >
   
    <div class="homeContainer">
       <h1>פרופיל עובד</h1>
 
-      <ion-card color="dark">
+      <ion-card >
         <ion-card-header>
           <ion-card-subtitle>{{employee?.userType === 'driller' ? 'קודח' : 'מנהל משרד'}}</ion-card-subtitle>
           <ion-card-title>{{employee?.first}} {{employee?.last}}</ion-card-title>   
         </ion-card-header>
 
         <ion-card-content>
-          <ion-item color="dark" v-show="project"> <p>{{'פרוייקט:'+' '+project?.name + ", " + project?.address}}</p></ion-item>
-          <ion-item color="dark" v-show="machine" > <p>{{'מכונת קידוח:'+' '+ machine?.name}}</p></ion-item>
+          <ion-item  v-show="project"> <p>{{'פרוייקט:'+' '+project?.name + ", " + project?.address}}</p></ion-item>
+          <ion-item  v-show="machine" > <p>{{'מכונת קידוח:'+' '+ machine?.name}}</p></ion-item>
         </ion-card-content>
       </ion-card>
 </div>
@@ -116,7 +116,6 @@ export default defineComponent({
 
 .homeContainer{
   display: block;
-  background-color: black;
   padding-top: 2%;
   padding-bottom: 2%;
   height: 100%;
