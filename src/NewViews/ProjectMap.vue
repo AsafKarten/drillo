@@ -171,10 +171,6 @@
     direction: rtl;
   }
   
-  .map{}
-  
-
-
   
   h5,h6{
     font-weight: bold;

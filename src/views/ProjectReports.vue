@@ -8,15 +8,15 @@
         <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
        <!-- <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>-->
-  
-         <ion-card :key="repo.date" v-for="repo in reports">
+
+         <ion-card  :key="repo.date" v-for="repo in reports">
       <ion-card-header>
         <ion-card-subtitle>{{ "תאריך" + ":"+ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-subtitle>
         <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
       </ion-card-header>
   
       <ion-card-content>
-         <ion-item :key="pit._id" v-for="pit in repo.pits">
+         <ion-item :key="pit._id" v-for="pit in repo.pitsToShow">
           
           <!-- <p class="textMargin">{{' ' + pit.p + ' '+}}</p> -->
           
@@ -45,7 +45,7 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail, } from '@ionic/vue';
+  import {onIonViewWillEnter,onIonViewDidEnter, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail, } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {useAppState} from '../realm-state';
@@ -59,7 +59,9 @@
   
   export default defineComponent({
     name: 'ProjectReports',
+    
     components: {
+      
       IonContent,
       IonPage,
       IonItem,
@@ -77,7 +79,7 @@
       const router = useRouter();
       const route = useRoute();
      
-      const {user , getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
+      const {user ,getReportPits, getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
       const currentUser = ref<any>(user)
       const project = ref<any>();
       const reports = ref<any>();
@@ -90,34 +92,39 @@
       const siteManagers = ref<any>()
       const siteManager = ref<any>()
       const {id} = route.params
-  
-    onMounted(async()=>{
+     
+
+      onIonViewDidEnter(() => {
+      console.log('Home page did enter');
+      
+    });
+
+      onIonViewWillEnter(async() => {
+      console.log('Home page will enter');
       user_id.value = user?.value.customData._id
-      console.log(project_id.value);
       
         project.value = await getProjectByID(id.toString()) 
         reports.value = await getProjectReports(project_id.value)
-        console.log(project);
-        // await getAllReports()
-        console.log(reports.value);
-        
-  
-      
+        console.log(project.value);
+        await getAllReports()
     });
-    const getAllReports = async ()=>{
-        let tempArr = []
-      for (let index = 0; index < project.value.reports.length; index++) {
-        //remove this if after creating new project
-        if(project?.value.reports[index].report_id !== undefined){
-          let report = await getReportByID(project?.value.reports[index].report_id.toString())
-          tempArr.push(report)
-          console.log(report);
-          
-        }
-          
-          
-          }
-      reports.value = tempArr.reverse()
+
+    // onMounted(async()=>{
+    //   user_id.value = user?.value.customData._id
+      
+    //     project.value = await getProjectByID(id.toString()) 
+    //     reports.value = await getProjectReports(project_id.value)
+    //     console.log(project.value);
+    //     await getAllReports()
+    // });
+
+    const getAllReports = async ()=>{        
+      for ( let index = 0; index < reports.value.length; index++) {
+         let pitsToShow = await getReportPits(reports.value[index]._id.toString()) ;
+         reports.value[index].pitsToShow =  pitsToShow 
+      }
+      reports.value = reports.value.reverse()
+      
     }
   
 
@@ -144,6 +151,7 @@
           siteManager:siteManager,
           projects:projects,
           id:id,
+        
           
     }
     },

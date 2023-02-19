@@ -14,7 +14,7 @@
     </ion-card-header>
 
     <ion-card-content>
-       <div class="pitBorder" :key="pit._id" v-for="pit in pits">
+       <div class="pitBorder" :key="pit._id" v-for="pit in pitsToShow">
         <p class="textMargin">{{"כלונס מספר: " + pit.p  }}</p>
         
         <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
@@ -89,12 +89,13 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     
-    const { user,getReportByID,updateReportByID, getAllProjects, updateProjectPits} = useAppState();
+    const { user,getReportPits,getReportByID,updateReportByID, getAllProjects, updateProjectPits} = useAppState();
     const currentUser = ref<any>(user)
     const project = ref<any>();
     //const reports = ref<any>();
     const report = ref<any>();
     const pits = ref<any>();
+    const pitsToShow = ref<any>()
     const repoDate = ref<any>()
     const projects =ref<any>()
     const siteManagers = ref<any>()
@@ -104,6 +105,7 @@ export default defineComponent({
   onMounted(async()=>{
 
       report.value = await getReportByID(id.toString())
+      pitsToShow.value = await getReportPits(report.value._id)
       console.log(report.value);
       
       pits.value = report.value.pits
@@ -168,6 +170,7 @@ export default defineComponent({
         //reports:reports,
         report:report,
         pits:pits,
+        pitsToShow,
         repoDate:repoDate,
         projects:projects,
         id:id,

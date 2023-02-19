@@ -102,7 +102,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     
-    const {user, loginAnon, getReportByID,updateReportSigByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
+    const {user, getReportPits, loginAnon, getReportByID,updateReportSigByID, getProjectByID,getAllProjects, updateProjectPits} = useAppState();
     const currentUser = ref<any>(user)
     const project = ref<any>();
     const reports = ref<any>();
@@ -127,8 +127,8 @@ export default defineComponent({
       //await for 1 more line of code so the signature image updates in the createPDF component
       await (()=>{return null;});
       //call the generate PDF function inside createPDF component
-      const pdfFileObject = await CreatePdfComponent.value.generatePDF({save: true});
-      console.log(pdfFileObject)
+      //const pdfFileObject = await CreatePdfComponent.value.generatePDF({save: true});
+      //console.log(pdfFileObject)
     };
 
     onMounted(async()=>{
@@ -138,7 +138,7 @@ export default defineComponent({
       }
       console.log(id);
       report.value = await getReportByID(id.toString())
-      pits.value = report.value.pits
+      pits.value = await getReportPits(report.value._id)
       console.log(report.value);
       
     });

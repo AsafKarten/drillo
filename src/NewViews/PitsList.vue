@@ -14,11 +14,11 @@
   
                 <ion-item  slot="header">
                   <ion-label>לא הושלמו</ion-label>
-                  <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status!='Done').length }} </ion-badge>
+                  <ion-badge style="margin:2px"> {{ pits.filter((pit: { status: string; })=>pit.status!='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item class="pitsList"  :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
+                  <ion-item class="pitsList"  :key="pit._id" v-for="pit in pits.filter((pit: { status: string; })=>pit.status!='Done')">
                   
                     <ion-button :color="pit.status=='Done'?'success':'danger'"  size="large"  @click="pitClick({_id:pit.p})">בחר</ion-button>
                    <p slot="end" class="pitText">{{ pit.p}}</p> 
@@ -32,11 +32,11 @@
   
                 <ion-item   slot="header">
                   <ion-label>הסתיימו</ion-label>
-                  <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status=='Done').length }} </ion-badge>
+                  <ion-badge style="margin:2px"> {{ pits.filter((pit: { status: string; })=>pit.status=='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item class="pitsList" :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
+                  <ion-item class="pitsList" :key="pit._id" v-for="pit in pits.filter((pit: { status: string; })=>pit.status=='Done')">
                     
                     <ion-button :color="pit.status=='Done'?'success':'danger'"  size="large"  @click="pitClick({_id:pit.p})">בחר</ion-button>
                  <p slot="end" class="pitText">{{ pit.p}}</p> 
@@ -75,7 +75,7 @@
                           type="number"
                         ></ion-input>
                       </ion-item>
-                      <ion-button  color="success" @click="changePitDiameterOrDepth('Depth', currentPit.p.toString())">אישור</ion-button>
+                      <ion-button  color="success" @click="changePitDiameterOrDepth('Depth', currentPit._id)">אישור</ion-button>
                     </ion-content>
                   </ion-popover>
                   <ion-item >
@@ -91,7 +91,7 @@
                           type="number"
                         ></ion-input>
                       </ion-item>
-                      <ion-button color="success" @click="changePitDiameterOrDepth('Diameter', currentPit.p.toString())">אישור</ion-button>
+                      <ion-button color="success" @click="changePitDiameterOrDepth('Diameter', currentPit._id)">אישור</ion-button>
                     </ion-content>
                   </ion-popover>
                   
@@ -109,8 +109,8 @@
                   <p>סוג מפגע:{{note?.note}} עומק: {{note?.depth}}</p>
                 </div>
                   <div>
-                    <GridButtons v-if="currentPit?.status === 'waiting'" :buttons="pendingButton" :options="{buttonHeight:110}"/>
-                    <GridButtons v-if="currentPit?.status === 'Pending'" :buttons="buttons" :options="{buttonHeight:110}"/>
+                    <GridButtons v-if="currentPit?.status === 'waiting'" :buttons="buttons" :options="{buttonHeight:110}"/>
+                    <GridButtons v-if="currentPit?.status === 'Done'" :buttons="unDoneButton" :options="{buttonHeight:110}"/>
                      <!-- <ion-button  @click="setPending" color="success">התחלת ביצוע</ion-button>
                      <ion-button v-if="currentPit?.status === 'Pending'" @click="unsetPending" color="danger">ביטול התחלת ביצוע</ion-button>
                      <ion-button v-if="currentPit?.status === 'Pending'" @click="setConfirm" color="success">סיום ביצוע</ion-button>
@@ -198,7 +198,7 @@
   
   import AppHeader from '../Components/AppHeader.vue'
   import GridButtons from "./Utilities/GridButtons.vue";
-  import { home, checkmarkDoneOutline } from 'ionicons/icons';
+  import { home, checkmarkDoneOutline, closeCircleOutline } from 'ionicons/icons';
   
   export default defineComponent({
     name: "PitsList",
@@ -228,7 +228,7 @@
       const currentDate = ref(new Date())
       const router = useRouter();
       const route = useRoute()
-      const { user, getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID, updateProjectLastPit} = useAppState(); 
+      const { user,updateProjectReports,updatePitStatusAndReport,updatePitDepth, updatePitDiameter, getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID, updateProjectLastPit} = useAppState(); 
       const currentUser = ref<any>(user);
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
@@ -252,9 +252,9 @@
       const tempDepth = ref<any>()
       const tempDiameter = ref<any>()
 
-        const pendingButton = reactive(
+        const unDoneButton = reactive(
         [
-          {text:"תחילת ביצוע",  icon: home,  click: ()=>setPending() },
+          {text:"ביטול ביצוע",  icon: closeCircleOutline,  click: ()=>setUnDone() },
         
         ]
       );
@@ -344,7 +344,9 @@
       
     }
 
-      const setConfirm = ()=>{    
+      const setConfirm = async ()=>{ 
+        console.log("setConfirm");
+           
         if(currentPit.value.diameter == 0 || currentPit.value.depth == 0 ){
           alert('יש לוודא עומק וקוטר פיר קידוח תקינים!')
           return
@@ -352,16 +354,24 @@
         else{
              currentPit.value.status = 'Done';
              currentPit.value.finishDate = new Date()
-             savePitChanges(); 
+             await savePitChanges(); 
             }          
       }
 
-      const setPending = async ()=>{  
-        if(currentPit.value.status === 'waiting'){
-             currentPit.value.status = 'Pending';
-             lastPit.value = currentPit.value
-             project.value.lastPit = project.value.pits.indexOf(currentPit.value) 
-             await updateProjectLastPit(project.value)
+      const setUnDone = async ()=>{  
+        if(currentPit.value.status === 'Done'){
+             currentPit.value.status = 'waiting';
+             //remove pit from report
+             console.log(currentPit.value);
+             
+             //let report = await getReportByID(currentPit.value.report_id.toString())
+             //console.log(report);
+             
+             //report.pits = report.pits.filter((pit: { pit_id: any; })=> pit.pit_id === currentPit.value._id)
+            // await updateReportByID(report)
+             //remove report  from pit
+             currentPit.value.report_id = ""
+             await updatePitStatusAndReport(currentPit.value)
              savePitChanges();
           }      
       }
@@ -374,55 +384,72 @@
       }
       
       const savePitChanges= async()=>{
-        
+        console.log("savePitChanges");
         let index = pits.value.indexOf(currentPit.value)
-          project.value.pits[index] = currentPit.value;
+          pits.value[index] = currentPit.value;
           if(currentPit.value.status === 'Done')
           {
             await addToDailyReport();
           }
           
-          await updateProjectPits(project.value)
+          //await updateProjectPits(project.value)
           //await saveNewReport(currentPit.value)
           modalManager("close")
       }
 
       const addToDailyReport = async()=>{
-          let reports = project.value.reports
+         console.log("addToDailyReport");
+         if(project.value.reports === null){
+          project.value.reports = []
+         }
+
           let today = new Date();
           //if its a new project and this is the first report
-          if(reports.length === 0){
-            let pits = [currentPit.value]
-            let report = {date: today, pits , project_id:project.value._id, project_name: project.value.name, project_address: project.value.address }
+          if(project.value.reports.length === 0){
+            let reports = []
+            //let pits = [currentPit.value._id]
+            let report = {date: today, project_id:project.value._id, project_name: project.value.name, project_address: project.value.address }
             let resp = await saveNewReport(report)
+            currentPit.value.report_id = resp
+            await updatePitStatusAndReport(currentPit.value)
             reports.push({date:today,report_id:resp })
             project.value.reports = reports
+            //await updateProjectReports(project.value)
           }
           else{
             
-            let index = reports.length  * 1  - 1
-            let report = reports[index]
+            let index = project.value.reports.length  * 1  - 1
+            let report = project.value.reports[index]
             let repoDate = new Date(report.date)
 
             //if the last report is today's report
             if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
             //project.value.reports[index].pits.push(currentPit.value)
             let report_id = report.report_id ;
-            report = await getReportByID(report_id)
-            report.pits.push(currentPit.value)
-            await updateReportByID(report)
+            //report = await getReportByID(report_id.toString())
+            //report.pits.push(currentPit.value._id)
+            //await updateReportByID(report)
+            currentPit.value.report_id = report_id
+            await updatePitStatusAndReport(currentPit.value)
+            
           }
           //else- its a new report for today
           else{
-            let pits = [currentPit.value]
-            let report = {date: today, pits , project_id:project.value._id, project_name: project.value.name, project_address: project.value.address  }
+            let reports = project.value.reports
+            //let pits = [currentPit.value._id]
+            let report = {date: today , project_id:project.value._id, project_name: project.value.name, project_address: project.value.address  }
             let resp = await saveNewReport(report)
+            currentPit.value.report_id = resp
+            await updatePitStatusAndReport(currentPit.value)
             reports.push({date:today,report_id:resp })
             project.value.reports = reports
+            
             //project.value.reports.push({date:today,pits:[currentPit.value] })
           }
-          }
+
           
+          }
+          await updateProjectReports(project.value)
       }
       const goToReport = ()=>{
         router.push('/daily-report/'+ project.value._id)
@@ -463,7 +490,7 @@
         
       }
 
-      const changePitDiameterOrDepth= async(type: string, _id:string)=>{
+      const changePitDiameterOrDepth= async(type: string, _id:any)=>{
         
         let index = pits.value.indexOf(currentPit.value)
         console.log(index);
@@ -472,21 +499,20 @@
         if(type === 'Depth'){
           tempPit.depth = tempDepth.value * 1
           tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
+          await  updatePitDepth(tempPit)
           popoverOpen.value = false
         }
         if(type === 'Diameter'){
           tempPit.diameter = tempDiameter.value * 1
           tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
+          await  updatePitDiameter(tempPit)
           popoverOpenDiameter.value = false
         }
-        project.value.pits[index] = tempPit;
-        console.log(project.value.pits);
+        pits.value[index] = tempPit;
+        console.log(pits.value);
         
         currentPit.value = tempPit
         console.log(currentPit.value);
-        
-          
-        await updateProjectPits(project.value)
         
       }
         
@@ -501,7 +527,7 @@
         modalManager,
         setConfirm,
         savePitChanges,
-        setPending,
+        setUnDone,
         unsetPending,
         addToDailyReport,
         goToReport,
@@ -533,7 +559,7 @@
         tempDepth,
         tempDiameter,
 
-        pendingButton,
+        unDoneButton,
         buttons,
   
   

@@ -332,6 +332,33 @@ const updateEmployeeProject =async (employee : any) => {
           
         }
     }
+    const updateProjectReports =async (project : any) => {
+      try {
+                // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("projects");
+      // 3. Read and write data with MongoDB queries
+      const query = { "_id": project._id };
+      const update = {
+        "$set": {
+         "reports":project.reports
+            }
+        };
+        const options = { "upsert": false };
+        collection?.updateOne(query, update, options)
+        .then(result => {
+         const { matchedCount, modifiedCount } = result;
+         if(matchedCount && modifiedCount) {
+         console.log(`Successfully updated the item.`)
+  }
+})
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+  }
 
     const updateProjectLastPit =async (project : any) => {
       try {
@@ -811,6 +838,65 @@ const getProjectPits=async (project_id:string) => {
  
 }
 
+const updatePitDepth =async (pit : any) => {
+  try {
+            // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("pits");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": pit._id };
+  const update = {
+    "$set": {
+     "depth": pit.depth,
+     "concreteVolume": pit.concreteVolume
+        }
+    };
+    const options = { "upsert": false };
+    collection?.updateOne(query, update, options)
+    .then(result => {
+     const { matchedCount, modifiedCount } = result;
+     if(matchedCount && modifiedCount) {
+     console.log(`Successfully updated the item.`)
+}
+})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+const updatePitDiameter =async (pit : any) => {
+  try {
+            // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("pits");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": pit._id };
+  const update = {
+    "$set": {
+     "diameter": pit.diameter,
+     "concreteVolume": pit.concreteVolume
+        }
+    };
+    const options = { "upsert": false };
+    collection?.updateOne(query, update, options)
+    .then(result => {
+     const { matchedCount, modifiedCount } = result;
+     if(matchedCount && modifiedCount) {
+     console.log(`Successfully updated the item.`)
+}
+})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+
     return{
         isLoggedIn,
         user,
@@ -836,6 +922,7 @@ const getProjectPits=async (project_id:string) => {
         getAllProjectByOrganizationID,
         createNewProject,
         updateProjectPits,
+        updateProjectReports,
         updateProjectLastPit,
         updateProjectMachines,
         updateProjectExternalServices,
@@ -865,6 +952,8 @@ const getProjectPits=async (project_id:string) => {
         updatePitStatusAndReport,
         getReportPits,
         getProjectPits,
+        updatePitDepth,
+        updatePitDiameter,
         
     };
 };
