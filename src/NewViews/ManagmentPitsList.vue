@@ -2,22 +2,38 @@
     <ion-page>
       <ion-content>
         <AppHeader :str="'רשימת כלונסאות'"/>
-     
+
   
             <ion-accordion-group  :multiple="true" :value="['Waiting', 'Done']">
   
+        <ion-accordion >
+  
+          <ion-item slot="header">
+            <ion-label>מיון</ion-label>
+          </ion-item>
+
+          <div slot="content">
+            <ion-item :key="listName" v-for="listName in project?.pitsList ">
+             
+              <ion-button size="large"  @click="sortPits(listName.toString())">{{listName}}</ion-button>
+        
+            </ion-item>
+          </div>
+
+        </ion-accordion>
               <ion-accordion  value="Waiting">
   
                 <ion-item slot="header">
                   <ion-label>לא הושלמו</ion-label>
-                  <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status!='Done').length }} </ion-badge>
+                  <ion-badge style="margin:2px"> {{ pits.filter((pit: { status: string; })=>pit.status!='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status!='Done')">
+                  <ion-item :key="pit._id" v-for="pit in pits.filter((pit: { status: string; })=>pit.status!='Done')">
                     
                     <ion-button :color="pit.status=='Done'?'success':'danger'" size="large"  @click="pitClick({_id:pit.p})">לפירוט</ion-button>
-                    <p slot="end" class="pitText">{{ pit.p}}</p> 
+                    <p slot="" class="pitText">{{ pit.listName}}</p> 
+                    <p slot="end" class="pitText">{{pit.p}}</p> 
                   </ion-item>
                 </div>
   
@@ -28,14 +44,15 @@
   
                 <ion-item slot="header">
                   <ion-label>הסתיימו</ion-label>
-                  <ion-badge style="margin:2px"> {{ pits.filter(pit=>pit.status=='Done').length }} </ion-badge>
+                  <ion-badge style="margin:2px"> {{ pits.filter((pit: { status: string; })=>pit.status=='Done').length }} </ion-badge>
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item :key="pit._id" v-for="pit in pits.filter(pit=>pit.status=='Done')">
+                  <ion-item :key="pit._id" v-for="pit in pits.filter((pit: { status: string; })=>pit.status=='Done')">
                     
                     <ion-button :color="pit.status=='Done'?'success':'danger'" size="large" @click="pitClick({_id:pit.p})">לפירוט</ion-button>
-                    <p slot="end" class="pitText">{{ pit.p}}</p> 
+                    <p slot="" class="pitText">{{ pit.listName}}</p> 
+                    <p slot="end" class="pitText">{{pit.p}}</p> 
                   </ion-item>
                 </div>
                 
@@ -229,6 +246,7 @@
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
       const projects = ref<any>();
+      const allPits = ref<any>([])
       const pits = ref<any>([]);
       const currentPit = ref();
       const prevPit = ref();
@@ -274,13 +292,18 @@
           
           console.log(project.value);
             
-            pits.value = await getProjectPits(project_id.value)
+            allPits.value = await getProjectPits(project_id.value)
+            pits.value = allPits.value
             //showMap.value = true
             pits.value.forEach((pit:any) => pit.selected = false );
             //current_machine.value = await getDrillingMachineByID(currentUser?.value.customData.machine_id.$oid)
             //console.log(current_machine.value);
              
       });
+
+      const sortPits = (listName:string)=>{
+        pits.value = allPits.value.filter((pit: { listName: string; })=> pit.listName === listName)
+      }
   
      
   
@@ -481,6 +504,7 @@
      
       return {
         //methoods
+        sortPits,
         pitClick,
         modalManager,
         setConfirm,

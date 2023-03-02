@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <Vue3Signature
+  <div >
+    <Vue3Signature class="mainContainer"
       ref="signature1"
       :sigOption="state.option"
-      :w="'300px'"
+      
       :h="'200px'"
       :disabled="state.disabled"
-      class="example"
+      
     >
     </Vue3Signature>
   </div>
@@ -55,7 +55,11 @@ export default defineComponent({
 
 <style scoped>
 .mainContainer{
+width: 100%;
+margin: 2%;
 display: block;
 direction: rtl;
+border: 2px lightgray solid;
+border-radius: 12px;
 }
 </style>

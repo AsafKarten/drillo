@@ -5,7 +5,7 @@
 
         
         <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address" :text="machine?.name"/> -->
-        <GridButtons :buttons="buttons" :options="{buttonHeight:180}"/>
+        <GridButtons :buttons="buttons" :options="{buttonHeight:210}"/>
 
       </ion-content>
    

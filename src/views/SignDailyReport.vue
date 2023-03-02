@@ -6,14 +6,14 @@
    <div v-if="!report?.signature">
       <ion-card v-show="report" >
         <ion-card-header>
-          <ion-card-subtitle>{{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-subtitle>
-          <ion-card-title>דו"ח ביצוע עבודה יומי </ion-card-title>
-          <ion-card-title>{{report?.project_name + " " + report?.project_address}}</ion-card-title>
+          <ion-card-subtitle>{{report?.project_name + " " + report?.project_address}}</ion-card-subtitle>
+          <ion-card-title>דו"ח ביצוע עבודה יומי {{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-title>
+      
         </ion-card-header>
     
         <ion-card-content>
            <div class="pitBorder" :key="pit._id" v-for="pit in pits">
-            <p class="textMargin">{{"כלונס מספר: " + pit.p  }}</p>
+            <p class="textMargin">{{pit.listName + " | " + "כלונס מספר: " + pit.p  }}</p>
             
             <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
 
@@ -58,16 +58,44 @@
       <CreatePdf ref="CreatePdfComponent" :report="report" :signatureImage="signatureImageString" :signatureName="signatureName"/>
 </div>
 <div v-else class="drilloCard">
-  <h1>Drillo</h1>
-  <h3>מומחים לקידוחים</h3>
-  <p>לא נמצא דוח זמין לחתימה</p>
+  <ion-card v-show="report" >
+    <ion-card-header>
+      <ion-card-subtitle>{{report?.project_name + " " + report?.project_address}}</ion-card-subtitle>
+      <ion-card-title>דו"ח ביצוע עבודה יומי {{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-title>
+   
+    </ion-card-header>
+
+    <ion-card-content>
+       <div class="pitBorder" :key="pit._id" v-for="pit in pits">
+        <p class="textMargin">{{pit.listName + " | " + "כלונס מספר: " + pit.p  }}</p>
+        
+        <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
+
+        <p class="textMargin">{{' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
+        <ion-item :key="n.depth" v-for="n in pit.notes">
+          
+          <p class="textMargin">{{n.note}}</p>
+          
+          <p class="textMargin">{{n.depth}}{{' מטר '}}</p>
+          </ion-item>
+        </div>
+  
+    </ion-card-content>
+    <ion-item v-show="report?.signature" >
+      <p class="textMargin">{{"שם החותם:"}}</p>
+      <p class="textMargin">{{report?.signatureName}}</p>
+      <ion-thumbnail slot="end"> 
+        <img  alt="signature" :src="report?.signature" />
+      </ion-thumbnail>
+    </ion-item>
+  </ion-card>
 </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import {IonContent, IonPage, IonButton, IonInput, IonLabel, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, } from '@ionic/vue';
+import {IonContent, IonPage, IonButton, IonInput, IonLabel, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,IonThumbnail, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -93,6 +121,7 @@ export default defineComponent({
     IonCardHeader, 
     IonCardSubtitle, 
     IonCardTitle,
+    IonThumbnail,
     CreatePdf,
     SignaturePad,
     AppHeader
@@ -114,12 +143,13 @@ export default defineComponent({
     const siteManager = ref<any>()
     const {id} = route.params
 
-    const signatureName = ref();
+    const signatureName = ref("");
     const signatureImageString = ref<string>();
     const SignaturePadComponent = ref<any>();
     const CreatePdfComponent = ref<any>();
+    const emptySig = ref("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAGQAlgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKpgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//9k=")
 
-
+    
     const clearSignature = ()=>SignaturePadComponent.value.clear();
     const saveAsPDF = async()=>{
       //save the signature as a string of a JPEG image
@@ -145,7 +175,17 @@ export default defineComponent({
 
     
     const confirmReport = async()=>{
+      if( signatureName.value === ""){
+        alert("יש למלא שם")
+        return
+      }
       await saveAsPDF()
+      console.log(signatureImageString.value);
+      if(signatureImageString.value === emptySig.value){
+        alert("יש לחתום במלבן הריק")
+        return
+      }
+      
       report.value.signature = signatureImageString.value
       report.value.signatureName = signatureName.value
       await updateReportSigByID(report.value)
@@ -168,6 +208,7 @@ export default defineComponent({
       repoDate,
       projects,
       id,
+      emptySig,
       
       signatureName,
       signatureImageString,
@@ -182,10 +223,12 @@ export default defineComponent({
 
 <style scoped>
 .textMargin{
+  text-align: right;
   margin-left: 1%;
 }
 .drilloCard{
-  text-align: center;
+  text-align: right;
+  
 }
 .pitBorder{
   border-bottom: 1px black solid;

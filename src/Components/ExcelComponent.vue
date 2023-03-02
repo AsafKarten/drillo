@@ -20,7 +20,7 @@
    
 <div class="container">
   <h1 id="title">הוספת כלונסים</h1>
-  <p> מספר כלונסים:{{project?.pits?.length}}</p>
+  <p> מספר כלונסים:{{pitsNumber}}</p>
 <div class="containerPits">
 
     <!-- <div >
@@ -100,6 +100,13 @@
           <ion-content class="ion-padding">
             <div class="hebrewText">
               <ion-item>
+                <ion-label position="floating">שם רשימה</ion-label>
+                <ion-input
+                  v-model="listName"
+                  type="text"
+                ></ion-input>
+            </ion-item>
+              <ion-item>
                 <ion-label position="floating">כלונס התחלה</ion-label>
                 <ion-input
                   v-model="columnStart"
@@ -161,7 +168,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>();
-    const {user , saveNewPit,getProjectByID,getProjectPits,updateProjectPits,  getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , saveNewPit, saveProjectPits, updateProjectPitsList,getProjectByID,getProjectPits,updateProjectPits,  getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -188,11 +195,13 @@ export default defineComponent({
     const current_employee = ref<any>() 
     const isOpenEmp= ref(false)
     const projectMachines = ref<any>([])
+    const listName = ref("")
     const columnStart = ref(0)
     const columnEnd = ref(0)
     const project_id = ref<any>(route.params.id)
     const project = ref<any>()
     const isOpenLoading = ref(false)
+    const pitsNumber = ref(0)
 
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
@@ -226,9 +235,9 @@ export default defineComponent({
             let itm = {x : arraylist.value[i].x , y : arraylist.value[i].y }
             let concreteVolume = (3.14 * ((diameter/2) * (diameter/2)) * depth)/10000
             const [long, lat] = proj4('+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs', '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees', [itm.x, itm.y]);
-            let pit = {project_id: project_id.value, p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting',concreteVolume:concreteVolume}
-            let pit_id = await saveNewPit(pit)
-            pits[i]= pit_id
+            let pit = {project_id: project.value._id, p:p ,depth, diameter, itm:itm , coordinates: {long:long,lat:lat}, status:'waiting',concreteVolume:concreteVolume}
+            //let pit_id = await saveNewPit(pit)
+            pits.push(pit) 
             
         }
         project.value.pits = pits
@@ -241,16 +250,29 @@ export default defineComponent({
     }
 
     const createColumnsManually = async ()=>{
+      if(columnEnd.value === columnStart.value){
+        alert("יש לוודא תקינות קלט")
+        return;
+      }
       console.log("called");
       isOpenLoading.value = true
       var pits= []
         for(var i = 0; i <= columnEnd.value - columnStart.value ; i++){
             let p = columnStart.value * 1 + i ;
-            let pit = {project_id: project_id.value, p:p ,depth:0, diameter:0, status:'waiting',concreteVolume:0}
-            let pit_id = await saveNewPit(pit)
-            pits[i]= pit_id
+            let pit = {listName:listName.value, project_id: project.value._id, p:p ,depth:0, diameter:0, status:'waiting',concreteVolume:0}
+            //let pit_id = await saveNewPit(pit)
+            pits.push(pit)
         }
-        project.value.pits = pits;
+        let res = await saveProjectPits(pits)
+        console.log(res);
+        pitsNumber.value += pits.length
+        if(project.value.pitsList === undefined || project.value.pitsList === null){
+          project.value.pitsList = []
+        }
+        project.value.pitsList.push(listName.value)
+        await updateProjectPitsList(project.value)
+        
+        //project.value.pits = pits;
         console.log(project.value);
         
         columnsModalManager();
@@ -413,11 +435,13 @@ export default defineComponent({
         current_employee:current_employee,
         isOpenEmp:isOpenEmp,
         projectMachines:projectMachines,
+        listName,
         columnStart:columnStart,
         columnEnd: columnEnd,
         project_id,
         project,
         isOpenLoading,
+        pitsNumber
       
   }
   },
