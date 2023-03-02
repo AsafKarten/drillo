@@ -59,12 +59,21 @@
 </div>
 </div>
 
+<ion-alert
+:is-open="isOpenAlert"
+header="שגיאה"
+sub-header="אנא מלא\י את כל השדות"
+message="יש למלא את כל השדות ורק לאחר מכן לשמור את הפרוייקט החדש"
+:buttons="['OK']"
+@didDismiss="setOpen(false)"
+></ion-alert>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem, } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAlert } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -93,7 +102,7 @@ export default defineComponent({
     IonInput,
     IonLabel,
     IonItem,
- 
+    IonAlert,
     AppHeader
 },
   setup(){
@@ -129,6 +138,9 @@ export default defineComponent({
     const columnStart = ref(0)
     const columnEnd = ref(0)
     const project_id= ref<any>()
+    const isOpenAlert = ref(false)
+
+    const setOpen = (state: boolean) => (isOpenAlert.value = state);
 
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
@@ -137,6 +149,10 @@ export default defineComponent({
 
 
     const saveProject =async ()=>{
+      if(projectName.value === "" || projectAddress.value === "" || projectClient.value === "" || projectAddress.value === "" || projectContactPerson.value === "" || contactPersonPhone.value === "" ||contactPersonMail.value === "" ){
+        setOpen(true)
+        return
+      }
       let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone.value, mail:contactPersonMail.value}
       let project_id = await createNewProject(projectName.value, projectAddress.value, projectClient.value ,contactPerson)
       router.push('/add-columns/'+ project_id)
@@ -146,6 +162,7 @@ export default defineComponent({
      return {
         //methoods
         saveProject,
+        setOpen,
        //properties
         currentUser : user,
         file : file,
@@ -177,6 +194,7 @@ export default defineComponent({
         columnStart:columnStart,
         columnEnd: columnEnd,
         project_id,
+        isOpenAlert,
       
   }
   },

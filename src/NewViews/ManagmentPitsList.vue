@@ -70,7 +70,7 @@
                           type="number"
                         ></ion-input>
                       </ion-item>
-                      <ion-button color="success" @click="changePitDiameterOrDepth('Depth')">אישור</ion-button>
+                      <ion-button color="success" @click="changePitDiameterOrDepth('Depth',currentPit._id)">אישור</ion-button>
                     </ion-content>
                   </ion-popover>
 
@@ -87,7 +87,7 @@
                           type="number"
                         ></ion-input>
                       </ion-item>
-                      <ion-button color="success" @click="changePitDiameterOrDepth('Diameter')">אישור</ion-button>
+                      <ion-button color="success" @click="changePitDiameterOrDepth('Diameter',currentPit._id)">אישור</ion-button>
                     </ion-content>
                   </ion-popover>
                   
@@ -224,7 +224,7 @@
       const currentDate = ref(new Date())
       const router = useRouter();
       const route = useRoute()
-      const { user,getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
+      const { user,updatePitDiameter,updatePitDepth, getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID} = useAppState(); 
       const currentUser = ref<any>(user);
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
@@ -447,26 +447,30 @@
         
         
       }
-
-      const changePitDiameterOrDepth= async(type: string)=>{
+      
+      const changePitDiameterOrDepth= async(type: string, _id:any)=>{
         
         let index = pits.value.indexOf(currentPit.value)
+        console.log(index);
+        
         let tempPit = currentPit.value
         if(type === 'Depth'){
           tempPit.depth = tempDepth.value * 1
           tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
+          await  updatePitDepth(tempPit)
           popoverOpen.value = false
         }
         if(type === 'Diameter'){
           tempPit.diameter = tempDiameter.value * 1
           tempPit.concreteVolume = (3.14 * ((tempPit.diameter/2) * (tempPit.diameter/2)) * tempPit.depth)/10000
+          await  updatePitDiameter(tempPit)
           popoverOpenDiameter.value = false
         }
-        project.value.pits[index] = tempPit;
-        currentPit.value = tempPit
+        pits.value[index] = tempPit;
+        console.log(pits.value);
         
-          
-        await updateProjectPits(project.value)
+        currentPit.value = tempPit
+        console.log(currentPit.value);
         
       }
         

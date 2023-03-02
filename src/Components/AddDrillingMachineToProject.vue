@@ -263,9 +263,15 @@
           //check if the current machine is in another project
           if(machine.project_id !== "" && machine.project_id !== undefined){
             let prevProject = await getProjectByID(machine.project_id )
-            let index = prevProject.machines.indexOf(tempMachine)
-            prevProject.machines.splice(index,1)
-            await updateProjectMachines(prevProject)
+            if(prevProject !== null || prevProject !== undefined){
+                    machine.project_id = ""
+            }
+            else{
+              let index = prevProject.machines.indexOf(tempMachine)
+                    prevProject.machines.splice(index,1)
+                    await updateProjectMachines(prevProject)
+                  }
+           
           }
             
           

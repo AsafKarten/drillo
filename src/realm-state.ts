@@ -264,7 +264,24 @@ const updateEmployeeProject =async (employee : any) => {
       return await collection?.findOne(query)
      
   }
+  
 
+  const deleteProjectByID =async (project_id : any) => {
+    try {
+              // 1. Get a data source client
+    const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+    // 2. Get a database & collection
+    const collection = mongodb?.db("drillo").collection("projects");
+    // 3. Read and write data with MongoDB queries
+    const query = { "_id": project_id };
+
+    collection?.deleteOne(query)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+}
 
   const getAllProjectByOrganizationID =async () => {
       
@@ -294,7 +311,7 @@ const updateEmployeeProject =async (employee : any) => {
         // 2. Get a database & collection
         const collection = mongodb?.db("drillo").collection("projects");
         // 3. Read and write data with MongoDB queries
-        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson, creationDate:new Date()});
+        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson,machines:[], creationDate:new Date()});
         return insertResponse?insertResponse.insertedId:false;
 
 
@@ -919,6 +936,7 @@ const updatePitDiameter =async (pit : any) => {
         //project
         getProject,
         getProjectByID,
+        deleteProjectByID,
         getAllProjectByOrganizationID,
         createNewProject,
         updateProjectPits,

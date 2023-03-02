@@ -121,7 +121,7 @@
           let empID = await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value)
           
           isOpen.value = false 
-          router.push('/employee/'+empID)
+          router.push('/employees')
 
         } catch (err) {
           console.error("Failed to log in", err)

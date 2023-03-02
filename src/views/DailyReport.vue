@@ -8,34 +8,29 @@
       <h5>פרוייקט: {{report?.project_name + " " + report?.project_address}}</h5>
 
        <ion-card >
-    <ion-card-header>
-      <ion-card-subtitle>{{ "תאריך" + ":"+ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-subtitle>
-      <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-       <div class="pitBorder" :key="pit._id" v-for="pit in pitsToShow">
-        <p class="textMargin">{{"כלונס מספר: " + pit.p  }}</p>
-        
-        <p class="textMargin">{{'סטטוס: '}}{{pit.status === "Done" ? 'בוצע' :  pit.status }}</p>
-        <p class="textMargin">{{' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
-        <ion-item :key="n.depth" v-for="n in pit.notes">
-          
-          <p class="textMargin">{{n.note}}</p>
-          
-          <p class="textMargin">{{n.depth}}{{' מטר '}}</p>
-          </ion-item>
-        </div>
-        <!-- <ion-button v-if="!report.approve" @click="confirmReport(report.date)">אישור ביצוע</ion-button>
-        <span v-else>אושר</span> -->
-    </ion-card-content>
-    <ion-item v-show="report?.signature" >
-      <p class="textMargin">{{"שם החותם:"}}</p>
-      <p class="textMargin">{{report?.signatureName}}</p>
-      <ion-thumbnail slot="end"> 
-        <img  alt="signature" :src="report?.signature" />
-      </ion-thumbnail>
-    </ion-item>
+        <ion-card-header>
+          <ion-card-subtitle></ion-card-subtitle>
+          <ion-card-title>דו"ח ביצוע עבודה {{ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-title>
+        </ion-card-header>
+    
+        <ion-card-content>
+           <ion-item :key="pit._id" v-for="pit in report?.pitsToShow">
+            
+            <!-- <p class="textMargin">{{' ' + pit.p + ' '+}}</p> -->
+            
+            <!-- <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p> -->
+  
+            <p class="textMargin">{{ "בור מס'" +' '+ pit.p +' ' +' | ' + ' עומק:' +' '+ pit.depth + ' ' +' | ' + 'קוטר:' + ' '+ pit.diameter + ' | ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
+            </ion-item>
+  
+        </ion-card-content>
+        <ion-item v-show="report?.signature" >
+          <p class="textMargin">{{"שם החותם:"}}</p>
+          <p class="textMargin">{{report?.signatureName}}</p>
+          <ion-thumbnail slot="end"> 
+            <img  alt="signature" :src="report?.signature" />
+          </ion-thumbnail>
+        </ion-item>
   </ion-card>
 
     <div style="padding-top: 6px">
@@ -52,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
+import {onIonViewWillEnter, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -102,10 +97,10 @@ export default defineComponent({
     const siteManager = ref<any>()
     const {id} = route.params
 
-  onMounted(async()=>{
+    onIonViewWillEnter(async()=>{
 
       report.value = await getReportByID(id.toString())
-      pitsToShow.value = await getReportPits(report.value._id)
+      report.value.pitsToShow = await getReportPits(report.value._id)
       console.log(report.value);
       
       pits.value = report.value.pits

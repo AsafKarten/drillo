@@ -3,7 +3,7 @@
       <AppHeader :str="'דוחות עבודה'"/>
       
       <ion-content :fullscreen="true" >
-    <div class="homeContainer">
+    <div class="homeContainer" v-if="loaded">
      
         <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
@@ -11,8 +11,8 @@
 
          <ion-card  :key="repo.date" v-for="repo in reports">
       <ion-card-header>
-        <ion-card-subtitle>{{ "תאריך" + ":"+ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-subtitle>
-        <ion-card-title>דו"ח ביצוע עבודה יומי</ion-card-title>
+        <ion-card-subtitle></ion-card-subtitle>
+        <ion-card-title>דו"ח ביצוע עבודה {{ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-title>
       </ion-card-header>
   
       <ion-card-content>
@@ -22,7 +22,7 @@
           
           <!-- <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p> -->
 
-          <p class="textMargin">{{pit.p + '-בוצע, ' + ' עומק:' +' '+ pit.depth + ' ' +' , ' + 'קוטר:' + ' '+ pit.diameter + ' , ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
+          <p class="textMargin">{{ "בור מס'" +' '+ pit.p +' ' +' | ' + ' עומק:' +' '+ pit.depth + ' ' +' | ' + 'קוטר:' + ' '+ pit.diameter + ' | ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
           </ion-item>
 
       </ion-card-content>
@@ -40,12 +40,33 @@
     </ion-card>
   
     </div>
+    <ion-list v-if="!loaded">
+      <ion-list-header>
+        <ion-skeleton-text :animated="true" style="width: 80px"></ion-skeleton-text>
+      </ion-list-header>
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <ion-skeleton-text :animated="true"></ion-skeleton-text>
+        </ion-thumbnail>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text :animated="true" style="width: 80%;"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text :animated="true" style="width: 60%;"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text :animated="true" style="width: 30%;"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
       </ion-content>
     </ion-page>
   </template>
   
   <script lang="ts">
-  import {onIonViewWillEnter,onIonViewDidEnter, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail, } from '@ionic/vue';
+  import {onIonViewWillEnter,onIonViewDidEnter,IonSkeletonText, IonList,IonListHeader,IonLabel, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail, } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import {useAppState} from '../realm-state';
@@ -72,6 +93,10 @@
       IonCardTitle,
       IonButton,
       IonThumbnail,
+      IonSkeletonText,
+      IonList,
+      IonListHeader
+      ,IonLabel,
       AppHeader
      
   },
@@ -92,6 +117,7 @@
       const siteManagers = ref<any>()
       const siteManager = ref<any>()
       const {id} = route.params
+      const loaded = ref(false)
      
 
       onIonViewDidEnter(() => {
@@ -105,8 +131,9 @@
       
         project.value = await getProjectByID(id.toString()) 
         reports.value = await getProjectReports(project_id.value)
+        reports.value = reports.value.reverse()
         console.log(project.value);
-        await getAllReports()
+        await getReportsPits()
     });
 
     // onMounted(async()=>{
@@ -115,16 +142,15 @@
     //     project.value = await getProjectByID(id.toString()) 
     //     reports.value = await getProjectReports(project_id.value)
     //     console.log(project.value);
-    //     await getAllReports()
+    //     await getReportsPits()
     // });
 
-    const getAllReports = async ()=>{        
+    const getReportsPits = async ()=>{        
       for ( let index = 0; index < reports.value.length; index++) {
          let pitsToShow = await getReportPits(reports.value[index]._id.toString()) ;
          reports.value[index].pitsToShow =  pitsToShow 
       }
-      reports.value = reports.value.reverse()
-      
+      loaded.value = true
     }
   
 
@@ -136,7 +162,7 @@
    
        return {
         //methods
-          getAllReports,
+          getReportsPits,
           goTo,
           //properties
           currentUser : user,
@@ -151,6 +177,7 @@
           siteManager:siteManager,
           projects:projects,
           id:id,
+          loaded,
         
           
     }

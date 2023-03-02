@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem, IonAvatar } from '@ionic/vue';
+import {onIonViewWillEnter, IonContent, IonPage,IonButton, IonItem, IonAvatar } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -54,7 +54,7 @@ export default defineComponent({
     const employees = ref<any>()
     const organization = ref<any>()
     
-  onMounted(async()=>{
+    onIonViewWillEnter(async() => {
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
           

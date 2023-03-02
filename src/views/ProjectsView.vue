@@ -8,7 +8,7 @@
         <div>
           <ion-item  :key="project._id" v-for="project in projects">
           <p>{{project.name + ", " + project.address }}</p>
-          <ion-button slot="end" shape="round" @click="goToProject(project)">{{'בחר'}}</ion-button>
+          <ion-button slot="end" shape="round" size="large" @click="goToProject(project)">{{'בחר'}}</ion-button>
           </ion-item>
           
         </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton,IonItem } from '@ionic/vue';
+import {onIonViewWillEnter, IonContent, IonPage,IonButton,IonItem } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -42,17 +42,17 @@ export default defineComponent({
     const router = useRouter();
    
     const {user , logout, getAllProjectByOrganizationID} = useAppState();
-     const currentUser = ref<any>(user)
+    const currentUser = ref<any>(user)
     const projects = ref<any>([]);
     
     
-  onMounted(async()=>{
+    onIonViewWillEnter(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
-    const allProjects = await getAllProjectByOrganizationID();
-    console.log(allProjects);
-    
-    projects.value = allProjects
+
+    projects.value = await getAllProjectByOrganizationID();
+    console.log(projects.value);
+      
   });
 
     

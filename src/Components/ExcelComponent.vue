@@ -20,17 +20,17 @@
    
 <div class="container">
   <h1 id="title">הוספת כלונסים</h1>
-  <p> מספר כלונסים:{{projectPits?.length}}</p>
+  <p> מספר כלונסים:{{project?.pits?.length}}</p>
 <div class="containerPits">
 
-    <div >
+    <!-- <div >
       <p>קובץ כלונסים</p>
       <input
         type="file"
         v-on:change="addfile($event)"
         accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
       />
-    </div>
+    </div> -->
       
     <div> 
       <ion-button @click="columnsModalManager">הוספת כלונסים ידנית </ion-button>
