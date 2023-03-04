@@ -8,15 +8,15 @@
        
      <ion-item  >
           <ion-label position="floating">שם פרטי</ion-label>
-       <ion-input v-model="first" type="text" autocomplete="new-first"></ion-input>
+       <ion-input v-model="first" type="text" ></ion-input>
        </ion-item>
        <ion-item  >
            <ion-label position="floating">שם משפחה</ion-label>
-       <ion-input v-model="last" type="text" autocomplete="new-last"></ion-input>
+       <ion-input v-model="last" type="text" ></ion-input>
        </ion-item>
        <ion-item  >
         <ion-label position="floating">כתובת מייל</ion-label>
-       <ion-input v-model="email" type="text" autocomplete="new-email"></ion-input>
+       <ion-input v-model="email" type="text" autocomplete="email"></ion-input>
        </ion-item>
         <ion-item >
         <ion-label position="floating">סיסמה</ion-label>
@@ -117,17 +117,34 @@
           isOpen.value = true
           //Create user
           console.log(employeeType.value , organizationID.value);
+          email.value = email.value.toLowerCase()
+          if(email.value[0]==" " || email.value[email.value.length]==" " ){
+            alert('יש להזין מייל תקין ללא רווחים')
+            console.log(email.value);
+            isOpen.value = false 
+            return
+          }
           
           let empID = await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value)
           
           isOpen.value = false 
+          clearForm()
           router.push('/employees')
+    
 
         } catch (err) {
           console.error("Failed to log in", err)
           error.value = err;
         }
       }
+      const clearForm = () =>{
+        email.value="" 
+        password.value="" 
+        first.value="" 
+        last.value="" 
+        employeeType.value="" 
+      }
+
 
    
       
@@ -135,6 +152,7 @@
       return{ 
         //methods
         createEmployeeAccountEmailPassword,
+        clearForm,
         //properties
         currentUser:user,
         organizationID,

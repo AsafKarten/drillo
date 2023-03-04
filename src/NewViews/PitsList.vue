@@ -10,7 +10,7 @@
 
             <ion-accordion-group  :multiple="true" :value="['Waiting', 'Done']">
 
-              <ion-accordion >
+              <ion-accordion v-if="project?.pitsList.length() > 1" >
   
                 <ion-item slot="header">
                   <ion-label>מיון</ion-label>
@@ -34,7 +34,7 @@
                 </ion-item>
   
                 <div slot="content">
-                  <ion-item class="pitsList"  :key="pit?._id" v-for="pit in pits.filter((pit: { status: string; })=>pit.status!='Done')">
+                  <ion-item  :key="pit?._id" v-for="pit in pits.filter((pit: { status: string; })=>pit.status!='Done')">
                   
                     <ion-button :color="pit?.status=='Done'?'success':'danger'"  size="large"  @click="pitClick({_id:pit.p})">בחר</ion-button>
                     <p slot="" class="pitText">{{ pit.listName}}</p> 
@@ -80,16 +80,15 @@
                   <h6>נתוני קידוח</h6>
                   <ion-item >
                     <ion-button size="large" @click="openPopover('Depth')">עומק</ion-button>
-                  <p @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
+                  <p slot="end" @click="openPopover('Depth')"><span @click="openPopover('Depth')" class="coords">{{currentPit?.depth +" "+ 'מטר'}}</span></p>
                   </ion-item>
                   <ion-popover  :is-open="popoverOpen" @didDismiss="popoverOpen = false">
                     <ion-content  class="ion-padding">
                       <ion-item >
                         <ion-label position="floating">שינוי עומק</ion-label>
                         <ion-input
-                         
                           v-model="tempDepth"
-                          clearInput
+                          clearInput="true"
                           type="number"
                         ></ion-input>
                       </ion-item>
@@ -98,7 +97,7 @@
                   </ion-popover>
                   <ion-item >
                   <ion-button size="large" @click="openPopover('Diameter')">קוטר</ion-button>
-                  <p @click="openPopover('Diameter')" >קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
+                  <p slot="end" @click="openPopover('Diameter')" > <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter +" "+ 'ס"מ'}}</span></p>
                   </ion-item>
                   <ion-popover :is-open="popoverOpenDiameter" @didDismiss="popoverOpenDiameter = false">
                     <ion-content  class="ion-padding">
@@ -313,7 +312,19 @@
   
      
       const sortPits = (listName:string)=>{
-        pits.value = allPits.value.filter((pit: { listName: string; })=> pit.listName === listName)
+        if(listName === 'איפוס'){
+          pits.value = allPits.value
+          project.value.pitsList.splice(0,1)
+        }
+        else{
+          pits.value = allPits.value.filter((pit: { listName: string; })=> pit.listName === listName)
+          if(project.value.pitsList[0]=== 'איפוס' ){
+            return
+          }
+          let tempArr = ['איפוס']
+          project.value.pitsList = tempArr.concat(project.value.pitsList)
+        }
+        
       }
   
   //check error
@@ -656,7 +667,6 @@
   }
   
   .coords {
-    font-family: monospace;
     font-size: 150%;
     letter-spacing: 1px;
   }

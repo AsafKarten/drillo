@@ -64,7 +64,7 @@
     setup(){
       const router = useRouter();
       const route = useRoute();
-      const {user , getProjectByID, deleteProjectByID} = useAppState();
+      const {user , getProjectByID, deleteProjectByID, deleteProjectPits} = useAppState();
       const currentUser = ref<any>(user)
       const project_id = ref<any>(route.params);
       const project = ref<any>();
@@ -108,6 +108,7 @@
     }
 
     const deleteProject =async () => {
+      await deleteProjectPits(project.value._id)
       await deleteProjectByID(project.value._id)
       .then(()=>{router.push('/home')})
       setOpen(false)

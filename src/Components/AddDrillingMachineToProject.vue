@@ -122,7 +122,7 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
+  import {onIonViewWillEnter, IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from "vue-router";
   import {useAppState} from '../realm-state';
@@ -171,7 +171,7 @@
       const projectMachines = ref<any>([])
       const avilableDrillingMachines = ref<any>()
   
-    onMounted(async()=>{
+      onIonViewWillEnter(async()=>{
      // organizationID.value = user.value.customData.organizationID
       project.value = await getProjectByID(project_id.value)
       console.log(project.value);
@@ -254,16 +254,21 @@
           if(project.value.machines === undefined || project.value.machines === null)
           project.value.machines = []
 
+          //check if the current machine is already in this project
           let check = project?.value.machines.find((m: { _id: any; })=> m._id === machine._id)
           if(check !== undefined){
+            console.log(check);
+            
             return
           }
 
           let tempMachine = {_id:machine._id, name:machine.name , licens_number:machine.licens_number }
           //check if the current machine is in another project
           if(machine.project_id !== "" && machine.project_id !== undefined){
-            let prevProject = await getProjectByID(machine.project_id )
-            if(prevProject !== null || prevProject !== undefined){
+            let prevProject = await getProjectByID(machine.project_id.toString() )
+            console.log(prevProject);
+            
+            if(prevProject === null || prevProject === undefined){
                     machine.project_id = ""
             }
             else{

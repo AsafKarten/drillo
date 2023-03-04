@@ -155,14 +155,25 @@ export default defineComponent({
       }
       let contactPerson = {name:projectContactPerson.value, phone:contactPersonPhone.value, mail:contactPersonMail.value}
       let project_id = await createNewProject(projectName.value, projectAddress.value, projectClient.value ,contactPerson)
+      clearForm()
       router.push('/add-columns/'+ project_id)
     }
 
+    const clearForm = ()=>{
+      projectName.value = ""
+      projectAddress.value = ""
+      projectClient.value = ""
+      projectAddress.value = ""
+      projectContactPerson.value = "" 
+      contactPersonPhone.value = ""
+      contactPersonMail.value = ""
+    }
 
      return {
         //methoods
         saveProject,
         setOpen,
+        clearForm,
        //properties
         currentUser : user,
         file : file,

@@ -20,6 +20,7 @@
    
 <div class="container">
   <h1 id="title">הוספת כלונסים</h1>
+  <p>{{'*ניתן ליצור מספר רשימות'}}</p>
   <p> מספר כלונסים:{{pitsNumber}}</p>
 <div class="containerPits">
 
@@ -35,9 +36,15 @@
     <div> 
       <ion-button @click="columnsModalManager">הוספת כלונסים ידנית </ion-button>
       
-    </div>
+  
 
    
+    </div>  
+  </div>
+    <div :key="obj.listName" v-for="obj in pitsLists">
+      <ion-item>
+        <p>{{obj.listName + ': ' }}{{'כלונס התחלה:' + obj.start}} {{'כלונס סיום:' + obj.end}} {{'סה"כ:' + obj.numOfPits}}</p>
+      </ion-item>
     </div>
   </div>
   <div class="center">
@@ -202,6 +209,7 @@ export default defineComponent({
     const project = ref<any>()
     const isOpenLoading = ref(false)
     const pitsNumber = ref(0)
+    const pitsLists = ref<any>([])
 
   onMounted(async()=>{
     organizationID.value = user.value.customData.organizationID
@@ -250,7 +258,7 @@ export default defineComponent({
     }
 
     const createColumnsManually = async ()=>{
-      if(columnEnd.value === columnStart.value){
+      if(columnEnd.value == 0 || columnStart.value == 0 || columnStart.value * 1 > columnEnd.value * 1 || listName.value === "" ){
         alert("יש לוודא תקינות קלט")
         return;
       }
@@ -265,17 +273,25 @@ export default defineComponent({
         }
         let res = await saveProjectPits(pits)
         console.log(res);
+        pitsLists.value.push({listName:listName.value, numOfPits: pits.length, start:columnStart.value, end:columnEnd.value })
         pitsNumber.value += pits.length
         if(project.value.pitsList === undefined || project.value.pitsList === null){
           project.value.pitsList = []
         }
-        project.value.pitsList.push(listName.value)
-        await updateProjectPitsList(project.value)
+        let check = project.value.pitsList.find((name: string)=>name === listName.value)
+        console.log(check);
         
+        if(check !== listName.value){
+           project.value.pitsList.push(listName.value)
+           await updateProjectPitsList(project.value)
+        }
         //project.value.pits = pits;
         console.log(project.value);
         
         columnsModalManager();
+        listName.value = ""
+        columnStart.value = 0
+        columnEnd.value = 0
         isOpenLoading.value = false
     }
 
@@ -441,7 +457,8 @@ export default defineComponent({
         project_id,
         project,
         isOpenLoading,
-        pitsNumber
+        pitsNumber,
+        pitsLists
       
   }
   },

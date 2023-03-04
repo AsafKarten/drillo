@@ -58,7 +58,8 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon, } from '@ionic/vue';
+
+import {onIonViewWillEnter, IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -91,16 +92,22 @@ export default defineComponent({
     const showComponent = ref(false)
     const organization = ref<any>()
     
-    onMounted(async()=>{
+    onIonViewWillEnter(async()=>{
       
       if(currentUser?.value.customData.organizationID === undefined)
               router.push('Login')
               
       else {
-        organization.value = await getOrganizationData()
-        console.log(organization.value);
+        if(currentUser?.value.customData.userType == 'manager'){
+           organization.value = await getOrganizationData()
+          console.log(organization.value);
         
-        showComponent.value = true
+          showComponent.value = true
+        }
+        else if(currentUser?.value.customData.userType == 'driller'){
+          router.push('/field-project-managment')
+        }
+       
       }
     });
 

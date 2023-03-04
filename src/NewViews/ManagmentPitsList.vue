@@ -6,7 +6,7 @@
   
             <ion-accordion-group  :multiple="true" :value="['Waiting', 'Done']">
   
-        <ion-accordion >
+        <ion-accordion>
   
           <ion-item slot="header">
             <ion-label>מיון</ion-label>
@@ -302,7 +302,19 @@
       });
 
       const sortPits = (listName:string)=>{
-        pits.value = allPits.value.filter((pit: { listName: string; })=> pit.listName === listName)
+        if(listName === 'איפוס'){
+          pits.value = allPits.value
+          project.value.pitsList.splice(0,1)
+        }
+        else{
+          pits.value = allPits.value.filter((pit: { listName: string; })=> pit.listName === listName)
+          if(project.value.pitsList[0]=== 'איפוס' ){
+            return
+          }
+          let tempArr = ['איפוס']
+          project.value.pitsList = tempArr.concat(project.value.pitsList)
+        }
+        
       }
   
      

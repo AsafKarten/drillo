@@ -87,6 +87,7 @@ export default defineComponent({
 
     const loginEmailPassword = async () => {
       try {
+      email.value = email.value.toLowerCase()
       let resp = await login(email.value, password.value)
       if(resp === "driller")
           router.replace("/field-project-managment");
