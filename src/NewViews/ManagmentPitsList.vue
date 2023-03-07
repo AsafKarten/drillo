@@ -15,7 +15,7 @@
           <div slot="content">
             <ion-item :key="listName" v-for="listName in project?.pitsList ">
              
-              <ion-button size="large"  @click="sortPits(listName.toString())">{{listName}}</ion-button>
+              <ion-button class="sortButton" size="large" expand="block" fill="outline"  @click="sortPits(listName.toString())">{{listName}}</ion-button>
         
             </ion-item>
           </div>
@@ -632,6 +632,9 @@
   }
   .pitText{
     font-size: 150%;
+  }
+  .sortButton{
+    width:100%;
   }
   </style>
   

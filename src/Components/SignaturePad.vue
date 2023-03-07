@@ -40,12 +40,13 @@ export default defineComponent({
     const signature1 = ref(Vue3Signature)
     const save = (t:String) => { return signature1.value.save(t); }  // signature1.value.save('image/jpeg')
     const clear = () => { signature1.value.clear(); }
+    const isEmpty = ()=> {return signature1.value.isEmpty();}
 
     //defineExpose({signature1})
 
     return {
       signature1, state,
-      save, clear
+      save, clear, isEmpty
     }
   }
 });
