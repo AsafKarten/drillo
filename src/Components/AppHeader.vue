@@ -1,15 +1,15 @@
 <template>
   <ion-header  :translucent="true">
     <ion-toolbar class="toolBar">
-      <ion-buttons slot="start" >
-        <ion-back-button color="light" text=""  default-href="/" @click="$router.back()"> </ion-back-button> 
+      <ion-buttons slot="start">
+        <ion-back-button style="transform:rotate(180deg);" color="light" text=""  default-href="/" @click="$router.back()"> </ion-back-button> 
       </ion-buttons> 
       <ion-buttons class="home" slot="start">
         <ion-back-button color="light" text="" :icon="home" default-href="/" @click="goToHome"> </ion-back-button> 
       </ion-buttons> 
       <p class="pageName">{{str}}</p>
       <ion-buttons slot="end">
-        <ion-back-button color="light" text="יציאה" :icon="exit" default-href="/" @click="userLogout">{{'יציאה'}} </ion-back-button> 
+        <ion-back-button color="light" text="יציאה" :icon="exit" default-href="/" @click="userLogout">{{' יציאה'}} </ion-back-button> 
         <!-- <ion-menu-button @click="userLogout" auto-hide="false"></ion-menu-button> -->
       </ion-buttons>
     </ion-toolbar>
