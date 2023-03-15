@@ -5,7 +5,7 @@
       <AppHeader :str="'ניהול פרוייקט'"/>
       <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address"/> -->
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
-
+      
       <!-- <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/> -->
 
       <ion-modal :is-open="isOpen">
@@ -24,6 +24,7 @@
           <ion-button color="danger" @click="deleteProject()">מחק</ion-button>
         </ion-content>
       </ion-modal>
+   
 
     </ion-content>
   
@@ -38,10 +39,11 @@
   import GridButtons from './Utilities/GridButtons.vue';
   import DescriptionCard from './Utilities/DescriptionCard.vue'
   import AppHeader from '../Components/AppHeader.vue'
+
   
   import FileUpload from './Utilities/FileUpload.vue'
   
-  import { home ,receiptOutline, constructOutline, peopleOutline, personAddOutline, closeCircleOutline} from 'ionicons/icons';
+  import { home ,receiptOutline, constructOutline, peopleOutline, personAddOutline, closeCircleOutline , documentTextOutline} from 'ionicons/icons';
 
   
   export default defineComponent({
@@ -57,6 +59,7 @@
     IonTitle,
     GridButtons,
     AppHeader,
+   
     //DescriptionCard,
 
     //FileUpload
@@ -80,6 +83,7 @@
           {text:"דוחות עבודה",           icon: receiptOutline, click: ()=>goTo('/project-reports/'+ project.value._id) },
           //{text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
           {text:"בורות קידוח",      icon: constructOutline, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
+          {text:'יצירת דו"ח',      icon: documentTextOutline, click: ()=>goTo('/generate-excel/'+ project.value._id)  },
           {text:"מחיקת פרוייקט",      icon: closeCircleOutline, click: ()=>setOpen(true) },
           
           // {text:"הוספת עובד",            icon: home,click: ()=>goTo('/add-worker/'+ project.value._id) },

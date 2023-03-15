@@ -34,6 +34,7 @@ import FieldProjectManagment from '../NewViews/FieldProjectManagment.vue'
 import MachineManagment from '../NewViews/MachineManagment.vue';
 import MachineCrew from '../NewViews/MachineCrew.vue'
 import FieldProjectMap from '../NewViews/FieldProjectMap.vue'
+import GenerateExcel from '../Components/GenerateExcel.vue'
 
 import { useAppState } from '../realm-state';
 import { User } from 'realm-web';
@@ -218,6 +219,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/field-map/:id',
     name: 'FieldProjectMap',
     component: FieldProjectMap
+  },
+  {
+    //add to safe routes
+    path: '/generate-excel/:id',
+    name: 'GenerateExcel',
+    component: GenerateExcel
   },
 ]
 const router = createRouter({

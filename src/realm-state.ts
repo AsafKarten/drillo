@@ -852,7 +852,8 @@ const query = { "_id": pit._id };
 const update = {
 "$set": {
 "status": pit.status,
-"report_id": pit.report_id
+"report_id": pit.report_id,
+"finishDate": pit.finishDate
 }
 };
 const options = { "upsert": false };
