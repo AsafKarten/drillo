@@ -17,16 +17,16 @@
     type="date"
   ></ion-input>
 </ion-item>
-<ion-button @click='sortPits'>יצירת דו"ח</ion-button>
-
+<ion-button expand="block" @click='sortPits'>יצירת דו"ח לפי תאריך</ion-button>
+<ion-button expand="block" @click='getFullReport'>יצירת דו"ח לכל הפרוייקט</ion-button>
   <table id="my-table-id" v-show="pits">
     <tr>
-      <th>List</th>
-      <th>Pit number</th>
-      <th>depth</th>
-      <th>diameter</th>
-      <th>concrete volume</th>
-      <th>finish date</th>
+      <th>רשימה</th>
+      <th>מספר בור קידוח</th>
+      <th>עומק</th>
+      <th>קוטר</th>
+      <th>נפח בטון תיאורטי</th>
+      <th>תאריך ביצוע</th>
     </tr>
     <tr :key="pit?._id" v-for="pit in pits">
       <td>{{pit.listName}}</td>
@@ -37,7 +37,7 @@
       <td>{{pit.finishDate.getDate() + '/' + (pit.finishDate.getMonth() * 1 + 1) + '/' + pit.finishDate.getFullYear()}}</td>
     </tr>
   </table>
-  <IonButton @click="createXl">שמירת דו"ח</IonButton>
+  <IonButton expand="block" @click="createXl">שמירת דו"ח</IonButton>
     </ion-content>
     </ion-page>
 </template>
@@ -72,39 +72,49 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute()
-    const { user,getProjectPits} = useAppState(); 
+    const { user,getProjectPits, getProjectByID} = useAppState(); 
     const currentUser = ref<any>(user);
     const project_id = ref<any>(route.params)
+    const project = ref<any>()
     const startDate = ref<Date>(new Date())
     const endDate =ref<Date>(new Date())
     const allPits = ref<any>([]);
-    const pits = ref<any>([]);
+    const pits = ref<any>();
     
     onIonViewWillEnter(async()=>{
       allPits.value = await getProjectPits(project_id.value)
       console.log(allPits.value);
+      project.value = await getProjectByID(project_id.value)
+      console.log(project.value);
+      
       
     });
 
     onIonViewDidLeave(()=>{
-      project_id.value = null
-      allPits.value = null
-      startDate.value = new Date()
-      endDate.value = new Date()
-      pits.value = null
+       //project_id.value = null
+       project.value = null
+       allPits.value = null
+      // // startDate.value = new Date()
+      // // endDate.value = new Date()
+       pits.value = null
     })
 
-    const sortPits =async () => {
+    const sortPits = () => {
       let start = new Date(startDate.value)
       let end = new Date(endDate.value)
       console.log(start);
       console.log(end);
     
       
-      pits.value = allPits.value.filter((pit: { finishDate: Date; })=> pit.finishDate?.valueOf() >= start.setHours(0, 0, 0, 0).valueOf() && pit.finishDate?.valueOf() <= end.setHours(0, 0, 0, 0).valueOf() )
+      pits.value = allPits.value.filter((pit: { finishDate: Date; status: string; })=> pit.finishDate?.valueOf() >= start.setHours(0, 0, 0, 0).valueOf() && pit.finishDate?.valueOf() <= end.setHours(0, 0, 0, 0).valueOf() && pit.status == 'Done' )
       pits.value.sort((pit1: { finishDate: Date; }, pit2: { finishDate: Date; })=>pit1.finishDate.valueOf() - pit2.finishDate.valueOf() )
       console.log(pits.value);
       
+    }
+
+    const getFullReport = () =>{
+      pits.value = allPits.value.filter((pit: { status: string; })=> pit.status == 'Done')
+      pits.value.sort((pit1: { finishDate: Date; }, pit2: { finishDate: Date; })=>pit1.finishDate.valueOf() - pit2.finishDate.valueOf() )
     }
 
     const createXl = () => {
@@ -118,22 +128,25 @@ export default defineComponent({
 
       // Extract Data (create a workbook object from the table)
       var workbook = XLSX.utils.table_to_book(table_elt);
-
       // Process Data (add a new row)
       var ws = workbook.Sheets["Sheet1"];
       XLSX.utils.sheet_add_aoa(ws, [["Created " + new Date().toISOString()]], { origin: -1 });
-
+      let date = new Date()
+      let today = date.getDate() + '/' + (date.getMonth() * 1 + 1) + '/' + date.getFullYear()
+      let fileName = ""+ project.value.name +"_"+ today + ".xlsb"
       // Package and Release Data (`writeFile` tries to write and save an XLSB file)
-      XLSX.writeFile(workbook, "Report.xlsb");
+      XLSX.writeFile(workbook, fileName);
 
     }
 
     return {
       createXl,
       sortPits,
+      getFullReport,
 
       currentUser,
       project_id,
+      project,
       allPits,
       pits,
       startDate,
