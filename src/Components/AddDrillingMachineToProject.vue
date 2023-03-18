@@ -315,6 +315,8 @@
           let prevMachine = await getDrillingMachineByID(employee.machine_id)
           let index = prevMachine.drillers.indexOf(driller)
           prevMachine.drillers.splice(index,1)
+          console.log(prevMachine);
+          
           await updateMachineDrillers(prevMachine)
         }
 

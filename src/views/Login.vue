@@ -93,7 +93,7 @@ export default defineComponent({
           router.replace("/field-project-managment");
           
       else
-        router.replace("/home");
+        router.replace("/new-home");
       } catch (err) {
         console.error("Failed to login", err);
         error.value = err;

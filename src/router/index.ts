@@ -35,6 +35,7 @@ import MachineManagment from '../NewViews/MachineManagment.vue';
 import MachineCrew from '../NewViews/MachineCrew.vue'
 import FieldProjectMap from '../NewViews/FieldProjectMap.vue'
 import GenerateExcel from '../Components/GenerateExcel.vue'
+import NewHomePageVue from '@/NewViews/NewHomePage.vue';
 
 import { useAppState } from '../realm-state';
 import { User } from 'realm-web';
@@ -225,7 +226,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/generate-excel/:id',
     name: 'GenerateExcel',
     component: GenerateExcel
+  },  
+  {
+    //add to safe routes
+    path: '/new-home/',
+    name: 'NewHomePageVue',
+    component: NewHomePageVue
   },
+  
 ]
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -234,7 +242,7 @@ const router = createRouter({
 
 router.beforeEach((to , from , next) => {
   const {isLoggedIn, user } = useAppState();
-  if(to.fullPath === '/home')
+  if(to.fullPath === '/new-home')
   {
     if(!isLoggedIn.value){
       next('/login');
@@ -254,7 +262,7 @@ router.beforeEach((to , from , next) => {
       return 
     }
       else if(user.value.customData.userType === 'manager'){
-      next('./home');
+      next('./new-home');
       return
     }
     }

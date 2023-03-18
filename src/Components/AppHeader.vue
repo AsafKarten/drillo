@@ -97,7 +97,7 @@ export default defineComponent({
               return
       }
       if(currentUser?.value.customData.userType === 'manager'){
-             router.push("/home");
+             router.push("/new-home");
              return
             }
     }
