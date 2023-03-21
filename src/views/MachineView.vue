@@ -14,6 +14,7 @@
         
         <h3>צוות קידוח</h3>
         <ion-button slot="end"  @click="changeDrillerModalManager()">{{'הוספת קודח'}}</ion-button>
+        <ion-button color="danger"  @click="deleteModalMAnager(true)">{{'מחיקת מכונה'}}</ion-button>
       </div>   
       
       <!--new drilling team list-->
@@ -54,6 +55,27 @@
                 
               </ion-content>
             </ion-modal>
+
+                 <!--delete machine modal-->
+                 <ion-modal :is-open="isOpenDelete">
+                  <ion-header>
+                    <ion-toolbar >
+                      <ion-title>מחיקת מכונת קידוח</ion-title>
+                      <ion-buttons slot="end">
+                        <ion-button @click="deleteModalMAnager(false)">סגירה</ion-button>
+                      </ion-buttons>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-content  class="ion-padding">
+                    <div class="hebrewText">
+                        <p>האם את/ה בטוח שברצונך למחוק מכונה זו?</p>
+                        <ion-button slot="end" color="danger" @click="deleteMachine()">{{'מחיקה'}}</ion-button>
+                        <ion-button slot="end" @click="deleteModalMAnager(false)">{{'ביטול'}}</ion-button>
+                         
+                    </div>
+                    
+                  </ion-content>
+                </ion-modal>
     
     </ion-content>
 
@@ -92,7 +114,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>()
-    const {user , getProjectByID, getDrillingMachineByID,getEmployeesByOrganizationID, updateEmployeeProject, updateMachineDrillers, updateEmployeeMachine,} = useAppState();
+    const {user , getProjectByID, updateProjectMachines,deleteMachineFromDB, getDrillingMachineByID,getEmployeesByOrganizationID, updateEmployeeProject, updateMachineDrillers, updateEmployeeMachine,} = useAppState();
     const machine_id = ref<any>(route.params);
     const machine = ref<any>();
     const {id} = route.params
@@ -103,6 +125,7 @@ export default defineComponent({
     const organization = ref<any>()
     const project = ref<any>()
     const isOpenDriller = ref(false)
+    const isOpenDelete = ref(false)
     
   onMounted(async()=>{
     if(user?.value.customData.organizationID === undefined)
@@ -197,7 +220,32 @@ export default defineComponent({
   
     }
 
+    const deleteModalMAnager =(state: boolean)=> {
+      isOpenDelete.value = state;
+    }
 
+    const deleteMachine = async ()=>{
+      if(project.value !== undefined && project.value !== null ){
+      project.value.machines = project.value.machines.filter((m: { _id: any; })=>m._id.toString() !== machine.value._id.toString())
+      console.log(project.value);
+      await updateProjectMachines(project.value)
+    }
+
+      if(machine.value.drillers !== undefined){
+      for (let index = 0; index < machine.value.drillers.length; index++) {
+        let employee = machine.value.drillers[index]
+        employee.machine_id = ""
+        employee.project_id = ""
+        await updateEmployeeMachine(employee)
+        await updateEmployeeProject(employee)
+      }
+    }
+      console.log(machine.value);
+      await deleteMachineFromDB(machine.value)
+      deleteModalMAnager(false)
+      router.push('/machines/')
+      
+    }
 
 
      return {
@@ -206,7 +254,9 @@ export default defineComponent({
       goToEmployee,
       changeDrillerModalManager,
       addDrillerToMachine,
-      
+      deleteModalMAnager,
+      deleteMachine,
+
       //properties
         currentUser : user,
         machine:machine,
@@ -219,6 +269,7 @@ export default defineComponent({
         organization:organization,
         project,
         isOpenDriller,
+        isOpenDelete,
         
   }
   },
@@ -230,7 +281,6 @@ export default defineComponent({
   .hebrewText{
     direction: rtl;
     line-height: 80%;
-    overflow: scroll;
     margin-bottom: 10%;
   }
 

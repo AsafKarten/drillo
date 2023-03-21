@@ -67,7 +67,7 @@
     setup(){
       const router = useRouter();
       const route = useRoute();
-      const {user , getProjectByID, deleteProjectByID, deleteProjectPits} = useAppState();
+      const {user , getProjectByID, deleteProjectByID, deleteProjectPits, getDrillingMachineByID, updateMachineProjectID,updateEmployeeProject} = useAppState();
       const currentUser = ref<any>(user)
       const project_id = ref<any>(route.params);
       const project = ref<any>();
@@ -112,11 +112,31 @@
     }
 
     const deleteProject =async () => {
+      if(project.value.machines !== undefined && project.value.machines !== null ){
+        for (let index = 0; index < project.value.machines.length; index++) {
+          let id = project.value.machines[index]._id
+          let machine = await getDrillingMachineByID(id.toString())
+          machine.project_id = ""
+          await updateMachineProjectID(machine)
+          await updateDrillers(machine)
+        }
+      }
       await deleteProjectPits(project.value._id)
-      await deleteProjectByID(project.value._id)
-      .then(()=>{router.push('/home')})
+      await deleteProjectByID(project.value)
+      .then(()=>{router.push('/new-home')})
       setOpen(false)
       
+    }
+
+    const updateDrillers =async (machine:any)=>{
+      if(machine.drillers !== undefined && machine.drillers !== null){
+        for (let index = 0; index < machine.drillers.length; index++) {
+          let driller = machine.drillers[index]
+          driller.project_id = ""
+          await updateEmployeeProject(driller)
+          
+        }
+      }
     }
     const setOpen = (value: boolean)=>{
       isOpen.value = value
@@ -137,6 +157,7 @@
          goTo,
          setOpen,
          deleteProject,
+         updateDrillers,
          //properties
          currentUser,
          project,

@@ -154,11 +154,38 @@ const getEmployeeByID =async (_id:string) => {
  
 }
 
-const deleteEmployeeFromDB = async() =>{
-  //await app.deleteUser();
-  console.log(app.currentUser);
-  
+const deleteEmployeeFromOrganization = async(employee: any) =>{
+  try {
+    // 1. Get a data source client
+const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+// 2. Get a database & collection
+const collection = mongodb?.db("drillo").collection("users");
+// 3. Read and write data with MongoDB queries
+const query = { "_id": employee._id };
+const update = {
+"$set": {
+"organizationID": "",
+"project_id":"",
+"machine_id":"",
+
 }
+};
+const options = { "upsert": false };
+collection?.updateOne(query, update, options)
+.then(result => {
+const { matchedCount, modifiedCount } = result;
+if(matchedCount && modifiedCount) {
+console.log(`Successfully updated the item.`)
+}
+})
+
+} catch (error) {
+console.log(error);
+
+}
+}
+  
+
 
 const getEmployeesByOrganizationID = async()=>{
   // 1. Get a data source client
@@ -266,14 +293,14 @@ const updateEmployeeProject =async (employee : any) => {
   }
   
 
-  const deleteProjectByID =async (project_id : any) => {
+  const deleteProjectByID =async (project : any) => {
     try {
               // 1. Get a data source client
     const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
     // 2. Get a database & collection
     const collection = mongodb?.db("drillo").collection("projects");
     // 3. Read and write data with MongoDB queries
-    const query = { "_id": project_id };
+    const query = { "_id": project._id };
 
     collection?.deleteOne(query)
       
@@ -686,6 +713,23 @@ const updateMachineProjectID =async (machine : any) => {
   }
 }
 
+const deleteMachineFromDB =async (machine : any) => {
+  try {
+            // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("drilling_machines");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": machine._id };
+
+    collection?.deleteOne(query)
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 
 const getReportByID =async (_id:string) => {
       
@@ -997,7 +1041,7 @@ const updatePitDiameter =async (pit : any) => {
         getAllEmployees,
         getEmployeesByOrganizationID,
         getEmployeeByID,
-        deleteEmployeeFromDB ,//need to be fixed
+        deleteEmployeeFromOrganization ,//need to be fixed
         updateEmployeeMachine,
         updateEmployeeProject,
 
@@ -1026,6 +1070,7 @@ const updatePitDiameter =async (pit : any) => {
           //getAllOrganizations,//need to be removed
         updateMachineDrillers,
         updateMachineProjectID,
+        deleteMachineFromDB,
 
         //reports
         getReportByID,
