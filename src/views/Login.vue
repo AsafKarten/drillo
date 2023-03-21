@@ -91,6 +91,10 @@ export default defineComponent({
       let resp = await login(email.value, password.value)
       if(resp === "driller")
           router.replace("/field-project-managment");
+
+      else if( (resp === "deleted"))
+        return
+
           
       else
         router.replace("/new-home");

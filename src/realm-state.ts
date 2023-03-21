@@ -27,12 +27,35 @@ export const useAppState = () => {
         //Refresh a user's custom data to make sure we have the latest version
         await app?.currentUser?.refreshCustomData();
         user.value = app?.currentUser
+        if(user.value.customData.organizationID == ""){
+          //await deleteUserData(user.value.customData._id)
+          await app?.deleteUser(user.value)
+          return "deleted"
+        }
+
         if(user.value.customData.userType === "driller")
           return "driller";
       
            
         return true;
     };
+
+    const deleteUserData =async (id : any) => {
+      try {
+                // 1. Get a data source client
+      const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+      // 2. Get a database & collection
+      const collection = mongodb?.db("drillo").collection("users");
+      // 3. Read and write data with MongoDB queries
+      const query = { "_id": id };
+  
+      collection?.deleteOne(query)
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+  }
 
     const loginAnon = async ()=>{
       const credentials = Realm.Credentials.anonymous();
@@ -1032,6 +1055,7 @@ const updatePitDiameter =async (pit : any) => {
         //functions
         getOrganizationData,
         login,
+        deleteUserData,
         loginAnon,
         logout,
         createAccount,
