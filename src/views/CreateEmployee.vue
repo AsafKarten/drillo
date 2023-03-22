@@ -23,6 +23,7 @@
        <ion-input v-model="password" type="text" autocomplete="new-password"></ion-input>
        </ion-item>
        <ion-item >
+        <p>סוג עובד:</p>
         <ion-label v-if="employeeType == 'driller'">קודח</ion-label>
         <ion-label v-if="employeeType == 'manager'">מנהל/מזכירה</ion-label>
         </ion-item>
