@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-  import { IonContent, IonPage } from '@ionic/vue';
+  import { onIonViewDidEnter, IonContent, IonPage } from '@ionic/vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
@@ -34,7 +34,7 @@
       const machines = ref<any>()
       const currentWorker = ref<any>()
 
-      onMounted(async()=>{
+      onIonViewDidEnter(async()=>{
         if(currentUser?.value.customData.organizationID === undefined)
           router.push('Login')
     

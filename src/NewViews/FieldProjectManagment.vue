@@ -13,7 +13,7 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonPage, IonButton, IonIcon } from '@ionic/vue';
+  import { onIonViewDidEnter, IonContent, IonPage, IonButton, IonIcon } from '@ionic/vue';
   import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
@@ -79,7 +79,7 @@ import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
       //IONIC COLORS: primary, secondary, tertiary, success, warning, danger, light, medium, dark
 
 
-      onMounted(async()=>{
+      onIonViewDidEnter(async()=>{
         if(currentUser?.value.customData.organizationID === undefined)
               router.push('Login')
               

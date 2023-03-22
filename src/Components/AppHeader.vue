@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { IonHeader, IonToolbar, IonButton,IonIcon , IonButtons, IonMenuButton , IonBackButton, IonTitle } from '@ionic/vue';
+import { onIonViewDidEnter, IonHeader, IonToolbar, IonButton,IonIcon , IonButtons, IonMenuButton , IonBackButton, IonTitle } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { arrowRedo, home, exit } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
@@ -57,7 +57,7 @@ export default defineComponent({
     const greeting = ref('')
 
 
-    onMounted(async()=>{
+    onIonViewDidEnter(async()=>{
       getGreeting()
     });
 

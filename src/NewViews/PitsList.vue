@@ -65,7 +65,7 @@
   
             </ion-accordion-group>
          
-            <ion-modal :is-open="isOpen" >
+            <ion-modal :is-open="isOpen" @willDismiss="modalManager('close')" >
               <ion-header>
                 <ion-toolbar >
                   <ion-title>בור קידוח מספר {{currentPit?.p}}</ion-title>
@@ -76,7 +76,7 @@
               </ion-header>
               <ion-content  class="ion-padding">
                 <div class="hebrewText">
-                  <h5>{{currentPit?.p}}</h5>
+                  <h5>{{currentPit?.listName +" " + currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
                   <ion-item >
                     <ion-button size="large" @click="openPopover('Depth')">עומק</ion-button>
@@ -189,6 +189,7 @@
   
   <script lang="ts">
   import {
+    onIonViewDidEnter,
     IonButtons,
     IonContent,
     IonHeader,
@@ -287,7 +288,7 @@
       );
      
     //<ion-icon name="checkmark-done-outline"></ion-icon>
-      onMounted(async () => {
+    onIonViewDidEnter(async () => {
         if(user?.value.customData.organizationID === undefined)
             router.push('Login')
 
@@ -615,7 +616,6 @@
   .hebrewText{
     direction: rtl;
     line-height: 80%;
-    overflow: scroll;
     margin-bottom: 10%;
   }
   #map {

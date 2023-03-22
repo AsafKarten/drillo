@@ -32,7 +32,7 @@
   
   <script lang="ts">
   
-  import {onIonViewWillEnter, IonContent, IonPage, IonToolbar, IonCol, IonGrid, IonRow, IonHeader,IonFooter, IonTitle,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon, } from '@ionic/vue';
+  import {onIonViewDidEnter, IonContent, IonPage, IonToolbar, IonCol, IonGrid, IonRow, IonHeader,IonFooter, IonTitle,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon, } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter } from 'vue-router';
   import {useAppState} from '../realm-state';
@@ -66,9 +66,10 @@
       const currentUser = ref<any>(user)
       const showComponent = ref(false)
       const organization = ref<any>()
+      const allProjects = ref<any>()
       const projects = ref<any>()
       
-      onIonViewWillEnter(async()=>{
+      onIonViewDidEnter(async()=>{
         
         if(currentUser?.value.customData.organizationID === undefined)
                 router.push('Login')
@@ -85,7 +86,8 @@
           }
          
         }
-        projects.value = await getAllProjectByOrganizationID()
+        allProjects.value = await getAllProjectByOrganizationID();
+        projects.value = allProjects.value.filter((proj: { status: string; })=>proj.status =="Active")
 
       });
   
@@ -94,6 +96,7 @@
           currentUser,
           showComponent,
           organization,
+          allProjects,
           projects,
           
     }

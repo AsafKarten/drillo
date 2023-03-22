@@ -1,8 +1,18 @@
 <template>
   <ion-page>
     <AppHeader :showButtons="true"/>
-    
     <ion-content  :fullscreen="true" >
+    <ion-segment
+    :value="selectedSegment"
+    @ionChange="segmentChanged"
+    ref="myIonSegment"
+>
+    <ion-segment-button value="Active">פעילים</ion-segment-button>
+    <ion-segment-button value="Done">הסתיימו</ion-segment-button>
+    
+</ion-segment>
+    
+    
     <div class="mainContainer">
       <h1>הפרוייקטים שלי</h1>
         <div>
@@ -18,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import {onIonViewWillEnter, IonContent, IonPage,IonButton,IonItem } from '@ionic/vue';
+import {onIonViewDidEnter, IonContent, IonPage,IonButton,IonItem,  IonSegment, IonSegmentButton, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -36,6 +46,8 @@ export default defineComponent({
     IonPage,
     IonButton,
     IonItem,
+    IonSegment,
+    IonSegmentButton,
     AppHeader
 },
   setup(){
@@ -43,17 +55,30 @@ export default defineComponent({
    
     const {user , logout, getAllProjectByOrganizationID} = useAppState();
     const currentUser = ref<any>(user)
+    const allProjects = ref<any>([]);
     const projects = ref<any>([]);
+    const myIonSegment = ref();
+    const selectedSegment = ref("Active");
     
     
-    onIonViewWillEnter(async()=>{
+    onIonViewDidEnter(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
 
-    projects.value = await getAllProjectByOrganizationID();
+    allProjects.value = await getAllProjectByOrganizationID();
+    projects.value = allProjects.value.filter((proj: { status: string; })=>proj.status =="Active")
     console.log(projects.value);
       
   });
+
+  const segmentChanged = (e: CustomEvent) => {
+            selectedSegment.value = e.detail.value;
+            sortProjects()
+        };
+
+    const sortProjects = () =>{
+      projects.value = allProjects.value.filter((proj: { status: string; })=>proj.status == selectedSegment.value)
+    }
 
     
     const goToProject =(project:any)=>{
@@ -62,10 +87,14 @@ export default defineComponent({
      return {
       //methods
         goToProject,
+        segmentChanged,
+        sortProjects,
         //properties
         currentUser,
-        projects
-        
+        allProjects,
+        projects,
+        myIonSegment,
+        selectedSegment,
   }
   },
  

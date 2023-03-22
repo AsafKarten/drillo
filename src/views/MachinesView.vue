@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton, IonItem , IonAvatar} from '@ionic/vue';
+import { onIonViewDidEnter,IonContent, IonPage,IonButton, IonItem , IonAvatar} from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -50,7 +50,7 @@ export default defineComponent({
     const {user , logout, getDrillingMachinesByID} = useAppState();
     const drillingMachines = ref<any>()
     
-  onMounted(async()=>{
+    onIonViewDidEnter(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
     else{

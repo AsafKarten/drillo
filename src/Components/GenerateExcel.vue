@@ -43,7 +43,7 @@
 </template>
   
 <script lang="ts">
-import { onIonViewWillEnter,onIonViewDidLeave, IonContent, IonHeader, IonPage, IonToolbar, IonButton, IonButtons, IonModal, IonTitle, IonInput, IonLabel, IonItem, IonLoading} from '@ionic/vue';
+import { onIonViewDidEnter,onIonViewDidLeave, IonContent, IonHeader, IonPage, IonToolbar, IonButton, IonButtons, IonModal, IonTitle, IonInput, IonLabel, IonItem, IonLoading} from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAppState } from '../realm-state';
@@ -81,7 +81,7 @@ export default defineComponent({
     const allPits = ref<any>([]);
     const pits = ref<any>();
     
-    onIonViewWillEnter(async()=>{
+    onIonViewDidEnter(async()=>{
       allPits.value = await getProjectPits(project_id.value)
       console.log(allPits.value);
       project.value = await getProjectByID(project_id.value)

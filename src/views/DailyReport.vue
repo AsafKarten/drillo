@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import {onIonViewWillEnter, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
+import {onIonViewDidEnter, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -97,7 +97,7 @@ export default defineComponent({
     const siteManager = ref<any>()
     const {id} = route.params
 
-    onIonViewWillEnter(async()=>{
+    onIonViewDidEnter(async()=>{
 
       report.value = await getReportByID(id.toString())
       report.value.pitsToShow = await getReportPits(report.value._id)

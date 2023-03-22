@@ -23,13 +23,21 @@
        <ion-input v-model="password" type="text" autocomplete="new-password"></ion-input>
        </ion-item>
        <ion-item >
-             <ion-select   :compareWith="employeeTypes"
+        <ion-label v-if="employeeType == 'driller'">קודח</ion-label>
+        <ion-label v-if="employeeType == 'manager'">מנהל/מזכירה</ion-label>
+        </ion-item>
+        <ion-item >
+          <IonButton size="large" @click="setUserType('driller')">קודח</IonButton>
+          <IonButton size="large" @click="setUserType('manager')">מנהל/מזכירה</IonButton>
+        </ion-item>
+        <!-- <ion-select
+        mode="ios"
         @ionChange="employeeType = $event.detail.value" placeholder="סוג עובד">
         <ion-select-option value="driller">קודח</ion-select-option>
         <ion-select-option value="manager">מנהל מערכת</ion-select-option>
-      </ion-select>
+      </ion-select> -->
 
-       </ion-item>
+       
        
         <div style="padding-top: 6px">
             <ion-button shape="round" @click="createEmployeeAccountEmailPassword" expand="full">צור עובד</ion-button>
@@ -62,7 +70,7 @@
 </template>
 
 <script lang="ts">
-  import { IonContent, IonPage,IonInput, IonLabel ,IonItem,IonButton, IonSelect, IonSelectOption,IonModal,IonHeader,IonToolbar,IonTitle, IonSpinner } from '@ionic/vue';
+  import {onIonViewDidEnter, IonContent, IonPage,IonInput, IonLabel ,IonItem,IonButton, IonSelect, IonSelectOption,IonModal,IonHeader,IonToolbar,IonTitle, IonSpinner } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   
   import { useRouter } from 'vue-router';
@@ -79,8 +87,6 @@
       IonLabel,
       IonItem,
       IonButton, 
-      IonSelect, 
-      IonSelectOption,
       IonModal,
       IonHeader,
       IonToolbar,
@@ -108,8 +114,9 @@
 
       
 
-       onMounted(async()=>{
+      onIonViewDidEnter(async()=>{
         organizationID.value = user.value.customData.organizationID
+        employeeType.value = ""
        });
      
       const createEmployeeAccountEmailPassword = async()=>{
@@ -124,6 +131,16 @@
             isOpen.value = false 
             return
           }
+          if(first.value === '' || last.value === ''){
+            alert('יש למלא את כל הפרטים')
+            isOpen.value = false 
+            return
+          }
+          if(employeeType.value !== 'driller' && employeeType.value !== 'manager'){
+            alert('יש לבחור סוג עובד')
+            isOpen.value = false 
+            return
+          }
           
           let empID = await createEmployeeAccount(email.value, password.value, first.value , last.value, employeeType.value)
           
@@ -135,6 +152,7 @@
         } catch (err) {
           console.error("Failed to log in", err)
           error.value = err;
+          isOpen.value = false 
         }
       }
       const clearForm = () =>{
@@ -145,6 +163,9 @@
         employeeType.value="" 
       }
 
+      const setUserType = (value: string)=>{
+        employeeType.value = value
+      }
 
    
       
@@ -153,6 +174,7 @@
         //methods
         createEmployeeAccountEmailPassword,
         clearForm,
+        setUserType,
         //properties
         currentUser:user,
         organizationID,

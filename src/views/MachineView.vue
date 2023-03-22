@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, IonAvatar } from '@ionic/vue';
+import {onIonViewDidEnter, IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, IonAvatar } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -127,7 +127,7 @@ export default defineComponent({
     const isOpenDriller = ref(false)
     const isOpenDelete = ref(false)
     
-  onMounted(async()=>{
+    onIonViewDidEnter(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
 

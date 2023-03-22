@@ -122,7 +122,7 @@
   </template>
   
   <script lang="ts">
-  import {onIonViewWillEnter, IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
+  import {onIonViewDidEnter, IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from "vue-router";
   import {useAppState} from '../realm-state';
@@ -171,7 +171,7 @@
       const projectMachines = ref<any>([])
       const avilableDrillingMachines = ref<any>()
   
-      onIonViewWillEnter(async()=>{
+      onIonViewDidEnter(async()=>{
      // organizationID.value = user.value.customData.organizationID
       project.value = await getProjectByID(project_id.value)
       console.log(project.value);
@@ -424,7 +424,6 @@
   .hebrewText{
     direction: rtl;
     line-height: 80%;
-    overflow: scroll;
     margin-bottom: 10%;
   }
   

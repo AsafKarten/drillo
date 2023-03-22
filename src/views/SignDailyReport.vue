@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import {IonContent, IonPage, IonButton, IonInput, IonLabel, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,IonThumbnail, IonCardTitle, } from '@ionic/vue';
+import {onIonViewDidEnter, IonContent, IonPage, IonButton, IonInput, IonLabel, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,IonThumbnail, IonCardTitle, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -162,7 +162,7 @@ export default defineComponent({
       //console.log(pdfFileObject)
     };
 
-    onMounted(async()=>{
+    onIonViewDidEnter(async()=>{
       if(!currentUser.value)
       {
         await loginAnon()

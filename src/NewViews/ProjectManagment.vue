@@ -7,8 +7,27 @@
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
       
       <!-- <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/> -->
+      <ion-modal :is-open="isOpenDetails" @willDismiss="setOpenDetails(false)">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>פרטי פרוייקט</ion-title>
+            <ion-buttons slot="end">
+              <ion-button @click="setOpenDetails(false)">סגירה</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <p>{{project?.name}}</p>
+          <p>{{project?.address}}</p>
+          <p>{{"איש קשר:"+" "+project?.contactPerson.name}}</p>
+          <p>{{"טלפון"+" "+project?.contactPerson.phone}}</p>
+          <p>{{"מייל:"+" "+project?.contactPerson.mail}}</p>
+          <ion-button v-if="project?.status == 'Done'"  @click="changeProjectStatus('Active')">פרוייקט פעיל</ion-button>
+          <ion-button v-else  @click="changeProjectStatus('Done')">פרוייקט הסתיים</ion-button>
+        </ion-content>
+      </ion-modal>
 
-      <ion-modal :is-open="isOpen">
+      <ion-modal :is-open="isOpen" @willDismiss="setOpen(false)">
         <ion-header>
           <ion-toolbar>
             <ion-title>מחיקת פרוייקט</ion-title>
@@ -32,7 +51,7 @@
 </template>
   
 <script lang="ts">
-  import { IonContent, IonPage, IonModal, IonButton, IonButtons ,IonToolbar, IonHeader, IonTitle } from '@ionic/vue';
+  import {onIonViewDidEnter, IonContent, IonPage, IonModal, IonButton, IonButtons ,IonToolbar, IonHeader, IonTitle } from '@ionic/vue';
   import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
@@ -43,7 +62,7 @@
   
   import FileUpload from './Utilities/FileUpload.vue'
   
-  import { home ,receiptOutline, constructOutline, peopleOutline, personAddOutline, closeCircleOutline , documentTextOutline} from 'ionicons/icons';
+  import { home ,receiptOutline, constructOutline, peopleOutline, personAddOutline, closeCircleOutline , documentTextOutline, reorderFourOutline} from 'ionicons/icons';
 
   
   export default defineComponent({
@@ -67,10 +86,11 @@
     setup(){
       const router = useRouter();
       const route = useRoute();
-      const {user , getProjectByID, deleteProjectByID, deleteProjectPits, getDrillingMachineByID, updateMachineProjectID,updateEmployeeProject} = useAppState();
+      const {user , getProjectByID,updateProjectStatus, deleteProjectByID, deleteProjectPits, getDrillingMachineByID, updateMachineProjectID,updateEmployeeProject} = useAppState();
       const currentUser = ref<any>(user)
       const project_id = ref<any>(route.params);
       const project = ref<any>();
+      const isOpenDetails = ref(false)
       const isOpen = ref(false)
 
 
@@ -84,6 +104,7 @@
           //{text:"מפת אתר קידוח",         icon: home, click: ()=>goTo('/project-map/'+ project.value._id) },
           {text:"בורות קידוח",      icon: constructOutline, click: ()=>goTo('/managment-pits-list/'+ project.value._id) },
           {text:'יצירת דו"ח',      icon: documentTextOutline, click: ()=>goTo('/generate-excel/'+ project.value._id)  },
+          {text:"פרטי פרוייקט",      icon: reorderFourOutline, click: ()=>setOpenDetails(true) },
           {text:"מחיקת פרוייקט",      icon: closeCircleOutline, click: ()=>setOpen(true) },
           
           // {text:"הוספת עובד",            icon: home,click: ()=>goTo('/add-worker/'+ project.value._id) },
@@ -98,7 +119,7 @@
       //IONIC COLORS: primary, secondary, tertiary, success, warning, danger, light, medium, dark
 
 
-    onMounted(async()=>{
+      onIonViewDidEnter(async()=>{
         if(currentUser?.value.customData.organizationID === undefined)
               router.push('Login')
     
@@ -138,8 +159,18 @@
         }
       }
     }
+    
+    const setOpenDetails = (value: boolean)=>{
+      isOpenDetails.value = value
+    }
+
     const setOpen = (value: boolean)=>{
       isOpen.value = value
+    }
+
+    const changeProjectStatus = async (status: string) =>{
+      project.value.status = status
+      await updateProjectStatus(project.value)
     }
 
 
@@ -155,13 +186,16 @@
       return {
          //methods
          goTo,
+         setOpenDetails,
          setOpen,
          deleteProject,
          updateDrillers,
+         changeProjectStatus,
          //properties
          currentUser,
          project,
          project_id,
+         isOpenDetails,
          isOpen,
 
          buttons, 

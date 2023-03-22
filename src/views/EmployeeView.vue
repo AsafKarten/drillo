@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon ,IonTitle,IonItem,IonToolbar, IonModal,IonButtons,IonHeader, } from '@ionic/vue';
+import { onIonViewDidEnter ,IonContent, IonPage,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon ,IonTitle,IonItem,IonToolbar, IonModal,IonButtons,IonHeader, } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { trash } from 'ionicons/icons';
 import { useRouter, useRoute } from 'vue-router';
@@ -92,7 +92,7 @@ export default defineComponent({
     const machine = ref<any>()
     const isOpenDelete = ref(false)
 
-  onMounted(async()=>{
+    onIonViewDidEnter(async()=>{
     if(user?.value.customData.organizationID === undefined)
           router.push('Login')
           

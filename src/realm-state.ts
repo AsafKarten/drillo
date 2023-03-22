@@ -361,7 +361,7 @@ const updateEmployeeProject =async (employee : any) => {
         // 2. Get a database & collection
         const collection = mongodb?.db("drillo").collection("projects");
         // 3. Read and write data with MongoDB queries
-        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson,machines:[], creationDate:new Date()});
+        const insertResponse = await collection?.insertOne({organizationID:organizationID,name, address, client,contactPerson,machines:[], creationDate:new Date(), status:"Active"});
         return insertResponse?insertResponse.insertedId:false;
 
 
@@ -601,6 +601,36 @@ const updateProjectExternalServices =async (project : any) => {
     
   }
 }
+
+const updateProjectStatus =async (project : any) => {
+  try {
+            // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("projects");
+  // 3. Read and write data with MongoDB queries
+  const query = { "_id": project._id };
+  const update = {
+    "$set": {
+     "status": project.status,
+    
+        }
+    };
+    const options = { "upsert": false };
+    collection?.updateOne(query, update, options)
+    .then(result => {
+     const { matchedCount, modifiedCount } = result;
+     if(matchedCount && modifiedCount) {
+     console.log(`Successfully updated the item.`)
+}
+})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
     
     const getAllProjects = async()=>{
             // 1. Get a data source client
@@ -1081,6 +1111,7 @@ const updatePitDiameter =async (pit : any) => {
         updateProjectLastPit,
         updateProjectMachines,
         updateProjectExternalServices,
+        updateProjectStatus,
 
         updateProjectDrillers,//need to be removed
         updateProjectSiteManagers,//need to be removed
