@@ -1020,6 +1020,24 @@ const deleteProjectPits=async (project_id:string) => {
  
 }
 
+const deletePitsOfList=async (columnIDs:Array<any>) => {
+      
+  //import mongodb = require("mongodb");
+  //const ObjectID = mongodb.ObjectID;
+  
+
+  // 1. Get a data source client
+  const mongodb = app.currentUser?.mongoClient("mongodb-atlas");
+  // 2. Get a database & collection
+  const collection = mongodb?.db("drillo").collection("pits");
+  // 3. Read and write data with MongoDB queries
+  //const id = new  Realm.BSON.ObjectID(project_id)
+  const query  =  {_id:{$in:columnIDs}};
+  return await collection?.deleteMany(query)
+ 
+}
+
+
 const updatePitDepth =async (pit : any) => {
   try {
             // 1. Get a data source client
@@ -1141,6 +1159,7 @@ const updatePitDiameter =async (pit : any) => {
         getReportPits,
         getProjectPits,
         deleteProjectPits,
+        deletePitsOfList,
         updatePitDepth,
         updatePitDiameter,
         

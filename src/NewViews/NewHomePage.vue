@@ -1,11 +1,12 @@
 <template>
     <ion-page class="back" v-show="showComponent">
+    <AppHeader :str="'מסך בית'"/>
       <ion-content  :fullscreen="true" >
-      <AppHeader :str="'מסך בית'"/>
+      
       
     
       <div class="homeContainer">
-        <ion-grid>
+        <ion-grid class="cardGrid">
             <ion-row>
               <ion-col sizeXl="1" sizeLg="1" sizeMd="1" sizeSm="3" size="3" :key="project._id" v-for="project in projects">
                 <ProjectCard :projectProp="project"/>
@@ -14,14 +15,31 @@
           </ion-grid>
       </div>
  </ion-content>
+
       <ion-footer>
         <ion-toolbar class="toolBar">
             <ion-grid>
                 <ion-row>
-                  <ion-col><ion-button shape="round"  router-link="/create-project" >{{'פרוייקט חדש'}}</ion-button></ion-col>
-                  <ion-col><ion-button shape="round" router-link="/projects">{{'פרוייקטים'}}</ion-button></ion-col>
-                  <ion-col><ion-button shape="round" router-link="/employees">{{'עובדים'}}</ion-button></ion-col>
-                  <ion-col><ion-button shape="round" router-link="/machines">{{' מכונות קידוח '}}</ion-button></ion-col>
+                  <ion-col class="footCol">
+                    <ion-button expand="full" size="large"   router-link="/create-project" >{{'פרוייקט חדש'}}
+                      <ion-icon slot="start" :icon="add"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col class="footCol">
+                    <ion-button expand="full" size="large"  router-link="/projects">{{'פרוייקטים'}}
+                      <ion-icon slot="start" :icon="listOutline"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col class="footCol">
+                    <ion-button expand="full" size="large"  router-link="/employees">{{'עובדים'}}
+                      <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col class="footCol">
+                    <ion-button expand="full" size="large"  router-link="/machines">{{' מכונות קידוח '}}
+                    <!--find some nice icon-->
+                    </ion-button>
+                  </ion-col>
                 </ion-row>
               </ion-grid>
         </ion-toolbar>
@@ -32,7 +50,8 @@
   
   <script lang="ts">
   
-  import {onIonViewDidEnter, IonContent, IonPage, IonToolbar, IonCol, IonGrid, IonRow, IonHeader,IonFooter, IonTitle,IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonIcon, } from '@ionic/vue';
+  import {onIonViewDidEnter, IonContent, IonPage, IonToolbar, IonCol, IonGrid, IonRow,IonFooter,IonButton, IonIcon } from '@ionic/vue';
+  import {add, listOutline, peopleOutline} from 'ionicons/icons';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter } from 'vue-router';
   import {useAppState} from '../realm-state';
@@ -40,7 +59,7 @@
   import AppHeader from '../Components/AppHeader.vue'
   import ProjectCard from './Utilities/ProjectCard.vue';
   import DescriptionCard from '@/NewViews/Utilities/DescriptionCard.vue';
-  
+ 
   
   
   
@@ -57,6 +76,7 @@
       IonButton,
       AppHeader,
       ProjectCard,
+      IonIcon,
      
   },
     setup(){
@@ -98,6 +118,11 @@
           organization,
           allProjects,
           projects,
+          //icons
+          add,
+          listOutline,
+          peopleOutline,
+
           
     }
     },
@@ -106,18 +131,27 @@
   </script>
   
   <style scoped>
-  ion-grid {
+  .cardGrid {
     --ion-grid-columns: 3;
   }
   .toolBar{
     --background:  #59AD86;
     justify-content: space-evenly;
+   
   }
   .footBar{
     width: 100%;
     justify-content: space-evenly;
+    background-color: none;
+   
     
   }
+  .footCol{
+    text-align: center;
+
+    
+  }
+ 
   .homeContainer{
     display: block;
     padding-top: 2%;
@@ -148,5 +182,7 @@
     
   
   }
+
+
   </style>
   

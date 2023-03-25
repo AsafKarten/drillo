@@ -6,16 +6,18 @@
   <div class="mainContainer">
    
       <h1>מכונות הקידוח שלי</h1>
-
+        <div class="addButton">
+          <ion-button size="large" router-link="/create-machine">הוסף מכונה חדשה</ion-button>
+        </div>
          <div>
-          <ion-button router-link="/create-machine">הוסף מכונה חדשה</ion-button>
+          
         <ion-item :key="machine._id" v-for="machine in drillingMachines">
           <ion-avatar slot="start">
             <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
           </ion-avatar>
         <p>{{'  '+ machine?.name + ' : '}} </p>
         <p> {{ machine?.licens_number}}</p>
-        <ion-button  slot="end" @click="goToMachine(machine)">צפייה במכונה</ion-button>
+        <ion-button size="large" slot="end" @click="goToMachine(machine)">צפייה במכונה</ion-button>
         </ion-item>       
       </div>
       </div>
@@ -112,5 +114,7 @@ ion-button {
   --padding-bottom: 10px;
 
 }
-
+.addButton{
+  text-align: center;
+}
 </style>

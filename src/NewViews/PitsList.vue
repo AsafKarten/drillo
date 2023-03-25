@@ -17,9 +17,9 @@
                 </ion-item>
       
                 <div slot="content">
-                  <ion-item :key="listName" v-for="listName in project?.pitsList">
-                   
-                    <ion-button class="sortButton" size="large" expand="block" fill="outline" @click="sortPits(listName.toString())">{{listName}}</ion-button>
+                  <ion-item :key="listObj" v-for="listObj in project?.pitsList ">
+             
+                    <ion-button class="sortButton" size="large" expand="block" fill="outline"  @click="sortPits(listObj.listName.toString())">{{listObj.listName}}</ion-button>
               
                   </ion-item>
                 </div>
@@ -319,10 +319,10 @@
         }
         else{
           pits.value = allPits.value.filter((pit: { listName: string; })=> pit.listName === listName)
-          if(project.value.pitsList[0]=== 'איפוס' ){
+          if(project.value.pitsList[0].listName === 'איפוס' ){
             return
           }
-          let tempArr = ['איפוס']
+          let tempArr = [{listName:'איפוס'}]
           project.value.pitsList = tempArr.concat(project.value.pitsList)
         }
         

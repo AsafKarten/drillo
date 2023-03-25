@@ -13,23 +13,23 @@
         <h1 id="title" >Drillo</h1>
         <h3>{{'מערכת לניהול קידוחים'}}</h3>
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
+          <ion-label position="floating">מייל</ion-label>
           <ion-input
             
             v-model="email"
             type="email"
             autocomplete="email"
-            placeholder="Email"
+            placeholder="מייל"
           ></ion-input>
         </ion-item >
         <ion-item >
-          <ion-label position="floating">Password</ion-label>
+          <ion-label position="floating">סיסמה</ion-label>
           <ion-input
             
             v-model="password"
             type="password"
             autocomplete="new-password"
-            placeholder="Password"
+            placeholder="סיסמה"
           ></ion-input>
         </ion-item>
 

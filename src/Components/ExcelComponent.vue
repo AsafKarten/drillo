@@ -41,16 +41,16 @@
    
     </div>  
   </div>
-    <div :key="obj.listName" v-for="obj in pitsLists">
+    <div :key="obj?.listName" v-for="obj in pitsLists">
       <ion-item>
-        <p>{{obj.listName + ': ' }}{{'כלונס התחלה:' + obj.start}} {{'כלונס סיום:' + obj.end}} {{'סה"כ:' + obj.numOfPits}}</p>
+        <ion-icon @click="deleteColumns(obj)" slot="start" :icon="closeCircleOutline" size="large"></ion-icon> <p>{{obj?.listName + ': ' }}{{'כלונס התחלה:' + obj?.start}} {{'כלונס סיום:' + obj?.end}} {{'סה"כ:' + obj?.numOfPits}}</p>
       </ion-item>
     </div>
   </div>
   <div class="center">
     <ion-button @click="updateProject">{{'שמירת פרוייקט ומעבר להוספת מכונת קידוח'}}</ion-button>
   </div>
-    
+  
 
      <MapBox v-show="showMap" id="map" 
       :pitsToShow="pitsToShow" 
@@ -138,7 +138,8 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonLoading } from '@ionic/vue';
+import { IonContent,IonIcon, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonLoading } from '@ionic/vue';
+import {add, closeCircleOutline} from 'ionicons/icons';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -157,6 +158,7 @@ export default defineComponent({
   name: 'SecondExcelComponent',
   components: {
     IonContent,
+    IonIcon,
     IonHeader,
     IonPage,
     IonToolbar,
@@ -175,7 +177,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const currentUser = ref<any>();
-    const {user , saveNewPit, saveProjectPits, updateProjectPitsList,getProjectByID,getProjectPits,updateProjectPits,  getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
+    const {user , saveNewPit, saveProjectPits,deletePitsOfList, updateProjectPitsList,getProjectByID,getProjectPits,updateProjectPits,  getDrillingMachinesByID,  updateMachineDrillers, updateEmployeeMachine, getAllEmployees} = useAppState();
     const file = ref<any>(File);
     const arrayBuffer = ref<any>(null);
     const filelist = ref<any>(null);
@@ -272,18 +274,33 @@ export default defineComponent({
             pits.push(pit)
         }
         let res = await saveProjectPits(pits)
-        console.log(res);
-        pitsLists.value.push({listName:listName.value, numOfPits: pits.length, start:columnStart.value, end:columnEnd.value })
+        pitsLists.value.push({listName:listName.value, numOfPits: pits.length, start:columnStart.value, end:columnEnd.value, columnsIDs:res })
         pitsNumber.value += pits.length
         if(project.value.pitsList === undefined || project.value.pitsList === null){
           project.value.pitsList = []
         }
-        let check = project.value.pitsList.find((name: string)=>name === listName.value)
+        let check = project.value.pitsList.find((name: { listName: string; })=>name.listName == listName.value)
         console.log(check);
         
-        if(check !== listName.value){
-           project.value.pitsList.push(listName.value)
+        if(check == undefined){
+          console.log("undifined");
+          
+           project.value.pitsList.push({listName:listName.value, count:1})
+           console.log(project.value);
+        
            await updateProjectPitsList(project.value)
+        }
+        else if(check.listName == listName.value){
+          console.log("check");
+          console.log(check);
+          console.log(project.value);
+          let index = project.value.pitsList.indexOf(check)
+          console.log(index);
+          
+          console.log(project.value.pitsList[index].count);
+          project.value.pitsList[index].count = project.value.pitsList[index].count + 1
+          console.log(project.value.pitsList);
+          await updateProjectPitsList(project.value)
         }
         //project.value.pits = pits;
         console.log(project.value);
@@ -293,6 +310,25 @@ export default defineComponent({
         columnStart.value = 0
         columnEnd.value = 0
         isOpenLoading.value = false
+    }
+
+    const deleteColumns =async (obj:any) => {
+      console.log(obj.columnsIDs.insertedIds);
+     await deletePitsOfList(obj.columnsIDs.insertedIds)
+     let tempObj = project.value.pitsList.find((name: { listName: string; })=>name.listName == obj.listName)
+     let index = project.value.pitsList.indexOf(tempObj)
+     console.log(index);
+     
+          project.value.pitsList[index].count -=1;
+          if(project.value.pitsList[index].count == 0){
+            project.value.pitsList.splice(index,1)
+          }
+          console.log(project.value.pitsList);
+          await updateProjectPitsList(project.value)
+          index = pitsLists.value.indexOf(obj)
+          pitsLists.value.splice(index,1)
+          pitsNumber.value -= obj.columnsIDs.insertedIds.length
+     
     }
 
      const pitClick = (clickData: { _id: any; }) => {
@@ -358,54 +394,10 @@ export default defineComponent({
         
       }
 
-      const addMachine = (machine: any)=>{
-        if(projectMachines.value === undefined)
-            projectMachines.value = []
-
-        projectMachines.value.push(machine)
-        machinesModalManager()
-      }
-
-      const removeMachine = (machine:any)=>{
-        let i = projectMachines.value.indexOf(machine)
-        projectMachines.value.splice(i,1)
-        console.log(projectMachines.value);
-        
-}
 
 
-  const addEmployee = async (employee: any)=>{
-    current_machine.value.driller = {driller_id : employee._id, first: employee.first, last: employee.last}
-    console.log(current_machine.value);
-    employee.machine_id = current_machine.value._id
-      
-    if(current_employee.value !== undefined){
-         current_employee.value.machine_id = ""
-         await updateEmployeeMachine(current_employee.value)
-        }
 
-    await updateMachineDrillers(current_machine.value)
-    await updateEmployeeMachine(employee)
-    current_employee.value = employee
-  }
-
-  const addDrillerToMachine = async (employee: any)=>{
-      if(current_machine.value.drillers === undefined){
-        current_machine.value.drillers = []
-      }
-      let driller = {first: employee.first, last: employee.last, _id: employee._id}
-      console.log(driller);
-      
-      current_machine.value.drillers.push(driller)
-      await updateMachineDrillers(current_machine.value)
-
-      employee.machine_id = current_machine.value._id
-      await updateEmployeeMachine(employee)
-
-      changeDrillerModalManager(null)
-      
-
-  }
+ 
 
       
      return {
@@ -418,11 +410,8 @@ export default defineComponent({
         viewEmployeeModalManager,
         columnsModalManager,
         updateProject,
-        addMachine,
-        removeMachine,
-        addEmployee,
-        addDrillerToMachine,
         createColumnsManually,
+        deleteColumns,
        //properties
         currentUser : user,
         file : file,
@@ -458,7 +447,10 @@ export default defineComponent({
         project,
         isOpenLoading,
         pitsNumber,
-        pitsLists
+        pitsLists,
+
+        //icons 
+        closeCircleOutline,
       
   }
   },

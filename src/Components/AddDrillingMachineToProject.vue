@@ -27,7 +27,7 @@
             <ion-button slot="end" color="danger" @click="removeMachine(machine)">הסר</ion-button>
         </IonItem>
       </div>
-  
+
   
       <!--Add machine to project modal-->
       <ion-modal :is-open="isOpenMachine">
@@ -55,6 +55,7 @@
           </div>
           
         </ion-content>
+        
       </ion-modal>
   
        <!--change driller in machine modal-->
@@ -118,6 +119,7 @@
         </ion-modal>
         
       </ion-content>
+      <ion-button @click="goToProj()" >סיום</ion-button>
     </ion-page>
   </template>
   
@@ -376,6 +378,11 @@
         router.push('/machine/'+ machine._id.toString())
         isOpenMachine.value = false
     }
+
+    const goToProj =()=>{      
+        router.push('/project-managment/'+ project_id.value.id.toString())
+        isOpenMachine.value = false
+    }
   
         
        return {
@@ -393,6 +400,7 @@
           updateDrillersProjectID,
 
           goToMachine,
+          goToProj,
       
          //properties
           currentUser,

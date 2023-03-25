@@ -1,13 +1,23 @@
 <template>
   <ion-page>
     <AppHeader :showButtons="true"/>
-    
+     
+
+      <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+        <ion-fab-button router-link="/create-employee" >
+          <ion-icon :icon="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
     <ion-content  :fullscreen="true" >
-  
+
+    <div class="addButton">
+      <ion-button  size="large" router-link="/create-employee">יצירת עובד חדש</ion-button>
+    </div>
    <div class="homeContainer">
       <!-- <h1>העובדים שלי</h1> -->
       
-      <ion-button router-link="/create-employee">יצירת עובד חדש</ion-button>
+     
 
         
         <ion-item  :key="employee._id" v-for="employee in employees">
@@ -16,7 +26,7 @@
           </ion-avatar>
         <p> {{employee.userType ===  'driller' ? ' קודח' : ' מנהל משרד' }} {{" "+ ','}}</p>
         <p> {{" " + employee.first}} {{employee.last + " "}}</p>
-        <ion-button slot="end" @click="goToEmployee(employee)">פרופיל עובד</ion-button>
+        <ion-button size="large" slot="end" @click="goToEmployee(employee)">פרופיל עובד</ion-button>
         </ion-item>       
      
       
@@ -26,7 +36,8 @@
 </template>
 
 <script lang="ts">
-import {onIonViewDidEnter, IonContent, IonPage,IonButton, IonItem, IonAvatar } from '@ionic/vue';
+import {onIonViewDidEnter, IonContent, IonPage,IonButton, IonItem, IonFab, IonFabButton, IonAvatar , IonIcon } from '@ionic/vue';
+import {add} from 'ionicons/icons';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -44,6 +55,9 @@ export default defineComponent({
     IonButton,
     IonItem,
     IonAvatar,
+    IonFab, 
+    IonIcon,
+    IonFabButton,
     AppHeader
 },
   setup(){
@@ -72,9 +86,12 @@ export default defineComponent({
       //methods
         goToEmployee,
         //properties
-        currentUser : currentUser,
-        employees:employees,
-        organization:organization,
+        currentUser,
+        employees,
+        organization,
+
+        //icons
+        add
         
   }
   },
@@ -119,6 +136,9 @@ ion-button {
   --padding-top: 10px;
   --padding-bottom: 10px;
 
+}
+.addButton{
+  text-align: center;
 }
 
 </style>

@@ -1,7 +1,7 @@
  <template>
-    <ion-card @click="goToProject()">
+    <ion-card lang="he" @click="goToProject()">
         <ion-card-header class="cardHeader">
-          <ion-card-title >{{project.name}}</ion-card-title>
+          <ion-card-title lang="he">{{project.name}}</ion-card-title>
           <ion-card-subtitle>{{project.address}}</ion-card-subtitle>
         </ion-card-header>
     
