@@ -7,7 +7,9 @@
    
       <h1>מכונות הקידוח שלי</h1>
         <div class="addButton">
-          <ion-button size="large" router-link="/create-machine">הוסף מכונה חדשה</ion-button>
+          <ion-button size="large" router-link="/create-machine">הוסף מכונה חדשה
+            <ion-icon slot="start" :icon="add"></ion-icon>
+          </ion-button>
         </div>
          <div>
           
@@ -26,12 +28,13 @@
 </template>
 
 <script lang="ts">
-import { onIonViewDidEnter,IonContent, IonPage,IonButton, IonItem , IonAvatar} from '@ionic/vue';
+import { onIonViewDidEnter,IonContent, IonPage,IonButton, IonItem ,IonIcon, IonAvatar} from '@ionic/vue';
+import {add, listOutline, peopleOutline} from 'ionicons/icons';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
 
-import AppHeader from '../Components/AppHeader.vue'
+import AppHeader from '../Components/OfficeAppHeader.vue'
 
 
 
@@ -44,6 +47,7 @@ export default defineComponent({
     IonButton,
     IonItem,
     IonAvatar,
+    IonIcon,
     AppHeader
 },
   setup(){
@@ -77,8 +81,10 @@ export default defineComponent({
         goToMachine,
         //properties
         currentUser : user,
-        drillingMachines:drillingMachines,
-        
+        drillingMachines,
+
+        //icons
+        add
   }
   },
  

@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <AppHeader :str="'יצירת מכונת קידוח'"/>
+    <OfficeAppHeader :str="'יצירת מכונת קידוח'"/>
     <ion-content  :fullscreen="true">
     
 
@@ -42,7 +42,7 @@
   import { useRouter } from 'vue-router';
 
   import { useAppState } from '@/realm-state';
-import AppHeader from '@/Components/AppHeader.vue';
+import OfficeAppHeader from '@/Components/OfficeAppHeader.vue';
 
 
   export default defineComponent({
@@ -54,7 +54,7 @@ import AppHeader from '@/Components/AppHeader.vue';
     IonLabel,
     IonItem,
     IonButton,
-    AppHeader
+    OfficeAppHeader
 },
     setup(){
       const currentUser = ref<any>();

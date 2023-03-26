@@ -8,7 +8,7 @@
     
   >
   </ion-loading>
-     <AppHeader :showButtons="true"/>
+     <OfficeAppHeader :showButtons="true"/>
     
     <ion-content  :fullscreen="true" >
 
@@ -148,7 +148,7 @@ import MapBox from'../views/MapBox.vue';
 import * as XLSX from "xlsx";
 import proj4 from 'proj4'
 
-import AppHeader from './AppHeader.vue'
+import OfficeAppHeader from './OfficeAppHeader.vue'
 
 
 
@@ -171,7 +171,7 @@ export default defineComponent({
     IonItem,
     IonLoading,
     MapBox,
-    AppHeader
+    OfficeAppHeader
 },
   setup(){
     const router = useRouter();

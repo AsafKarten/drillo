@@ -3,16 +3,12 @@
     <AppHeader :showButtons="true"/>
      
 
-      <ion-fab slot="fixed" vertical="bottom" horizontal="center">
-        <ion-fab-button router-link="/create-employee" >
-          <ion-icon :icon="add"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-
     <ion-content  :fullscreen="true" >
 
     <div class="addButton">
-      <ion-button  size="large" router-link="/create-employee">יצירת עובד חדש</ion-button>
+      <ion-button  size="large" router-link="/create-employee">יצירת עובד חדש
+        <ion-icon slot="start" :icon="add"></ion-icon>
+      </ion-button>
     </div>
    <div class="homeContainer">
       <!-- <h1>העובדים שלי</h1> -->
@@ -42,7 +38,7 @@ import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
 
-import AppHeader from '../Components/AppHeader.vue'
+import AppHeader from '../Components/OfficeAppHeader.vue'
 
 
 
@@ -55,9 +51,7 @@ export default defineComponent({
     IonButton,
     IonItem,
     IonAvatar,
-    IonFab, 
     IonIcon,
-    IonFabButton,
     AppHeader
 },
   setup(){

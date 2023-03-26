@@ -3,13 +3,71 @@
       <AppHeader :str="'דוחות עבודה'"/>
       
       <ion-content :fullscreen="true" >
+    <div class="homeContainer" v-if="loaded">
+     
+        <!-- <h1>מנהל עבודה: {{currentUser?.customData?.first}} {{currentUser?.customData?.last}}</h1> -->
         <h5>פרוייקט: {{project?.name}}</h5>
-    
+       <!-- <ion-button @click="goTo('/daily-report/'+project._id)">מעבר לדו"ח יומי</ion-button>-->
 
-        <div :key="repo.date" v-for="repo in reports">
-          <ReportComponent :reportProp="repo"/>
-        </div>  
-    
+         <ion-card  :key="repo.date" v-for="repo in reports">
+      <ion-card-header>
+        <ion-card-subtitle></ion-card-subtitle>
+        <ion-card-title>דו"ח ביצוע עבודה {{ repo.date.getDate() + '/' + (repo.date.getMonth() * 1 + 1) + '/' + repo.date.getFullYear() }}</ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+         <ion-item :key="pit._id" v-for="pit in repo.pitsToShow">
+          
+          <!-- <p class="textMargin">{{' ' + pit.p + ' '+}}</p> -->
+          
+          <!-- <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p> -->
+
+          <p class="textMargin">{{pit.listName + " | " + "בור מס'" +' '+ pit.p +' ' +' | ' + ' עומק:' +' '+ pit.depth + ' ' +' | ' + 'קוטר:' + ' '+ pit.diameter + ' | ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
+          </ion-item>
+
+      </ion-card-content>
+      <ion-item v-show="repo.signature" >
+        <p class="textMargin">{{"שם החותם:"}}</p>
+        <p class="textMargin">{{repo.signatureName}}</p>
+        <ion-thumbnail slot="end"> 
+          <img  alt="signature" :src="repo.signature" />
+        </ion-thumbnail>
+      </ion-item>
+       
+      
+      <!-- <ion-button v-show="!repo.signature" @click="goTo('/sign-daily-report/'+repo._id)">מעבר לחתימת דו"ח יומי</ion-button> -->
+      <ion-button @click="goTo('/daily-report/'+repo._id)">מעבר לדו"ח יומי</ion-button>
+    </ion-card>
+  
+    </div>
+    <ion-card style="width: 60%" v-if="!loaded">
+      <ion-card-header>
+        <ion-card-subtitle></ion-card-subtitle>
+        <h3><ion-skeleton-text :animated="true" style="width: 30%"></ion-skeleton-text></h3>
+      </ion-card-header>
+  
+      <ion-card-content>
+      <ion-item>
+          <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+    </ion-item>
+    <ion-item>
+      <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+  </ion-item>
+  <ion-item>
+    <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+</ion-item>
+</ion-card-content>
+
+      <ion-item>
+        <ion-skeleton-text :animated="true" style="width: 30%;"></ion-skeleton-text>
+      <ion-thumbnail slot="end">
+              <ion-skeleton-text :animated="true"></ion-skeleton-text>
+            </ion-thumbnail>
+          </ion-item>
+    </ion-card>
       </ion-content>
     </ion-page>
   </template>
@@ -23,7 +81,6 @@
   import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
   
   import AppHeader from '../Components/AppHeader.vue'
-  import ReportComponent from '@/Components/ReportComponent.vue';
   
   
   
@@ -35,20 +92,19 @@
       
       IonContent,
       IonPage,
-      //IonItem,
-      //IonCard,
-      //IonCardContent, 
-      //IonCardHeader, 
-      //IonCardSubtitle, 
-      //IonCardTitle,
-      //IonButton,
-     //IonThumbnail,
-      //IonSkeletonText,
+      IonItem,
+      IonCard,
+      IonCardContent, 
+      IonCardHeader, 
+      IonCardSubtitle, 
+      IonCardTitle,
+      IonButton,
+      IonThumbnail,
+      IonSkeletonText,
       //IonList,
       //IonListHeader,
       //IonLabel,
-      AppHeader,
-      ReportComponent
+      AppHeader
      
   },
     setup(){
@@ -84,9 +140,7 @@
         reports.value = await getProjectReports(project_id.value)
         reports.value = reports.value.reverse()
         console.log(project.value);
-        console.log(reports.value);
-        
-        //await getReportsPits()
+        await getReportsPits()
     });
 
     // onMounted(async()=>{
@@ -98,13 +152,13 @@
     //     await getReportsPits()
     // });
 
-    // const getReportsPits = async ()=>{        
-    //   for ( let index = 0; index < reports.value.length; index++) {
-    //      let pitsToShow = await getReportPits(reports.value[index]._id.toString()) ;
-    //      reports.value[index].pitsToShow =  pitsToShow 
-    //   }
-    //   loaded.value = true
-    // }
+    const getReportsPits = async ()=>{        
+      for ( let index = 0; index < reports.value.length; index++) {
+         let pitsToShow = await getReportPits(reports.value[index]._id.toString()) ;
+         reports.value[index].pitsToShow =  pitsToShow 
+      }
+      loaded.value = true
+    }
   
 
     const goTo =(route:any)=>{
@@ -115,7 +169,7 @@
    
        return {
         //methods
-          //getReportsPits,
+          getReportsPits,
           goTo,
           //properties
           currentUser : user,

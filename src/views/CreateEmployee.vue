@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <AppHeader :str="'יצירת עובד חדש'"/>
+    <OfficeAppHeader :str="'יצירת עובד חדש'"/>
     <ion-content :fullscreen="true">
     
       <div id="container"> 
@@ -78,7 +78,7 @@
 
   import { useAppState } from '@/realm-state';
 
-  import AppHeader from '../Components/AppHeader.vue'
+  import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
   export default defineComponent({
     name: 'CreateEmployee',
     components: {
@@ -93,7 +93,7 @@
       IonToolbar,
       IonTitle,
       IonSpinner,
-      AppHeader,
+      OfficeAppHeader,
      
      
     },

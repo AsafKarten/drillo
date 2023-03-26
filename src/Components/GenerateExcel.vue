@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content  :fullscreen="true" >
 
-      <AppHeader :str="'ניהול פרוייקט'"/>
+      <OfficeAppHeader :str="'ניהול פרוייקט'"/>
   <ion-item>
     <ion-label position="floating">תאריך התחלה</ion-label>
     <ion-input
@@ -47,7 +47,7 @@ import { onIonViewDidEnter,onIonViewDidLeave, IonContent, IonHeader, IonPage, Io
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAppState } from '../realm-state';
-import AppHeader from '../Components/AppHeader.vue'
+import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
 
 //imports 
 import * as XLSX from "xlsx";
@@ -66,7 +66,7 @@ export default defineComponent({
     IonLabel,
     IonInput,
     IonButton,
-    AppHeader,
+    OfficeAppHeader,
 
   },
   setup() {

@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-       <AppHeader :showButtons="true"/>
+       <OfficeAppHeader :showButtons="true"/>
       
       <ion-content :fullscreen="true" >
   
@@ -130,7 +130,7 @@
   import {useAppState} from '../realm-state';
 
   
-  import AppHeader from './AppHeader.vue'
+  import OfficeAppHeader from './OfficeAppHeader.vue'
   
   
   
@@ -151,7 +151,7 @@
       //IonLabel,
       IonItem,
       IonAvatar,
-      AppHeader
+      OfficeAppHeader
   },
     setup(){
       const router = useRouter();

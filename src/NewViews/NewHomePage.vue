@@ -1,6 +1,6 @@
 <template>
     <ion-page class="back" v-show="showComponent">
-    <AppHeader :str="'מסך בית'"/>
+    <OfficeAppHeader :str="'מסך בית'"/>
       <ion-content  :fullscreen="true" >
       
       
@@ -56,7 +56,7 @@
   import { useRouter } from 'vue-router';
   import {useAppState} from '../realm-state';
   
-  import AppHeader from '../Components/AppHeader.vue'
+  import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
   import ProjectCard from './Utilities/ProjectCard.vue';
   import DescriptionCard from '@/NewViews/Utilities/DescriptionCard.vue';
  
@@ -74,7 +74,7 @@
       IonFooter,  
       IonToolbar,
       IonButton,
-      AppHeader,
+      OfficeAppHeader,
       ProjectCard,
       IonIcon,
      

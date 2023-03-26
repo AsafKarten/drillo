@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content  :fullscreen="true" >
 
-      <AppHeader :str="'ניהול פרוייקט'"/>
+      <OfficeAppHeader :str="'ניהול פרוייקט'"/>
       <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address"/> -->
       <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
       
@@ -57,7 +57,7 @@
   import { useAppState } from '../realm-state';
   import GridButtons from './Utilities/GridButtons.vue';
   import DescriptionCard from './Utilities/DescriptionCard.vue'
-  import AppHeader from '../Components/AppHeader.vue'
+  import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
 
   
   import FileUpload from './Utilities/FileUpload.vue'
@@ -77,7 +77,7 @@
     IonHeader, 
     IonTitle,
     GridButtons,
-    AppHeader,
+    OfficeAppHeader,
    
     //DescriptionCard,
 

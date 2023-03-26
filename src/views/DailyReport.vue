@@ -3,11 +3,13 @@
     <AppHeader :str="'דוח עבודה יומי'"/>
     
     <ion-content :fullscreen="true" >
-      <div class="homeContainer">
+      <div class="homeContainer" v-if="loaded" >
    <create-pdf :report="report" :signature="false"/>
       <h5>פרוייקט: {{report?.project_name + " " + report?.project_address}}</h5>
 
-       <ion-card >
+     
+
+       <ion-card  >
         <ion-card-header>
           <ion-card-subtitle></ion-card-subtitle>
           <ion-card-title>דו"ח ביצוע עבודה {{ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-title>
@@ -42,12 +44,44 @@
         </ion-button>
     </div>
 </div>
+
+<div v-if="!loaded">
+  <h3><ion-skeleton-text :animated="true" style="width: 40%"></ion-skeleton-text></h3>
+<ion-card  >
+  <ion-card-header>
+    <ion-card-subtitle></ion-card-subtitle>
+    <h3><ion-skeleton-text :animated="true" style="width: 30%"></ion-skeleton-text></h3>
+  </ion-card-header>
+
+  <ion-card-content>
+  <ion-item>
+      <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+  </ion-item>
+  <ion-item>
+    <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+</ion-item>
+<ion-item>
+  <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+</ion-item>
+<ion-item>
+<ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
+</ion-item>
+</ion-card-content>
+
+  <ion-item>
+    <ion-skeleton-text :animated="true" style="width: 30%;"></ion-skeleton-text>
+  <ion-thumbnail slot="end">
+          <ion-skeleton-text :animated="true"></ion-skeleton-text>
+        </ion-thumbnail>
+      </ion-item>
+</ion-card>
+</div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import {onIonViewDidEnter, IonContent, IonPage,IonButton, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
+import {onIonViewDidEnter,onIonViewWillEnter, IonContent, IonPage,IonButton,IonSkeletonText, IonItem,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonThumbnail ,IonIcon } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -57,8 +91,8 @@ import { home ,receiptOutline, constructOutline, shareSocialOutline ,pencilOutli
 import CreatePdf from '@/Components/CreatePdf.vue';
 import { userInfo } from 'os';
 
-import AppHeader from '../Components/AppHeader.vue'
-
+import AppHeader from '../Components/OfficeAppHeader.vue'
+import ReportComponent from '@/Components/ReportComponent.vue';
 
 
 
@@ -75,9 +109,11 @@ export default defineComponent({
     IonCardSubtitle, 
     IonCardTitle,
     IonThumbnail,
+    IonSkeletonText,
     IonIcon,
     CreatePdf,
-    AppHeader
+    AppHeader,
+    //ReportComponent,
    
 },
   setup(){
@@ -96,14 +132,16 @@ export default defineComponent({
     const siteManagers = ref<any>()
     const siteManager = ref<any>()
     const {id} = route.params
+    const loaded = ref(false)
 
-    onIonViewDidEnter(async()=>{
+    onIonViewWillEnter(async()=>{
 
       report.value = await getReportByID(id.toString())
       report.value.pitsToShow = await getReportPits(report.value._id)
       console.log(report.value);
       
       pits.value = report.value.pits
+      loaded.value = true
   });
  
 
@@ -169,6 +207,7 @@ export default defineComponent({
         repoDate:repoDate,
         projects:projects,
         id:id,
+        loaded,
 
         shareSocialOutline,
         pencilOutline,

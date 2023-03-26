@@ -1,7 +1,7 @@
 <template>
     <ion-page>
       <ion-content>
-        <AppHeader :str="'רשימת כלונסאות'"/>
+        <OfficeAppHeader :str="'רשימת כלונסאות'"/>
 
   
             <ion-accordion-group  :multiple="true" :value="['Waiting', 'Done']">
@@ -210,7 +210,7 @@
   import { useAppState } from "../realm-state";
  
   
-  import AppHeader from '../Components/AppHeader.vue'
+  import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
   import GridButtons from "./Utilities/GridButtons.vue";
   import { home } from 'ionicons/icons';
   
@@ -234,7 +234,7 @@
       //IonIcon,
       IonInput,
       //MapBox,
-      AppHeader,
+      OfficeAppHeader,
       //GridButtons,
       
     },
