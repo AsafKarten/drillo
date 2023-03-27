@@ -78,7 +78,7 @@
                 <div class="hebrewText">
                   <h5>{{currentPit?.listName +" " + currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
-                  <ion-item >
+                  <ion-item @click="openPopover('Depth')" >
                     <ion-button size="large" @click="openPopover('Depth')">עומק</ion-button>
                   <p slot="end" @click="openPopover('Depth')"><span @click="openPopover('Depth')" class="coords">{{currentPit?.depth +" "+ 'מטר'}}</span></p>
                   </ion-item>
@@ -95,7 +95,7 @@
                       <ion-button  color="success" @click="changePitDiameterOrDepth('Depth', currentPit._id)">אישור</ion-button>
                     </ion-content>
                   </ion-popover>
-                  <ion-item >
+                  <ion-item @click="openPopover('Diameter')" >
                   <ion-button size="large" @click="openPopover('Diameter')">קוטר</ion-button>
                   <p slot="end" @click="openPopover('Diameter')" > <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter +" "+ 'ס"מ'}}</span></p>
                   </ion-item>

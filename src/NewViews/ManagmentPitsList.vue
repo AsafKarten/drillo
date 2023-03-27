@@ -73,7 +73,7 @@
                 <div class="hebrewText">
                   <h5>{{currentPit?.listName +" " + currentPit?.p}}</h5>
                   <h6>נתוני קידוח</h6>
-                  <ion-item>
+                  <ion-item  @click="openPopover('Depth')">
                     <ion-button size="large" @click="openPopover('Depth')">עומק</ion-button>
                   <p  @click="openPopover('Depth')">עומק: <span @click="openPopover('Depth')" class="coords">{{currentPit?.depth}}</span></p>
                   </ion-item>
@@ -91,7 +91,7 @@
                     </ion-content>
                   </ion-popover>
 
-                  <ion-item>
+                  <ion-item  @click="openPopover('Diameter')">
                     <ion-button size="large" @click="openPopover('Diameter')">קוטר</ion-button>
                     <p @click="openPopover('Diameter')" >קוטר: <span @click="openPopover('Diameter')" class="coords">{{currentPit?.diameter}}</span></p>
                     </ion-item>
