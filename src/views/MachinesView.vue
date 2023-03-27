@@ -14,9 +14,9 @@
          <div>
           
         <ion-item :key="machine._id" v-for="machine in drillingMachines">
-          <ion-avatar slot="start">
-            <img alt="Silhouette of a person's head" src="../../public/assets/icon/favicon.png" />
-          </ion-avatar>
+          <ion-thumbnail slot="start">
+            <img alt="Silhouette of a person's head" src="../../public/assets/icon/drilling-rig.png" />
+          </ion-thumbnail>
         <p>{{'  '+ machine?.name + ' : '}} </p>
         <p> {{ machine?.licens_number}}</p>
         <ion-button size="large" slot="end" @click="goToMachine(machine)">צפייה במכונה</ion-button>
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { onIonViewDidEnter,IonContent, IonPage,IonButton, IonItem ,IonIcon, IonAvatar} from '@ionic/vue';
+import { onIonViewDidEnter,IonContent, IonPage,IonButton, IonItem ,IonIcon, IonAvatar,IonThumbnail} from '@ionic/vue';
 import {add, listOutline, peopleOutline} from 'ionicons/icons';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter } from 'vue-router';
@@ -46,8 +46,9 @@ export default defineComponent({
     IonPage,
     IonButton,
     IonItem,
-    IonAvatar,
+    //IonAvatar,
     IonIcon,
+    IonThumbnail,
     AppHeader
 },
   setup(){

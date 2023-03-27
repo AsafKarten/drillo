@@ -7,7 +7,7 @@
     
 
         <div :key="repo.date" v-for="repo in reports">
-          <ReportComponent :reportProp="repo"/>
+          <ReportComponent :reportProp="repo" :showButton="true"/>
         </div>  
     
       </ion-content>

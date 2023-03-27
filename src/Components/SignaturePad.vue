@@ -1,9 +1,9 @@
 <template>
-  <div >
-    <Vue3Signature class="mainContainer"
+  <div>
+    <Vue3Signature class="mainContainer" 
       ref="signature1"
       :sigOption="state.option"
-      
+      :w="'300px'"
       :h="'200px'"
       :disabled="state.disabled"
       
@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+import SignaturePad from 'signature_pad';
 import { defineComponent, onMounted, ref, reactive, defineExpose } from 'vue';
 import Vue3Signature from "vue3-signature";
 
@@ -25,7 +26,10 @@ export default defineComponent({
   setup(){
     onMounted(async()=>{
       //add code or delete
+      console.log('pen');
+      
     });
+    
 
     //SIGNATURE PAD
     const state = reactive({
@@ -41,6 +45,7 @@ export default defineComponent({
     const save = (t:String) => { return signature1.value.save(t); }  // signature1.value.save('image/jpeg')
     const clear = () => { signature1.value.clear(); }
     const isEmpty = ()=> {return signature1.value.isEmpty();}
+    
 
     //defineExpose({signature1})
 
@@ -57,10 +62,14 @@ export default defineComponent({
 <style scoped>
 .mainContainer{
 width: 100%;
-margin: 2%;
+margin: 2%,0,0,2%;
 display: block;
-direction: rtl;
+
 border: 2px lightgray solid;
 border-radius: 12px;
 }
+.mainContainer.canvas{
+  min-width: 300px !important;
+}
+
 </style>

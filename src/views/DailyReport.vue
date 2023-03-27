@@ -7,25 +7,26 @@
    <create-pdf :report="report" :signature="false"/>
       <h5>פרוייקט: {{report?.project_name + " " + report?.project_address}}</h5>
 
+      <ReportComponent v-if="report" :reportProp="report" :showButton="false"/>
      
 
-       <ion-card  >
+       <!-- <ion-card  >
         <ion-card-header>
           <ion-card-subtitle></ion-card-subtitle>
           <ion-card-title>דו"ח ביצוע עבודה {{ report?.date.getDate() + '/' + (report?.date.getMonth() * 1 + 1) + '/' + report?.date.getFullYear() }}</ion-card-title>
         </ion-card-header>
     
         <ion-card-content>
-           <ion-item :key="pit._id" v-for="pit in report?.pitsToShow">
+           <ion-item :key="pit._id" v-for="pit in report?.pitsToShow"> -->
             
             <!-- <p class="textMargin">{{' ' + pit.p + ' '+}}</p> -->
             
             <!-- <p class="textMargin">{{pit.status === 'Done' ? 'בוצע' : pit.status}}</p> -->
   
-            <p class="textMargin">{{pit.listName + " | " + "בור מס'" +' '+ pit.p +' ' +' | ' + ' עומק:' +' '+ pit.depth + ' ' +' | ' + 'קוטר:' + ' '+ pit.diameter + ' | ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
-            </ion-item>
+            <!-- <p class="textMargin">{{pit.listName + " | " + "בור מס'" +' '+ pit.p +' ' +' | ' + ' עומק:' +' '+ pit.depth + ' ' +' | ' + 'קוטר:' + ' '+ pit.diameter + ' | ' + 'נפח בטון:' + ' ' + pit.concreteVolume.toFixed(2) }}</p>
+            </ion-item> -->
   
-        </ion-card-content>
+        <!-- </ion-card-content>
         <ion-item v-show="report?.signature" >
           <p class="textMargin">{{"שם החותם:"}}</p>
           <p class="textMargin">{{report?.signatureName}}</p>
@@ -33,7 +34,7 @@
             <img  alt="signature" :src="report?.signature" />
           </ion-thumbnail>
         </ion-item>
-  </ion-card>
+  </ion-card> -->
 
     <div style="padding-top: 6px">
         <ion-button shape="round" @click="$router.push('/sign-daily-report/' + $route.params.id)" expand="full">{{'חתימה'}}
@@ -45,36 +46,18 @@
     </div>
 </div>
 
-<div v-if="!loaded">
-  <h3><ion-skeleton-text :animated="true" style="width: 40%"></ion-skeleton-text></h3>
-<ion-card  >
-  <ion-card-header>
-    <ion-card-subtitle></ion-card-subtitle>
-    <h3><ion-skeleton-text :animated="true" style="width: 30%"></ion-skeleton-text></h3>
-  </ion-card-header>
+<div v-if="!loaded" style="width: 100%; height: 100% ">
 
-  <ion-card-content>
-  <ion-item>
-      <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
-  </ion-item>
-  <ion-item>
-    <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
-</ion-item>
-<ion-item>
-  <ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
-</ion-item>
-<ion-item>
-<ion-skeleton-text :animated="true" style="width: 50%;"></ion-skeleton-text>
-</ion-item>
-</ion-card-content>
-
-  <ion-item>
-    <ion-skeleton-text :animated="true" style="width: 30%;"></ion-skeleton-text>
+    
   <ion-thumbnail slot="end">
-          <ion-skeleton-text :animated="true"></ion-skeleton-text>
-        </ion-thumbnail>
-      </ion-item>
-</ion-card>
+          <ion-skeleton-text :animated="true" style="width: 300px ; height: 40px ; margin-top: 30px" ></ion-skeleton-text>
+  </ion-thumbnail>
+  <ion-thumbnail slot="end">
+    <ion-skeleton-text :animated="true" style="width: 1000px ; height: 50px ; margin-top: 300px" ></ion-skeleton-text>
+</ion-thumbnail>
+<ion-thumbnail slot="end">
+  <ion-skeleton-text :animated="true" style="width: 1000px ; height: 50px ; margin-top: 20px" ></ion-skeleton-text>
+</ion-thumbnail>
 </div>
     </ion-content>
   </ion-page>
@@ -102,19 +85,18 @@ export default defineComponent({
     IonContent,
     IonPage,
     IonButton,
-    IonItem,
-    IonCard,
-    IonCardContent, 
-    IonCardHeader, 
-    IonCardSubtitle, 
-    IonCardTitle,
+    //IonItem,
+    //IonCard,
+    //IonCardContent,
+    //IonCardHeader,
+    //IonCardSubtitle,
+    //IonCardTitle,
     IonThumbnail,
     IonSkeletonText,
     IonIcon,
     CreatePdf,
     AppHeader,
-    //ReportComponent,
-   
+    ReportComponent
 },
   setup(){
     const router = useRouter();

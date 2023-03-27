@@ -76,7 +76,7 @@
     name: 'ProjectView',
     components: {
         IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonThumbnail, IonSkeletonText, CircleProgressBar  },
-        props:{projectProp:Object},
+        props:{projectProp:Object, isClick:Boolean},
     setup(props){
       const router = useRouter();
       const route = useRoute();
@@ -93,6 +93,7 @@
       const isSigned = ref()
       const unSignedAmount = ref()
       const loaded = ref(false)
+      const isClickable = ref(props.isClick)
   
     onMounted(async()=>{
     console.log(project.value);
@@ -133,7 +134,10 @@
     }
 
     const goToProject =()=>{
-        router.push('/project-managment/'+ project.value._id)
+      if(isClickable.value)
+          router.push('/project-managment/'+ project.value._id)
+      else
+        return
     }
    
         
@@ -155,7 +159,8 @@
           isToday,
           isSigned,
           unSignedAmount,
-          loaded
+          loaded,
+          isClickable,
        
     }
     },

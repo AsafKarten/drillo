@@ -4,7 +4,17 @@
 
       <OfficeAppHeader :str="'ניהול פרוייקט'"/>
       <!-- <DescriptionCard :header="project?.name" :subtitle="project?.address"/> -->
-      <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
+      <ion-grid class="cardGrid">
+        <ion-row>
+          <ion-col sizeXl="1" sizeLg="2" sizeMd="2" sizeSm="2" size="2">
+            <ProjectCard v-if="project" :projectProp="project" :isClick="false"/>
+          </ion-col>
+          <ion-col sizeXl="1" sizeLg="2" sizeMd="2" sizeSm="2" size="2">
+            <GridButtons :buttons="buttons" :options="{buttonHeight:110}"/>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
       
       <!-- <FileUpload :withPreview="true" :originID="project_id" :projectID="project_id" @fileUploaded="logFileUploaded"/> -->
       <ion-modal :is-open="isOpenDetails" @willDismiss="setOpenDetails(false)">
@@ -51,14 +61,14 @@
 </template>
   
 <script lang="ts">
-  import {onIonViewDidEnter, IonContent, IonPage, IonModal, IonButton, IonButtons ,IonToolbar, IonHeader, IonTitle } from '@ionic/vue';
+  import {onIonViewDidEnter, IonContent, IonPage, IonModal, IonButton, IonButtons ,IonToolbar, IonHeader, IonCol, IonGrid, IonRow, IonTitle } from '@ionic/vue';
   import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
   import GridButtons from './Utilities/GridButtons.vue';
   import DescriptionCard from './Utilities/DescriptionCard.vue'
   import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
-
+  import ProjectCard from './Utilities/ProjectCard.vue';
   
   import FileUpload from './Utilities/FileUpload.vue'
   
@@ -76,8 +86,12 @@
     IonToolbar,
     IonHeader, 
     IonTitle,
+    IonCol, 
+    IonGrid, 
+    IonRow,
     GridButtons,
     OfficeAppHeader,
+    ProjectCard,
    
     //DescriptionCard,
 
@@ -208,5 +222,7 @@
   </script>
   
   <style scoped>
-
+  .cardGrid {
+    --ion-grid-columns: 2;
+  }
   </style>

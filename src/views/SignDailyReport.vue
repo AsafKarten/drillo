@@ -237,7 +237,9 @@ export default defineComponent({
   border-bottom: 1px black solid;
   margin-bottom: 2%;
 }
-
+canvas{
+  width: 100% !important;
+}
 </style>
 
 

@@ -13,8 +13,8 @@
         <p>כתובת: {{project?.address}}</p>
         
         <h3>צוות קידוח</h3>
-        <ion-button slot="end"  @click="changeDrillerModalManager()">{{'הוספת קודח'}}</ion-button>
-        <ion-button color="danger"  @click="deleteModalMAnager(true)">{{'מחיקת מכונה'}}</ion-button>
+        <ion-button size="default" slot="end"  @click="changeDrillerModalManager()">{{'הוספת קודח'}}</ion-button>
+        <ion-button size="default" color="danger"  @click="deleteModalMAnager(true)">{{'מחיקת מכונה'}}</ion-button>
       </div>   
       
       <!--new drilling team list-->
@@ -26,8 +26,8 @@
           <ion-label>
             {{employee.first +" "+ employee.last}} 
        </ion-label>
-          <ion-button slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
-          <ion-button color="danger" slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
+          <ion-button size="default" slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
+          <ion-button size="default" color="danger" slot="end" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
           </ion-item>      
       </div>
 
@@ -48,8 +48,8 @@
                   <ion-item  :key="employee?._id" v-for="employee in employees">
                     <!-- <p>{{employee?._id}}</p> -->
                     <p>{{employee?.first}} {{employee?.last}}</p>
-                    <ion-button slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
-                    <ion-button slot="end" @click="addDrillerToMachine(employee)">בחר</ion-button>
+                    <ion-button size="default" slot="end" @click="goToEmployee(employee)">{{'פרופיל עובד'}}</ion-button>
+                    <ion-button size="default" slot="end" @click="addDrillerToMachine(employee)">בחר</ion-button>
                     </ion-item>      
                 </div>
                 
@@ -69,8 +69,8 @@
                   <ion-content  class="ion-padding">
                     <div class="hebrewText">
                         <p>האם את/ה בטוח שברצונך למחוק מכונה זו?</p>
-                        <ion-button slot="end" color="danger" @click="deleteMachine()">{{'מחיקה'}}</ion-button>
-                        <ion-button slot="end" @click="deleteModalMAnager(false)">{{'ביטול'}}</ion-button>
+                        <ion-button size="default" slot="end" color="danger" @click="deleteMachine()">{{'מחיקה'}}</ion-button>
+                        <ion-button size="default" slot="end" @click="deleteModalMAnager(false)">{{'ביטול'}}</ion-button>
                          
                     </div>
                     

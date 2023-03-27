@@ -26,7 +26,7 @@
        
       
       <!-- <ion-button v-show="!repo.signature" @click="goTo('/sign-daily-report/'+repo._id)">מעבר לחתימת דו"ח יומי</ion-button> -->
-      <ion-button @click="goTo('/daily-report/'+report._id)">מעבר לדו"ח יומי</ion-button>
+      <ion-button v-show="showBtn" @click="goTo('/daily-report/'+report._id)">מעבר לדו"ח יומי</ion-button>
     </ion-card>
   
     </div>
@@ -91,7 +91,7 @@
       IonSkeletonText,
     
   },
-  props:{reportProp : Object},
+  props:{reportProp : Object, showButton: Boolean},
 
     setup(props){
       const router = useRouter();
@@ -111,6 +111,7 @@
       const siteManager = ref<any>()
       const {id} = route.params
       const loaded = ref(false)
+      const showBtn = ref(props.showButton)
      
 
       onMounted(async() => {
@@ -151,6 +152,7 @@
           projects:projects,
           id:id,
           loaded,
+          showBtn,
         
           
     }

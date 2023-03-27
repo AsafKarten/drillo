@@ -1,9 +1,9 @@
 <template>
     <div>
         <ion-item :key="machine._id" v-for="machine in machines">
-            <ion-avatar slot="start">
-              <img alt="Silhouette of a person's head" src="../../../public/assets/icon/favicon.png" />
-            </ion-avatar>
+            <ion-thumbnail slot="start">
+              <img alt="Silhouette of a person's head" src="../../../public/assets/icon/drilling-rig.png" />
+            </ion-thumbnail>
             <ion-label>
                  {{machine.type +" "+ machine.name}} 
             </ion-label>
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-  import { IonContent, IonPage, IonItem, IonAvatar, IonLabel, IonButton } from '@ionic/vue';
+  import { IonContent, IonPage, IonItem, IonAvatar, IonLabel, IonButton, IonThumbnail } from '@ionic/vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../../realm-state';
@@ -24,8 +24,9 @@
     name: 'MachinesDrillersList',
     components: {
     IonItem, 
-    IonAvatar, 
+    //IonAvatar, 
     IonLabel,
+    IonThumbnail,
     //IonButton,
 
     },

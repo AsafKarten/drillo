@@ -9,7 +9,7 @@
         <ion-grid class="cardGrid">
             <ion-row>
               <ion-col sizeXl="1" sizeLg="1" sizeMd="1" sizeSm="3" size="3" :key="project._id" v-for="project in projects">
-                <ProjectCard :projectProp="project"/>
+                <ProjectCard :projectProp="project" :isClick="true"/>
             </ion-col>
             </ion-row>
           </ion-grid>
