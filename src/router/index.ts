@@ -36,9 +36,12 @@ import MachineCrew from '../NewViews/MachineCrew.vue'
 import FieldProjectMap from '../NewViews/FieldProjectMap.vue'
 import GenerateExcel from '../Components/GenerateExcel.vue'
 import NewHomePageVue from '@/NewViews/NewHomePage.vue';
+import DrillerBlankVue from '@/NewViews/DrillerBlank.vue';
+import DrilloPage from '@/NewViews/DrilloPage.vue';
 
 import { useAppState } from '../realm-state';
 import { User } from 'realm-web';
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -232,6 +235,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/new-home/',
     name: 'NewHomePageVue',
     component: NewHomePageVue
+  },
+  {
+    //add to safe routes
+    path: '/driller-blank/',
+    name: 'DrillerBlankVue',
+    component: DrillerBlankVue
+  },
+  {
+    //add to safe routes
+    path: '/drillo/',
+    name: 'DrilloPageVue',
+    component: DrilloPage
   },
   
 ]

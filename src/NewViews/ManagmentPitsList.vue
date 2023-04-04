@@ -83,6 +83,7 @@
                       <ion-item>
                         <ion-label position="floating">שינוי עומק</ion-label>
                         <ion-input
+                          
                           v-model="tempDepth"
                           type="number"
                         ></ion-input>
@@ -213,6 +214,7 @@
   import OfficeAppHeader from '../Components/OfficeAppHeader.vue'
   import GridButtons from "./Utilities/GridButtons.vue";
   import { home } from 'ionicons/icons';
+import { log } from "console";
   
   export default defineComponent({
     name: "ManagmentPitsList",

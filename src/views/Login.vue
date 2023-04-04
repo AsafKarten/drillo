@@ -10,7 +10,7 @@
      
       
       <div id="container">
-        <h1 id="title" >Drillo</h1>
+        <h1 @click="goTo('/drillo/')" id="title" >Drillo</h1>
         <h3>{{'מערכת לניהול קידוחים'}}</h3>
         <ion-item>
           <ion-label position="floating">מייל</ion-label>
@@ -104,9 +104,14 @@ export default defineComponent({
       }
     };
 
+    const goTo = (value:string)=>{
+      router.replace(value)
+    }
+
     return {
       //method
       loginEmailPassword,
+      goTo,
       //properties
       email,
       password,

@@ -87,6 +87,7 @@
                       <ion-item >
                         <ion-label position="floating">שינוי עומק</ion-label>
                         <ion-input
+                          :autofocus="true"
                           v-model="tempDepth"
                           clearInput="true"
                           type="number"

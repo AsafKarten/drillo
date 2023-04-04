@@ -77,11 +77,18 @@ import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
       // );
       //BUTTON TEMPLATE: {index:Number/nothing, text:String, icon:Icon, fill:"solid"/"clear"/"outline", color:String, badge:{count:String/Number, color:String} ,click: ()=>Function },
       //IONIC COLORS: primary, secondary, tertiary, success, warning, danger, light, medium, dark
-
+      
 
       onIonViewDidEnter(async()=>{
-        if(currentUser?.value.customData.organizationID === undefined)
+        if(currentUser?.value.customData.organizationID === undefined){
               router.push('Login')
+            return
+          }
+        
+        if(currentUser?.value.customData.project_id == "" || currentUser?.value.customData.project_id == undefined ){
+            router.replace("/driller-blank");
+          return
+        }
               
        
         project_id.value = currentUser?.value.customData.project_id.$oid

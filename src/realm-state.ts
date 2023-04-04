@@ -40,6 +40,15 @@ export const useAppState = () => {
         return true;
     };
 
+        //refresh user data
+        const refreshUser =async () => {
+        
+          //Refresh a user's custom data to make sure we have the latest version
+          await app?.currentUser?.refreshCustomData();
+          user.value = app?.currentUser
+          return true;
+      };
+
     const deleteUserData =async (id : any) => {
       try {
                 // 1. Get a data source client
@@ -1103,6 +1112,7 @@ const updatePitDiameter =async (pit : any) => {
         //functions
         getOrganizationData,
         login,
+        refreshUser,
         deleteUserData,
         loginAnon,
         logout,

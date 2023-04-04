@@ -12,7 +12,7 @@
     <h1 id="title">יצירת פרוייקט חדש</h1>
     <div class="container">
       <h1 id="title">פרטים</h1>
-     <ion-item >
+     <ion-item  >
           <ion-label position="floating">שם הפרוייקט</ion-label>
           <ion-input
             v-model="projectName"
@@ -73,8 +73,8 @@ message="יש למלא את כל השדות ורק לאחר מכן לשמור א
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAlert } from '@ionic/vue';
-import { defineComponent, onMounted, ref, render } from 'vue';
+import {onIonViewDidEnter, IonContent, IonHeader, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAlert } from '@ionic/vue';
+import { defineComponent, onMounted, ref, render, } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAppState} from '../realm-state';
 import MapBox from'../views/MapBox.vue';
@@ -142,8 +142,10 @@ export default defineComponent({
 
     const setOpen = (state: boolean) => (isOpenAlert.value = state);
 
-  onMounted(async()=>{
+    onIonViewDidEnter(async()=>{
     organizationID.value = user.value.customData.organizationID
+    
+    
 
   });
 
