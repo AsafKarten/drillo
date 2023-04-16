@@ -17,15 +17,26 @@
     type="date"
   ></ion-input>
 </ion-item>
-<ion-button expand="block" @click='sortPits'>יצירת דו"ח לפי תאריך</ion-button>
+<ion-item>
+  <ion-label position="floating">מחיר למטר</ion-label>
+  <ion-input
+    v-model="price"
+    type="number"
+  ></ion-input>
+</ion-item>
+<ion-button expand="block" @click='generateRegularReport'>יצירת דו"ח לפי תאריך</ion-button>
 <ion-button expand="block" @click='getFullReport'>יצירת דו"ח לכל הפרוייקט</ion-button>
-  <table id="my-table-id" v-show="pits">
+<ion-button expand="block" @click='generatePaymentReport'>יצירת דו"ח תשלום לפי תאריך</ion-button>
+
+        <!--regular riport table-->
+  <table id="my-table-id" v-show="regularReport" >
     <tr>
       <th>רשימה</th>
       <th>מספר בור קידוח</th>
       <th>עומק</th>
       <th>קוטר</th>
       <th>נפח בטון תיאורטי</th>
+      <th>מחיר</th>
       <th>תאריך ביצוע</th>
     </tr>
     <tr :key="pit?._id" v-for="pit in pits">
@@ -34,16 +45,59 @@
       <td>{{pit.depth}}</td>
       <td>{{pit.diameter}}</td>
       <td>{{pit.concreteVolume}}</td>
+      <td>{{(pit.depth * price)}}</td>
       <td>{{pit.finishDate.getDate() + '/' + (pit.finishDate.getMonth() * 1 + 1) + '/' + pit.finishDate.getFullYear()}}</td>
     </tr>
   </table>
+
+        <!--payment riport table-->
+        <table id="payment-table-id" v-show="paymentReport" >
+       
+          <thead>
+            <tr>
+               <th colspan="10" style="text-align: center;" >{{'חשבון לחודש'+' '+month + ' ' + 'עבור קידוח כלונסאות' + ' ' + project?.name + ' ' + project?.address}}</th>
+            </tr>
+            <tr>
+            <th colspan="1">מס' רץ</th>
+            <th style="text-align: center;" colspan="7">תאור</th>
+            <th colspan="1"></th>
+            <th colspan="1"></th>
+            </tr>
+            
+         </thead>
+          
+          <tr>
+            <th>#</th>
+            <th>תאריך</th>
+            <th>יום</th>
+            <th>מס' כלונס</th>
+            <th>קוטר</th>
+            <th>עומק</th>
+            <th>כמות</th>
+            <th>מטר אורך</th>
+            <th colspan="1">מחיר יחידה</th>
+            <th colspan="1">סה"כ</th>
+          </tr>
+          <tr :key="pit?._id" v-for="pit in pits">
+            <td>{{pit.listName}}</td>
+            <td>{{pit.p}}</td>
+            <td>{{pit.depth}}</td>
+            <td>{{pit.diameter}}</td>
+            <td>{{pit.concreteVolume}}</td>
+            <td>{{(pit.depth * price)}}</td>
+            <td>{{pit.finishDate.getDate() + '/' + (pit.finishDate.getMonth() * 1 + 1) + '/' + pit.finishDate.getFullYear()}}</td>
+          </tr>
+        </table>
+
+
   <IonButton expand="block" @click="createXl">שמירת דו"ח</IonButton>
-    </ion-content>
+   
+  </ion-content>
     </ion-page>
 </template>
   
 <script lang="ts">
-import { onIonViewDidEnter,onIonViewDidLeave, IonContent, IonHeader, IonPage, IonToolbar, IonButton, IonButtons, IonModal, IonTitle, IonInput, IonLabel, IonItem, IonLoading} from '@ionic/vue';
+import { onIonViewWillEnter,onIonViewDidLeave, IonContent, IonHeader, IonPage, IonToolbar, IonButton, IonButtons, IonModal, IonTitle, IonInput, IonLabel, IonItem, IonLoading} from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAppState } from '../realm-state';
@@ -66,6 +120,11 @@ export default defineComponent({
     IonLabel,
     IonInput,
     IonButton,
+    //IonModal,
+    //IonHeader,
+    //IonToolbar,
+    //IonTitle,
+    //IonButtons,
     OfficeAppHeader,
 
   },
@@ -78,10 +137,15 @@ export default defineComponent({
     const project = ref<any>()
     const startDate = ref<Date>(new Date())
     const endDate =ref<Date>(new Date())
+    const price = ref(0)
     const allPits = ref<any>([]);
     const pits = ref<any>();
+    const regularReport = ref(false)
+    const paymentReport = ref(false)
+    const isOpenMonth = ref(false)
+    const month = ref()
     
-    onIonViewDidEnter(async()=>{
+    onIonViewWillEnter(async()=>{
       allPits.value = await getProjectPits(project_id.value)
       console.log(allPits.value);
       project.value = await getProjectByID(project_id.value)
@@ -97,7 +161,22 @@ export default defineComponent({
       // // startDate.value = new Date()
       // // endDate.value = new Date()
        pits.value = null
-    })
+    }) 
+    
+    const generateRegularReport=()=>{
+      sortPits()
+      paymentReport.value = false
+      regularReport.value = true
+    }
+
+    const generatePaymentReport =()=>{
+      sortPits()
+      let dateVar = new Date(startDate.value)
+      month.value ="" + (dateVar.getUTCMonth()*1+1) + "/" + dateVar.getFullYear()
+      regularReport.value = false
+      paymentReport.value = true
+      
+    }
 
     const sortPits = () => {
       let start = new Date(startDate.value)
@@ -106,25 +185,38 @@ export default defineComponent({
       console.log(end);
     
       
-      pits.value = allPits.value.filter((pit: { finishDate: Date; status: string; })=> pit.finishDate?.valueOf() >= start.setHours(0, 0, 0, 0).valueOf() && pit.finishDate?.valueOf() <= end.setHours(0, 0, 0, 0).valueOf() && pit.status == 'Done' )
+      pits.value = allPits.value.filter((pit: { finishDate: Date; status: string; })=> pit.finishDate?.valueOf() >= start.setHours(0, 0, 0, 0).valueOf() && pit.finishDate?.valueOf() <= end.setHours(23, 60, 60, 0).valueOf() && pit.status == 'Done' )
       pits.value.sort((pit1: { finishDate: Date; }, pit2: { finishDate: Date; })=>pit1.finishDate.valueOf() - pit2.finishDate.valueOf() )
       console.log(pits.value);
+      
       
     }
 
     const getFullReport = () =>{
       pits.value = allPits.value.filter((pit: { status: string; })=> pit.status == 'Done')
       pits.value.sort((pit1: { finishDate: Date; }, pit2: { finishDate: Date; })=>pit1.finishDate.valueOf() - pit2.finishDate.valueOf() )
+      paymentReport.value = false
+      regularReport.value = true
     }
 
+ 
+
+
+
     const createXl = () => {
+      let table = ''
       if(pits.value == null || pits.value.length == 0){
         alert('לא ניתן ליצר דו"ח ריק') 
         return
       }
+      if(regularReport.value)
+        table = "my-table-id"
+      if(paymentReport.value)
+        table = "payment-table-id"
+
       console.log("createXl");
       // Acquire Data (reference to the HTML table)
-      var table_elt = document.getElementById("my-table-id");
+      var table_elt = document.getElementById(table);
 
       // Extract Data (create a workbook object from the table)
       var workbook = XLSX.utils.table_to_book(table_elt);
@@ -139,10 +231,22 @@ export default defineComponent({
 
     }
 
+    const openChooseMonth = ()=>{
+
+      if(isOpenMonth.value)
+          isOpenMonth.value = false
+
+      else
+        isOpenMonth.value = true
+    }
+
     return {
       createXl,
+      generateRegularReport,
+      generatePaymentReport,
       sortPits,
       getFullReport,
+      openChooseMonth,
 
       currentUser,
       project_id,
@@ -150,7 +254,12 @@ export default defineComponent({
       allPits,
       pits,
       startDate,
-      endDate
+      endDate,
+      price,
+      regularReport,
+      paymentReport,
+      isOpenMonth,
+      month,
     }
   },
 
