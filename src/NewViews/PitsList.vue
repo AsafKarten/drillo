@@ -247,7 +247,7 @@
       const currentDate = ref(new Date())
       const router = useRouter();
       const route = useRoute()
-      const { user,updateProjectReports,updatePitStatusAndReport,updatePitDepth, updatePitDiameter, getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID, updateProjectLastPit} = useAppState(); 
+      const { user,updateProjectReports, unsetReportSigByID, updatePitStatusAndReport,updatePitDepth, updatePitDiameter, getProjectPits, saveNewReport,getReportByID,updateReportByID, logout,getProjectByID,updateProjectPits ,getDrillingMachineByID, updateProjectLastPit} = useAppState(); 
       const currentUser = ref<any>(user);
       const project_id = ref<any>(route.params)
       const project = ref<any>({});
@@ -303,6 +303,7 @@
           
           
             allPits.value = await getProjectPits(currentUser?.value.customData.project_id.$oid)
+            allPits.value= allPits.value.sort((a: { p: number; },b: { p: number; })=>a.p*1 - b.p*1)
             pits.value = allPits.value
             
             showMap.value = true
@@ -400,6 +401,12 @@
 
       const setUnDone = async ()=>{  
         if(currentPit.value.status === 'Done'){
+          let report = await getReportByID(currentPit?.value.report_id)
+            if(report.signatureName !== undefined){
+              alert('לא ניתן לבצע שינוי מאחר שהדו"ח חתום')
+              return
+            }
+            else{
              currentPit.value.status = 'waiting';
              //remove pit from report
              console.log(currentPit.value);
@@ -413,6 +420,7 @@
              currentPit.value.report_id = ""
              await updatePitStatusAndReport(currentPit.value)
              savePitChanges();
+            }
           }      
       }
 
@@ -466,7 +474,13 @@
             if(repoDate.getDate() == today.getDate() &&repoDate.getMonth() == today.getMonth() &&repoDate.getFullYear() == today.getFullYear()){
             //project.value.reports[index].pits.push(currentPit.value)
             let report_id = report.report_id ;
-            //report = await getReportByID(report_id.toString())
+            let tempReport = await getReportByID(report_id.toString())
+            //if today's report is already signed 
+            if(tempReport.signatureName !== undefined || tempReport.signatureName !== ""){
+              console.log('is today');
+              //add confirmation prompt
+                await unsetReportSigByID(tempReport)
+            }
             //report.pits.push(currentPit.value._id)
             //await updateReportByID(report)
             currentPit.value.report_id = report_id
@@ -483,6 +497,8 @@
             await updatePitStatusAndReport(currentPit.value)
             reports.push({date:today,report_id:resp })
             project.value.reports = reports
+            console.log(resp);
+            
             
             //project.value.reports.push({date:today,pits:[currentPit.value] })
           }

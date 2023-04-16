@@ -6,8 +6,8 @@
         <h5>פרוייקט: {{project?.name}}</h5>
     
 
-        <div :key="repo.date" v-for="repo in reports">
-          <ReportComponent :reportProp="repo" :showButton="true"/>
+        <div :key="repo?.date" v-for="repo in reports">
+          <ReportComponent :reportProp="repo" :showButton="true" @deleteMe="deleteReport(repo)"/>
         </div>  
     
       </ion-content>
@@ -24,6 +24,7 @@
   
   import AppHeader from '../Components/AppHeader.vue'
   import ReportComponent from '@/Components/ReportComponent.vue';
+import { log } from 'console';
   
   
   
@@ -55,7 +56,7 @@
       const router = useRouter();
       const route = useRoute();
      
-      const {user ,getReportPits, getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
+      const {user ,getReportPits,updateProjectReports, getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
       const currentUser = ref<any>(user)
       const project = ref<any>();
       const reports = ref<any>();
@@ -71,8 +72,11 @@
       const loaded = ref(false)
      
 
-      onIonViewDidEnter(() => {
+      onIonViewDidEnter(async() => {
       console.log('Home page did enter');
+      // reports.value = await getProjectReports(project_id.value)
+      // console.log(reports.value);
+      
       
     });
 
@@ -111,12 +115,18 @@
         router.push(route)
     }
     
+    const deleteReport= async(value:any)=>{
+      reports.value = reports.value.filter((report: { _id: any; })=> report._id.toString() !== value._id.toString())
+      project.value.reports= project.value.reports.filter((report: { report_id: any; })=> report.report_id.toString() !== value._id.toString())
+      await updateProjectReports(project.value)
+    }
   
    
        return {
         //methods
           //getReportsPits,
           goTo,
+          deleteReport,
           //properties
           currentUser : user,
           project:project,

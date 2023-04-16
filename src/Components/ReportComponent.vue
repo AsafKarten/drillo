@@ -69,6 +69,8 @@
   import {useAppState} from '../realm-state';
 
   import { home ,receiptOutline, constructOutline} from 'ionicons/icons';
+
+
   
  
   
@@ -92,12 +94,13 @@
     
   },
   props:{reportProp : Object, showButton: Boolean},
-
-    setup(props){
+  emits: ['deleteMe'],
+    setup(props, emits){
+     
       const router = useRouter();
       const route = useRoute();
      
-      const {user ,getReportPits, getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
+      const {user ,getReportPits,deleteReportByID, getProjectByID, getReportByID,getProjectReports, getAllProjects, updateProjectPits} = useAppState();
       const currentUser = ref<any>(user)
       const project = ref<any>();
       const reports = ref<any>();
@@ -122,7 +125,14 @@
         console.log(report.value);
         
         report.value.pitsToShow =  await getReportPits(report.value._id)
+        if(report?.value.pitsToShow.length == 0){
+            await deleteReportByID(report.value._id.toString())
+            emits.emit('deleteMe')
+            
+        }
+        else{
         loaded.value = true
+        }
  
       
     });
