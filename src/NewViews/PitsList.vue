@@ -190,6 +190,7 @@
   
   <script lang="ts">
   import {
+    onIonViewWillLeave,
     onIonViewDidEnter,
     IonButtons,
     IonContent,
@@ -312,6 +313,12 @@
         
              
       });
+      onIonViewWillLeave(()=>{
+        isOpen.value = false
+        isOpenNotes.value = false
+        isOpenDepth.value = false
+
+    })
   
      
       const sortPits = (listName:string)=>{
@@ -547,6 +554,14 @@
       }
 
       const changePitDiameterOrDepth= async(type: string, _id:any)=>{
+        // if(currentPit.value.report_id !== undefined){
+        //   let report = await getReportByID(currentPit.value.report_id.toString())
+        //   if(report.signatureName !== undefined){
+        //     alert('לא ניתן לבצע שינוי לאחר שהדו"ח נחתם')
+        //     return
+        //   }
+        // }
+        
         
         let index = pits.value.indexOf(currentPit.value)
         console.log(index);

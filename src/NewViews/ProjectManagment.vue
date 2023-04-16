@@ -61,7 +61,7 @@
 </template>
   
 <script lang="ts">
-  import {onIonViewDidEnter, IonContent, IonPage, IonModal, IonButton, IonButtons ,IonToolbar, IonHeader, IonCol, IonGrid, IonRow, IonTitle } from '@ionic/vue';
+  import {onIonViewDidEnter,onIonViewWillLeave, IonContent, IonPage, IonModal, IonButton, IonButtons ,IonToolbar, IonHeader, IonCol, IonGrid, IonRow, IonTitle } from '@ionic/vue';
   import { defineComponent, onMounted, reactive, ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   import { useAppState } from '../realm-state';
@@ -141,6 +141,12 @@
         console.log(project.value);
     
       });
+
+      onIonViewWillLeave(()=>{
+        isOpenDetails.value = false
+        isOpen.value = false
+
+    })
 
       const goTo =(route:any)=>{
         router.push(route)

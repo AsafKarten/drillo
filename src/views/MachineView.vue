@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import {onIonViewDidEnter, IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, IonAvatar } from '@ionic/vue';
+import {onIonViewDidEnter,onIonViewWillLeave, IonContent, IonPage, IonModal, IonButton, IonButtons,IonHeader,IonToolbar, IonTitle, IonItem,  IonLabel, IonAvatar } from '@ionic/vue';
 import { defineComponent, onMounted, ref, render } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import {useAppState} from '../realm-state';
@@ -142,6 +142,11 @@ export default defineComponent({
     
    
   });
+  onIonViewWillLeave(()=>{
+    isOpenDriller.value = false
+    isOpenDelete.value = false
+
+    })
 
   const removeDrillerFromMachine = async (employee: any)=>{
 

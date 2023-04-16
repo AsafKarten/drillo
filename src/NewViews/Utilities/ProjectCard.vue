@@ -12,7 +12,7 @@
          <CircleProgressBar slot="end" :total="amount*1" :current="amountDone*1" />
         </ion-item>
         <ion-item>
-         <p class="cardText">{{"בוצעו היום:" + " " + amountToday + " " + "כלונסאות"}}</p>
+         <p class="cardText" >{{"בוצעו היום:" + " " + amountToday + " " + "כלונסאות"}}</p>
         </ion-item>
         <ion-item>
          <p class="cardText" v-if="reports?.length == 0">{{'אין דוחות לפרוייקט זה'}}</p>
@@ -211,6 +211,7 @@
   }
   .cardText{
     font-size: 100%;
+    font-weight: bold;
   }
   .cardHeaders{
     font-size: 130%;

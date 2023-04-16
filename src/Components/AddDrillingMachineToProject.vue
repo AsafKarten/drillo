@@ -59,7 +59,7 @@
       </ion-modal>
   
        <!--change driller in machine modal-->
-       <ion-modal :is-open="isOpenDriller">
+       <ion-modal :is-open="isOpenDriller" >
         <ion-header>
           <ion-toolbar>
             <ion-title>עריכת צוות קודחים</ion-title>
@@ -71,27 +71,24 @@
         <ion-content class="ion-padding">
 
             <div class="hebrewText">
-                <ion-item v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
-                  <!-- <p>{{employee?._id}}</p> -->
-                  <ion-avatar slot="start">
-                    <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-                  </ion-avatar>
-                  <p>{{employee?.first}} {{employee?.last}}</p>
-                  <ion-button size="default" slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-                  <ion-button size="default" slot="end" color="danger" @click="removeDrillerFromMachine(employee)">הסר</ion-button>
-                  </ion-item>      
+
+              <div v-show="employee?._id" :key="employee?._id" v-for="employee in current_machine?.drillers">
+                <EmployeesList :employee-obj="employee" :profile-btn="false" :select-btn="false" :modal-btn="true" :remove-btn="true" :empType="false"
+               @remove-employee="removeDrillerFromMachine(employee)"
+               @open-modal="viewEmployeeModalManager(employee)"
+                />
+              </div>
+                 
               </div>
 
           <div class="hebrewText">
-            <ion-item :key="employee?._id" v-for="employee in employees">
-              <!-- <p>{{employee?._id}}</p> -->
-              <ion-avatar slot="start">
-                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-              </ion-avatar>
-              <p>{{employee?.first}} {{employee?.last}}</p>
-              <ion-button size="default" slot="end" @click="viewEmployeeModalManager(employee)">פרטי עובד</ion-button>
-              <ion-button size="default" slot="end" @click="addDrillerToMachine(employee)">בחר</ion-button>
-              </ion-item>      
+            <div :key="employee?._id" v-for="employee in employees">
+              <EmployeesList :employee-obj="employee" :profile-btn="false" :select-btn="true" :modal-btn="true" :remove-btn="false" :empType="false"
+              @add-employee="addDrillerToMachine(employee)"
+              @open-modal="viewEmployeeModalManager(employee)"
+              />
+            </div>
+           
           </div>
           
         </ion-content>
@@ -124,13 +121,14 @@
   </template>
   
   <script lang="ts">
-  import {onIonViewDidEnter, IonContent, IonHeader,IonThumbnail, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
+  import {onIonViewDidEnter,onIonViewWillLeave, IonContent, IonHeader,IonThumbnail, IonPage, IonToolbar,IonButton,IonButtons,IonModal,IonTitle,IonInput,IonLabel,IonItem,IonAvatar } from '@ionic/vue';
   import { defineComponent, onMounted, ref, render } from 'vue';
   import { useRouter, useRoute } from "vue-router";
   import {useAppState} from '../realm-state';
 
   
   import OfficeAppHeader from './OfficeAppHeader.vue'
+import EmployeesList from './EmployeesList.vue';
   
   
   
@@ -139,21 +137,22 @@
   export default defineComponent({
     name: 'AddDrillingMachineToProject',
     components: {
-      IonContent,
-      IonHeader,
-      IonPage,
-      IonToolbar,
-      IonButton,
-      IonButtons,
-      IonModal,
-      IonTitle,
-      //IonInput,
-      //IonLabel,
-      IonItem,
-      IonAvatar,
-      IonThumbnail,
-      OfficeAppHeader
-  },
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonToolbar,
+    IonButton,
+    IonButtons,
+    IonModal,
+    IonTitle,
+    //IonInput,
+    //IonLabel,
+    IonItem,
+    //IonAvatar,
+    IonThumbnail,
+    OfficeAppHeader,
+    EmployeesList
+},
     setup(){
       const router = useRouter();
       const route = useRoute()
@@ -189,6 +188,12 @@
       
       
     });
+
+    onIonViewWillLeave(()=>{
+      isOpenEmp.value = false
+      isOpenDriller.value = false
+      isOpenMachine.value = false
+    })
  
   
     
@@ -237,8 +242,13 @@
      
   
         const viewEmployeeModalManager = async (employee: any)=>{
-          if(isOpenEmp.value)
+          if(isOpenEmp.value){
           isOpenEmp.value=false;
+          employee_project.value= null
+          current_employee.value = null
+          employee_machine.value = null
+        }
+
           else{
             current_employee.value = await getEmployeeByID(employee._id.toString())
             if(current_employee.value.project_id !== "" && current_employee.value.project_id !== undefined )
@@ -434,6 +444,7 @@
     direction: rtl;
     line-height: 80%;
     margin-bottom: 10%;
+ 
   }
   
   .splitScreen {

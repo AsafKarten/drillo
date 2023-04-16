@@ -187,6 +187,7 @@
   <script lang="ts">
   import {
     onIonViewDidEnter,
+    onIonViewWillLeave,
     IonButtons,
     IonContent,
     IonHeader,
@@ -303,6 +304,13 @@ import { log } from "console";
             //console.log(current_machine.value);
              
       });
+
+      onIonViewWillLeave(()=>{
+        isOpen.value = false
+        isOpenNotes.value = false
+        isOpenDepth.value = false
+
+    })
 
       const sortPits = (listName:string)=>{
         if(listName === 'איפוס'){
