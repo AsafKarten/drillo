@@ -55,13 +55,13 @@
        
           <thead  >
             <tr >
-               <th colspan="14" style="text-align: center;" >{{'חשבון לחודש'+' '+month + ' ' + 'עבור קידוח כלונסאות' + ' ' + project?.name + ' ' + project?.address}}</th>
+               <th colspan="15" style="text-align: center;" >{{'חשבון לחודש'+' '+month + ' ' + 'עבור קידוח כלונסאות' + ' ' + project?.name + ' ' + project?.address}}</th>
             </tr>
             <tr>
             <th colspan="1">מס' רץ</th>
             <th style="text-align: center;" colspan="11">תאור</th>
             <th colspan="1" rowspan="2">מחיר יחידה</th>
-            <th colspan="1" rowspan="2" >סה"כ</th>
+            <th colspan="2" rowspan="2" >סה"כ</th>
             </tr>
             
          
@@ -82,48 +82,48 @@
           <tr :key="day?.number" v-for="day in daysOfWork">
             
             <td>{{day.number}}</td>
-            <td>{{day.currentDate.getDate() + '/' + (day.currentDate.getMonth() * 1 + 1) + '/' + day.currentDate.getFullYear()}}</td>
+            <td>{{day.currentDate}}</td>
             <!-- <PaymentTableRows :row="day.rows" :currentDay="day.day"/> -->
             <td colspan="2">
-              <tr colspan="2" :key="row?.listName" v-for="row in day.rows">
-                <td colspan="2">{{day.day}}</td>
+              <div colspan="2" :key="row?.listName" v-for="row in day.rows">
+                <p>{{day.day}}</p>
                 
-              </tr>
+              </div>
            </td>
            <td colspan="2">
-            <tr colspan="2" :key="row?.listName" v-for="row in day.rows">
-              <td>{{row.listName + ": "}}{{row.columnsNumbers}}</td>
-            </tr>
+            <div  :key="row?.listName" v-for="row in day.rows">
+              <p>{{row.listName + ": "}}{{row.columnsNumbers}}</p>
+              </div>
          </td>
          <td colspan="2">
-          <tr colspan="2" :key="row?.listName" v-for="row in day.rows">
-            <td>{{row.diameter}}</td>
-          </tr>
+          <div  :key="row?.listName" v-for="row in day.rows">
+            <p>{{row.diameter}}</p>
+          </div>
        </td>
        <td colspan="1">
-        <tr colspan="1" :key="row?.listName" v-for="row in day.rows">
-          <td>{{row.depth}}</td>
-        </tr>
+        <div  :key="row?.listName" v-for="row in day.rows">
+          <p>{{row.depth}}</p>
+        </div>
      </td>
      <td colspan="1">
-      <tr colspan="1" :key="row?.listName" v-for="row in day.rows">
-        <td>{{row.amount}}</td>
-      </tr>
+      <div  :key="row?.listName" v-for="row in day.rows">
+        <p>{{row.amount}}</p>
+      </div>
    </td>
    <td colspan="2">
-    <tr colspan="2" :key="row?.listName" v-for="row in day.rows">
-      <td>{{row.totalDepth}}</td>
-    </tr>
+    <div  :key="row?.listName" v-for="row in day.rows">
+      <p>{{row.totalDepth}}</p>
+    </div>
  </td>
  <td colspan="1">
-  <tr colspan="1" :key="row?.listName" v-for="row in day.rows">
-    <td>{{price}}</td>
-  </tr>
+  <div  :key="row?.listName" v-for="row in day.rows">
+    <p>{{price}}</p>
+  </div>
 </td>
  <td colspan="2">
-  <tr colspan="2" :key="row?.listName" v-for="row in day.rows">
-    <td>{{(row.totalDepth*price)}}</td>
-  </tr>
+  <div :key="row?.listName" v-for="row in day.rows">
+    <p>{{(row.totalDepth*price)}}</p>
+  </div>
 </td>
            
               
@@ -232,12 +232,16 @@ export default defineComponent({
       let currentNumber = 1
       let numOfColumns = 1
       let currentDate = null
+      let tempDate=new Date()
+      let dateString = ''
       for (let index = 0; index < pits.value.length; index++) {
         let date = pits.value[index].finishDate.setHours(0, 0, 0, 0)
         if(index === 0){
           currentDate =pits.value[index].finishDate.setHours(0, 0, 0, 0)
           day = daysOfWeek[pits.value[index].finishDate.getDay()]
-          numOfDays.push({number : currentNumber , currentDate : new Date(currentDate)  , day: day , numOfColumns : numOfColumns, rows:rows })
+          tempDate = new Date(currentDate)
+          dateString = tempDate.getDate() + '/' + (tempDate.getMonth() * 1 + 1) + '/' + tempDate.getFullYear()
+          numOfDays.push({number : currentNumber , currentDate : dateString  , day: day , numOfColumns : numOfColumns, rows:rows })
           
         }
         else if(date === currentDate){
@@ -251,7 +255,9 @@ export default defineComponent({
           currentNumber++
           day = daysOfWeek[pits.value[index].finishDate.getDay()]
           currentDate =pits.value[index].finishDate.setHours(0, 0, 0, 0)
-          numOfDays.push({number : currentNumber , currentDate :new Date(currentDate) , day: day , numOfColumns : numOfColumns,  rows:rows  })
+          tempDate = new Date(currentDate)
+          dateString = tempDate.getDate() + '/' + (tempDate.getMonth() * 1 + 1) + '/' + tempDate.getFullYear()
+          numOfDays.push({number : currentNumber , currentDate :dateString , day: day , numOfColumns : numOfColumns,  rows:rows  })
         }
       }
       numOfDays[numOfDays.length-1].rows =sortPaymentPits(currentDate)
@@ -410,6 +416,10 @@ export default defineComponent({
 </script>
   
 <style scoped>
+p{
+border-bottom: 1px solid #000000;
+
+}
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -419,7 +429,8 @@ table {
 td, th {
   border: 1px solid #000000;
   text-align: left;
-  padding: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   text-align: center;
 }
 
