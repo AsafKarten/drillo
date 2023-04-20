@@ -55,11 +55,11 @@
        
           <thead  >
             <tr >
-               <th colspan="14" style="text-align: center;" >{{'חשבון לחודש'+' '+month + ' ' + 'עבור קידוח כלונסאות' + ' ' + project?.name + ' ' + project?.address}}</th>
+               <th colspan="13" style="text-align: center;" >{{'חשבון לחודש'+' '+month + ' ' + 'עבור קידוח כלונסאות' + ' ' + project?.name + ' ' + project?.address}}</th>
             </tr>
             <tr>
             <th colspan="1">מס' רץ</th>
-            <th colspan="10">תאור</th>
+            <th colspan="9">תאור</th>
             <th colspan="1" rowspan="2">מחיר יחידה</th>
             <th colspan="2" rowspan="2" >סה"כ</th>
             </tr>
@@ -68,10 +68,10 @@
           
           <tr>
             <th>#</th>
-            <th colspan="2">תאריך</th>
-            <th colspan="2">יום</th>
+            <th colspan="1">תאריך</th>
+            <th colspan="1">יום</th>
             <th colspan="2">מס' כלונס</th>
-            <th colspan="1">קוטר</th>
+            <th colspan="2">קוטר</th>
             <th colspan="1">עומק</th>
             <th colspan="1">כמות</th>
             <th colspan="1">מטר אורך</th>
@@ -86,7 +86,7 @@
             <td>{{day?.number}}</td>
             <td>{{day?.currentDate}}</td>
             <!-- <PaymentTableRows :row="day.rows" :currentDay="day.day"/> -->
-    <td colspan="2">{{day?.day}}</td>
+    <td colspan="1">{{day?.day}}</td>
       <td colspan="2">{{row?.listName + ": "}}{{row?.columnsNumbers}}</td>
     <td colspan="2">{{row?.diameter}}</td>
        <td colspan="1">{{row?.depth}}</td>
@@ -97,17 +97,23 @@
            
               
             </tr>
+
            </template>
+           <tr >
+            <td style="padding:8px; font-size:large; font-weight:bold ;" colspan="8">סה"כ</td>
+            <td style="padding:8px; font-size:large; font-weight:bold ;"   colspan="1"> {{pitsAmount  }}</td>
+            <td style="padding:8px; font-size:large; font-weight:bold ;" colspan="1"> {{totoalDepth  }}</td>
+          </tr>
            <tr class="total-row">
-            <td colspan="12">סה"כ</td>
+            <td style="padding:8px; font-size:large; font-weight:bold ;" colspan="11">סה"כ</td>
             <td style="text-align: right; padding:8px; font-size:large; font-weight:bold ;" colspan="2"> {{(totoalDepth * price) }} &#8362;</td>
           </tr>
           <tr class="total-row">
-            <td colspan="12">מע"מ</td>
+            <td style="padding:8px; font-size:large; font-weight:bold ;" colspan="11">מע"מ</td>
             <td style="text-align: right; padding:8px; font-size:large; font-weight:bold ;" colspan="2"> {{(((totoalDepth * price )/100)*17).toFixed(0) }} &#8362;</td>
           </tr>
           <tr class="total-row">
-            <td colspan="12">סה"ב כולל מע"מ</td>
+            <td style="padding:8px; font-size:large; font-weight:bold ;" colspan="11">סה"ב כולל מע"מ</td>
             <td style="text-align: right; padding:8px; font-size:large; font-weight:bold ;" colspan="2"> {{((totoalDepth * price)+(((totoalDepth * price )/100)*17)).toFixed(0) }} &#8362;</td>
           </tr>
         </table>
@@ -169,6 +175,7 @@ export default defineComponent({
     const isOpenMonth = ref(false)
     const month = ref()
     const totoalDepth = ref(0)
+    const pitsAmount= ref(0)
 
     const daysOfWork = ref<any>()
     
@@ -209,6 +216,7 @@ export default defineComponent({
     const clearValues=()=>{
       totoalDepth.value = 0
       daysOfWork.value =[]
+      pitsAmount.value = 0
       console.log(totoalDepth.value);
       console.log(daysOfWork.value);
       
@@ -279,6 +287,7 @@ export default defineComponent({
           amount = 1
           totalDepth = pit.depth
           totoalDepth.value += pit.depth
+          pitsAmount.value +=1
           rows.push({listName:listName, depth:depth, diameter:diameter, columnsNumbers:columnsNumbers, amount:amount, totalDepth:totalDepth })
           console.log('if')
           console.log(pit);
@@ -291,6 +300,7 @@ export default defineComponent({
           rows[rows.length-1].amount= amount
           rows[rows.length-1].totalDepth += pit.depth
           totoalDepth.value += pit.depth
+          pitsAmount.value +=1
           console.log('else if')
           console.log(pit);
           console.log(rows);
@@ -304,6 +314,7 @@ export default defineComponent({
             rows[rowIndex].amount= tempAmount
             rows[rowIndex].totalDepth += pit.depth
             totoalDepth.value += pit.depth
+            pitsAmount.value +=1
             console.log('else.if')
             console.log(pit);
             console.log(rows);
@@ -318,6 +329,7 @@ export default defineComponent({
           amount = 1
           totalDepth = pit.depth
           totoalDepth.value += pit.depth
+          pitsAmount.value +=1
           rows.push({listName:listName, depth:depth, diameter:diameter, columnsNumbers:columnsNumbers, amount:amount, totalDepth:totalDepth })
           console.log('else.else')
           console.log(pit);
@@ -419,6 +431,7 @@ export default defineComponent({
 
       daysOfWork,
       totoalDepth,
+      pitsAmount,
     }
   },
 
