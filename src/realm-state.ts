@@ -3,7 +3,7 @@ import {computed, ref} from 'vue';
 const user = ref<any>(null);
 
 //get app instance
-const app = Realm.getApp("application-0-sliwo");
+const app = Realm.getApp("APP_TOKEN");
 user.value = app?.currentUser;
 
 export const useAppState = () => {
